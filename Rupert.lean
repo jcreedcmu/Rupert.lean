@@ -64,12 +64,38 @@ by π/4 radians. No offset translation is needed.
      constructor
      · -- to show: star inner_rot * inner_rot = 1
        simp [inner_rot]
-       -- some ideas here:
-       -- https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/the.20identity.20matrix.20and.20decidable.20equality
-       ext i j; simp [ Matrix.one_apply, Matrix.star_apply]
-       sorry
+       ext i j; simp [Matrix.mul_apply, Fin.sum_univ_succ]
+       match i with
+       | 0 => match j with
+         | 0 => simp
+         | 1 => simp
+         | 2 => simp
+       | 1 => match j with
+         | 0 => simp
+         | 1 => simp
+         | 2 => simp
+       | 2 => match j with
+         | 0 => simp
+         | 1 => simp
+         | 2 => simp
      · -- to show: inner_rot * star inner_rot = 1
-       sorry
+       ext i j;
+       simp [inner_rot]
+       unfold Matrix.vecMul
+       match i with
+       | 0 => match j with
+         | 0 => simp;
+         | 1 => simp
+         | 2 => simp
+       | 1 => match j with
+         | 0 => simp
+         | 1 => simp
+         | 2 => simp
+       | 2 => match j with
+         | 0 => simp
+         | 1 => simp
+         | 2 => simp
+
    constructor
    · exact inner_rot_unitary
    · simp [inner_rot, det_succ_row_zero, Fin.sum_univ_succ]
