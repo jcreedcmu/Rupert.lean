@@ -17,11 +17,9 @@ def IsRupert (p : Set ℝ³) : Prop :=
    have outer_shadow := Set.image (λ t ↦ project32 (outer_rot *ᵥ t)) p
    inner_shadow ⊆ interior (convexHull ℝ outer_shadow)
 
+section square_is_rupert
 def square : Set ℝ³ := { ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] }
 
-def ident : Matrix (Fin 3) (Fin 3) ℝ := !![1,0,0;0,1,0;0,0,1]
-
-section square_is_rupert
 /- In this section we aim to show that the square has the rupert property.
    Status:  
    - Still need to show that the desired rotations are actually in SO(3)
