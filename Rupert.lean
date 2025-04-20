@@ -16,8 +16,3 @@ def IsRupert (p : Set ℝ³) : Prop :=
    let inner_shadow := Set.image (λ t ↦ inner_offset + project32 (inner_rot *ᵥ t)) p
    let outer_shadow := Set.image (λ t ↦ project32 (outer_rot *ᵥ t)) p
    closure inner_shadow ⊆ interior (convexHull ℝ outer_shadow)
-
-def m : Matrix (Fin 2) (Fin 2) ℚ := !![1,2;3,4]
-
-example : m.det = -2 := by with_unfolding_all rfl
-
