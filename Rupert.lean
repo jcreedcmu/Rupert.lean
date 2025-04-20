@@ -15,4 +15,4 @@ def IsRupert (p : Set ℝ³) : Prop :=
    ∃ inner_rot ∈ SO3, ∃ outer_rot ∈ SO3, ∃ inner_offset : ℝ²,
    let inner_shadow := Set.image (λ t ↦ inner_offset + project32 (inner_rot *ᵥ t)) p
    let outer_shadow := Set.image (λ t ↦ project32 (outer_rot *ᵥ t)) p
-   inner_shadow ⊆ convexHull ℝ outer_shadow
+   inner_shadow ⊆ interior (convexHull ℝ outer_shadow)
