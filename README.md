@@ -12,4 +12,4 @@ Known solutions for Platonic, Catalan, and Archimedean solids are
 visualized in this video:
 
 [<img src="http://img.youtube.com/vi/evKFok65t_E/maxresdefault.jpg" height="300px">](https://youtu.be/evKFok65t_E)
-)
+
