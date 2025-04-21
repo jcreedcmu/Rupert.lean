@@ -63,7 +63,7 @@ by π/4 radians. No offset translation is needed.
    !![ rh, rh, 0;
       -rh, rh, 0;
         0,  0, 1]
- let inner_offset : ℝ² := λ _ => 0
+ let inner_offset : ℝ² := 0
 
  have inner_rot_so3 : inner_rot ∈ SO3 := by
    have unitary : inner_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
