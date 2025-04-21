@@ -23,7 +23,7 @@ lemma closure_eq_of_finite {X : Type*} [TopologicalSpace X] [T1Space X]
     {s : Set X} (hs : s.Finite) : closure s = s :=
   closure_eq_iff_isClosed.mpr (hs.isClosed)
 
-lemma foo (inner outer : Set ℝ²) (ε : ℝ) (hε : ε ∈ Set.Ioo 0 1)
+lemma subset_interior_hull (inner outer : Set ℝ²) (ε : ℝ) (hε : ε ∈ Set.Ioo 0 1)
     (h0 : 0 ∈ convexHull ℝ outer)
     (h : inner ⊆ convexHull ℝ ((fun v : ℝ² ↦ (1 - ε) • v) '' outer)) :
     inner ⊆ interior (convexHull ℝ outer) := by
@@ -37,4 +37,11 @@ lemma foo (inner outer : Set ℝ²) (ε : ℝ) (hε : ε ∈ Set.Ioo 0 1)
   rw [mem_convexHull_iff_exists_fintype] at h
   obtain ⟨ι, x, w, g, hwp, hw1, hg, hwv⟩ := h
   intro v1 hv1
-  sorry
+  rw [mem_convexHull_iff_exists_fintype]
+  use ι, x, w
+  -- scale g by (1 / (1 - ε))
+  let g' i : ℝ² := (1 / (1 - ε)) • g i
+  use g'
+  refine ⟨hwp, hw1, ?_, ?_⟩
+  · sorry
+  · sorry
