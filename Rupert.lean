@@ -18,16 +18,25 @@ def IsRupert (p : Set ℝ³) : Prop :=
    inner_shadow ⊆ interior (convexHull ℝ outer_shadow)
 
 section square_is_rupert
-def square : Set ℝ³ := { ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] }
-
 /- In this section we aim to show that the square has the rupert property.
    Status:  
    - Still need to show that the desired rotations are actually in SO(3)
    - Still need to show that the shadow of any point from the inner square is in the 
      shadow of the outer square.
 -/
- open Matrix 
- open Real
+open Matrix 
+open Real
+def square : Set ℝ³ := { ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] }
+
+noncomputable
+def rh : ℝ := (√2)/2 -- square root of one-half
+
+theorem rh_norm_lemma : rh * rh + rh * rh = 1 := by
+  calc rh * rh + rh * rh 
+    _ = 2 * ((√2) / 2)^2 := by rw[rh]; ring
+    _ = 2 * (((√2) * (√2))/ (2^2))  := by rw[div_pow]; ring
+    _ = 2 * (2 / (2^2))  := by rw[mul_self_sqrt (by norm_num)]
+    _ = 1 := by norm_num
 
 theorem square_is_rupert : IsRupert square := by
 
@@ -53,54 +62,42 @@ by π/4 radians. No offset translation is needed.
       0, 0,-1;
       0, 1, 0]
  let outer_rot : Matrix (Fin 3) (Fin 3) ℝ := 
-   !![0, sqrt 2, 0;
-      -sqrt 2, 0, 0;
-      0, 0, 1]
+   !![ rh, rh, 0;
+      -rh, rh, 0;
+        0,  0, 1]
  let inner_offset : ℝ² := λ _ => 0
 
  have inner_rot_so3 : inner_rot ∈ SO3 := by
-   have inner_rot_unitary : inner_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
+   have unitary : inner_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
      change star inner_rot * inner_rot = 1 ∧ inner_rot * star inner_rot = 1
      constructor
      · -- to show: star inner_rot * inner_rot = 1
        simp [inner_rot]
        ext i j; simp [Matrix.mul_apply, Fin.sum_univ_succ]
-       match i with
-       | 0 => match j with
-         | 0 => simp
-         | 1 => simp
-         | 2 => simp
-       | 1 => match j with
-         | 0 => simp
-         | 1 => simp
-         | 2 => simp
-       | 2 => match j with
-         | 0 => simp
-         | 1 => simp
-         | 2 => simp
+       fin_cases i, j <;> simp
      · -- to show: inner_rot * star inner_rot = 1
        ext i j;
        simp [inner_rot]
        unfold Matrix.vecMul
-       match i with
-       | 0 => match j with
-         | 0 => simp;
-         | 1 => simp
-         | 2 => simp
-       | 1 => match j with
-         | 0 => simp
-         | 1 => simp
-         | 2 => simp
-       | 2 => match j with
-         | 0 => simp
-         | 1 => simp
-         | 2 => simp
-
+       fin_cases i, j <;> simp
+       
    constructor
-   · exact inner_rot_unitary
+   · exact unitary
    · simp [inner_rot, det_succ_row_zero, Fin.sum_univ_succ]
 
- have outer_rot_so3 : outer_rot ∈ SO3 := sorry
+ have outer_rot_so3 : outer_rot ∈ SO3 := by
+   have unitary : outer_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
+    constructor
+    · sorry
+    · sorry
+   constructor
+   · exact unitary
+   · simp [outer_rot, det_succ_row_zero, Fin.sum_univ_succ]
+     calc rh * rh + rh * rh 
+       _ = 2 * ((√2) / 2)^2 := by rw[rh]; ring
+       _ = 2 * (((√2) * (√2))/ (2^2))  := by rw[div_pow]; ring
+       _ = 2 * (2 / (2^2))  := by rw[mul_self_sqrt (by norm_num)]
+       _ = 1 := by norm_num
 
  use inner_rot, inner_rot_so3, outer_rot, outer_rot_so3, inner_offset
 
