@@ -23,14 +23,12 @@ lemma closure_eq_of_finite {X : Type*} [TopologicalSpace X] [T1Space X]
     {s : Set X} (hs : s.Finite) : closure s = s :=
   closure_eq_iff_isClosed.mpr (hs.isClosed)
 
-lemma subset_interior_hull {inner outer : Set ℝ²} {ε : ℝ} (hε : ε ∈ Set.Ioo 0 1)
-    (h0 : 0 ∈ convexHull ℝ outer)
-    (h : inner ⊆ convexHull ℝ ((fun v : ℝ² ↦ (1 - ε) • v) '' outer)) :
-    inner ⊆ interior (convexHull ℝ outer) := by
+lemma subset_interior_hull {outer : Set ℝ²} {ε : ℝ} (hε : ε ∈ Set.Ioo 0 1)
+    (h0 : 0 ∈ convexHull ℝ outer) :
+    convexHull ℝ ((fun v : ℝ² ↦ (1 - ε) • v) '' outer) ⊆
+      interior (convexHull ℝ outer) := by
   rw [Set.mem_Ioo] at hε
-  intro v hv
-  rw [Set.subset_def] at h
-  specialize h v hv
+  intro v h
   rw [mem_interior]
   use Metric.ball v ε
   refine ⟨?_, Metric.isOpen_ball, Metric.mem_ball_self hε.1⟩
@@ -45,6 +43,14 @@ lemma subset_interior_hull {inner outer : Set ℝ²} {ε : ℝ} (hε : ε ∈ Se
   refine ⟨hwp, hw1, ?_, ?_⟩
   · sorry
   · sorry
+
+lemma mem_interior_hull {outer : Set ℝ²} {ε : ℝ} (hε : ε ∈ Set.Ioo 0 1)
+    {p : ℝ²}
+    (h0 : 0 ∈ convexHull ℝ outer)
+    (h : p ∈ convexHull ℝ ((fun v : ℝ² ↦ (1 - ε) • v) '' outer)) :
+    p ∈ interior (convexHull ℝ outer) := by
+  revert h p
+  convert subset_interior_hull hε h0
 
 section square_is_rupert
 /- In this section we aim to show that the square has the rupert property.
@@ -164,10 +170,8 @@ by π/4 radians. No offset translation is needed.
  have hε : ε ∈ Set.Ioo 0 1 := by norm_num
 
  have negx_in_outer : ![-1, 0] ∈ interior (convexHull ℝ outer_shadow) := by
-   apply subset_interior_hull hε zero_in_outer
-   · sorry
-   · sorry
-   · sorry
+   apply mem_interior_hull hε zero_in_outer
+   sorry
  have posx_in_outer : ![1, 0] ∈ interior (convexHull ℝ outer_shadow) := sorry
 
  -- we have y ∈ ℝ³ that came from the square, which after being rotated by
