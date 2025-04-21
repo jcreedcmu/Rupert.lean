@@ -37,7 +37,24 @@ lemma subset_interior_hull {outer : Set ℝ²} {ε₀ ε₁: ℝ}
   obtain ⟨ι, x, w, g, hwp, hw1, hg, hwv⟩ := h
   intro v1 hv1
   rw [mem_convexHull_iff_exists_fintype]
-  sorry
+  use ι ⊕ Unit, inferInstance
+  let w₁ : ι ⊕ Unit → ℝ := fun i ↦ match i with
+    | .inl ii => (1 - ε₁) * w ii
+    | .inr () => ε₁
+  let g₁ : ι ⊕ Unit → ℝ² := fun i ↦ match i with
+    | .inl ii => (1 / (1 - ε₁)) • g ii
+    | .inr () => v1 - v
+  use w₁, g₁
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · rintro (i | i)
+    · have := hwp i
+      simp [w₁]
+      sorry
+    · sorry
+  · sorry
+  · sorry
+  · sorry
+
 
 lemma mem_interior_hull {outer : Set ℝ²} {ε₀ ε₁ : ℝ}
     (hε₀ : 0 < ε₀)
