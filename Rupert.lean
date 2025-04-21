@@ -30,6 +30,9 @@ def square : Set ℝ³ := { ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] }
 noncomputable
 def rh : ℝ := √2/2 -- square root of one-half
 
+-- A simple algebraic fact about √2/2 that arises multiple times
+-- FIXME: is there a systematic naming convention that would give me a less
+-- opaque name for this
 theorem rh_lemma : rh * rh + rh * rh  = 1 := by
   calc rh * rh + rh * rh 
        _ = 2 * (√2 / 2)^2 := by rw[rh]; ring
@@ -103,11 +106,19 @@ by π/4 radians. No offset translation is needed.
      exact rh_lemma
 
  use inner_rot, inner_rot_so3, outer_rot, outer_rot_so3, inner_offset
-
  intro inner_shadow outer_shadow x ⟨y, ⟨y_in_square, proj_rot_y_eq_x ⟩⟩
+
+ have negx_in_outer : ![-1, 0] ∈ interior (convexHull ℝ outer_shadow) := sorry
+ have posx_in_outer : ![1, 0] ∈ interior (convexHull ℝ outer_shadow) := sorry
+
  -- we have y ∈ ℝ³ that came from the square, which after being rotated by
  -- inner_rot and projected, is x
  rw [← proj_rot_y_eq_x]; unfold inner_offset; simp; 
- sorry
+ rcases y_in_square with h | h | h | h
+ all_goals (rw [h]; unfold Matrix.mulVec; simp[inner_rot, project32])
+ · exact negx_in_outer
+ · exact posx_in_outer
+ · exact negx_in_outer
+ · exact posx_in_outer
 
 end square_is_rupert
