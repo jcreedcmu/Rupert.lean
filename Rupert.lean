@@ -23,7 +23,7 @@ lemma closure_eq_of_finite {X : Type*} [TopologicalSpace X] [T1Space X]
     {s : Set X} (hs : s.Finite) : closure s = s :=
   closure_eq_iff_isClosed.mpr (hs.isClosed)
 
-lemma subset_interior_hull (inner outer : Set ℝ²) (ε : ℝ) (hε : ε ∈ Set.Ioo 0 1)
+lemma subset_interior_hull {inner outer : Set ℝ²} {ε : ℝ} (hε : ε ∈ Set.Ioo 0 1)
     (h0 : 0 ∈ convexHull ℝ outer)
     (h : inner ⊆ convexHull ℝ ((fun v : ℝ² ↦ (1 - ε) • v) '' outer)) :
     inner ⊆ interior (convexHull ℝ outer) := by
@@ -142,7 +142,32 @@ by π/4 radians. No offset translation is needed.
  rw [closure_eq_of_finite hisf] at hx
  obtain ⟨y, ⟨y_in_square, proj_rot_y_eq_x ⟩⟩ := hx
 
- have negx_in_outer : ![-1, 0] ∈ interior (convexHull ℝ outer_shadow) := sorry
+ have zero_in_outer : 0 ∈ convexHull ℝ outer_shadow := by
+   rw [mem_convexHull_iff_exists_fintype]
+   use Fin 2, inferInstance, ![1/2, 1/2], ![![-rh * 2, 0], ![rh * 2 , 0]]
+   refine ⟨?_, ?_, ?_, ?_⟩
+   · intro i; fin_cases i <;> simp
+   · norm_num
+   · intro i
+     unfold outer_shadow square project32 outer_rot rh
+     fin_cases i
+     · use ![-1, -1, 0]
+       simp
+       ext i; fin_cases i <;> simp
+       ring
+     · use ![1, 1, 0]; simp
+   · ext i
+     fin_cases i <;> simp
+
+ -- subset_interior_hull
+ let ε : ℝ := 0.001
+ have hε : ε ∈ Set.Ioo 0 1 := by norm_num
+
+ have negx_in_outer : ![-1, 0] ∈ interior (convexHull ℝ outer_shadow) := by
+   apply subset_interior_hull hε zero_in_outer
+   · sorry
+   · sorry
+   · sorry
  have posx_in_outer : ![1, 0] ∈ interior (convexHull ℝ outer_shadow) := sorry
 
  -- we have y ∈ ℝ³ that came from the square, which after being rotated by
