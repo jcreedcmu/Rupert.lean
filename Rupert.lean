@@ -166,14 +166,11 @@ by π/4 radians. No offset translation is needed.
      change star inner_rot * inner_rot = 1 ∧ inner_rot * star inner_rot = 1
      constructor
      · -- to show: star inner_rot * inner_rot = 1
-       simp [inner_rot]
-       ext i j; simp [Matrix.mul_apply, Fin.sum_univ_succ]
-       fin_cases i, j <;> simp
+       ext i j
+       fin_cases i, j <;> simp [Matrix.mul_apply, Fin.sum_univ_succ, inner_rot]
      · -- to show: inner_rot * star inner_rot = 1
-       ext i j;
-       simp [inner_rot]
-       unfold Matrix.vecMul
-       fin_cases i, j <;> simp
+       ext i j
+       fin_cases i, j <;> simp [inner_rot, Matrix.vecMul]
 
    constructor
    · exact unitary
