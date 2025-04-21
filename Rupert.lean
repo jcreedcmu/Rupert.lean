@@ -180,19 +180,15 @@ by π/4 radians. No offset translation is needed.
    have unitary : outer_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
     constructor
     · ext i j
-      simp [outer_rot, Matrix.mul_apply, Fin.sum_univ_succ]
-      fin_cases i, j <;> simp
-      all_goals (exact rh_lemma)
+      fin_cases i, j <;>
+        simp [outer_rot, Matrix.mul_apply, Fin.sum_univ_succ, rh_lemma]
     · ext i j
-      simp [outer_rot]; unfold Matrix.vecMul
-      fin_cases i, j
-      all_goals simp
-      all_goals (exact rh_lemma)
+      fin_cases i, j <;>
+        simp [outer_rot, Matrix.vecMul, rh_lemma]
 
    constructor
    · exact unitary
-   · simp [outer_rot, det_succ_row_zero, Fin.sum_univ_succ]
-     exact rh_lemma
+   · simp [outer_rot, det_succ_row_zero, Fin.sum_univ_succ, rh_lemma]
 
  use inner_rot, inner_rot_so3, outer_rot, outer_rot_so3, inner_offset
 
@@ -292,8 +288,8 @@ by π/4 radians. No offset translation is needed.
  -- we have y ∈ ℝ³ that came from the square, which after being rotated by
  -- inner_rot and projected, is x
  rw [← proj_rot_y_eq_x]; unfold inner_offset; simp;
- rcases y_in_square with h | h | h | h
- all_goals (rw [h]; unfold Matrix.mulVec; simp[inner_rot, project32])
+ rcases y_in_square with rfl | rfl | rfl | rfl
+ all_goals (unfold Matrix.mulVec; simp[inner_rot, project32])
  · exact negx_in_outer
  · exact posx_in_outer
  · exact negx_in_outer
