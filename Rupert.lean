@@ -16,3 +16,25 @@ def IsRupert (p : Set ℝ³) : Prop :=
    let inner_shadow := Set.image (λ t ↦ inner_offset + project32 (inner_rot *ᵥ t)) p
    let outer_shadow := Set.image (λ t ↦ project32 (outer_rot *ᵥ t)) p
    closure inner_shadow ⊆ interior (convexHull ℝ outer_shadow)
+
+-- ∃ ε, ∀ p ∈ inner_shadow, ε-ball centered a p ⊆ outshadow
+
+lemma closure_eq_of_finite {X : Type*} [TopologicalSpace X] [T1Space X]
+    {s : Set X} (hs : s.Finite) : closure s = s :=
+  closure_eq_iff_isClosed.mpr (hs.isClosed)
+
+lemma foo (inner outer : Set ℝ²) (ε : ℝ) (hε : ε ∈ Set.Ioo 0 1)
+    (h0 : 0 ∈ convexHull ℝ outer)
+    (h : inner ⊆ convexHull ℝ ((fun v : ℝ² ↦ (1 - ε) • v) '' outer)) :
+    inner ⊆ interior (convexHull ℝ outer) := by
+  rw [Set.mem_Ioo] at hε
+  intro v hv
+  rw [Set.subset_def] at h
+  specialize h v hv
+  rw [mem_interior]
+  use Metric.ball v ε
+  refine ⟨?_, Metric.isOpen_ball, Metric.mem_ball_self hε.1⟩
+  rw [mem_convexHull_iff_exists_fintype] at h
+  obtain ⟨ι, x, w, g, hwp, hw1, hg, hwv⟩ := h
+  intro v1 hv1
+  sorry
