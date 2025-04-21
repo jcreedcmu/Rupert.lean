@@ -58,16 +58,20 @@ lemma subset_interior_hull {outer : Set ℝ²} {ε₀ ε₁: ℝ}
     | .inr ii => ε₁ * w₀ ii
   let g₁ : ι ⊕ ι₀ → ℝ² := fun i ↦ match i with
     | .inl ii => (1 / (1 - ε₁)) • g ii
-    | .inr ii => sorry
+    | .inr ii => g₀ ii
   use w₁, g₁
   refine ⟨?_, ?_, ?_, ?_⟩
   · rintro (i | i)
-    · have := hwp i
+    · have h4 := hwp i
       simp [w₁]
-      sorry
-    · sorry
-  · sorry
-  · sorry
+      have h3 : 0 ≤ 1 - ε₁ := by linarith
+      positivity
+    · simp [w₁]
+      specialize hwp₀ i
+      positivity
+  · simp [Fintype.sum_sum_type, w₁, ←Finset.mul_sum, hw1₀, hw1]
+  · intro i
+    sorry
   · sorry
 
 
