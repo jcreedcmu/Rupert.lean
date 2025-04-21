@@ -23,34 +23,38 @@ lemma closure_eq_of_finite {X : Type*} [TopologicalSpace X] [T1Space X]
     {s : Set X} (hs : s.Finite) : closure s = s :=
   closure_eq_iff_isClosed.mpr (hs.isClosed)
 
-lemma subset_interior_hull {outer : Set ℝ²} {ε : ℝ} (hε : ε ∈ Set.Ioo 0 1)
-    (h0 : 0 ∈ convexHull ℝ outer) :
-    convexHull ℝ ((fun v : ℝ² ↦ (1 - ε) • v) '' outer) ⊆
+lemma subset_interior_hull {outer : Set ℝ²} {ε₀ ε₁: ℝ}
+    (hε₀ : 0 < ε₀)
+    (hε₁ : ε₁ ∈ Set.Ioo 0 1)
+    (h0 : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer) :
+    convexHull ℝ ((fun v : ℝ² ↦ (1 - ε₁) • v) '' outer) ⊆
       interior (convexHull ℝ outer) := by
-  rw [Set.mem_Ioo] at hε
+  rw [Set.mem_Ioo] at hε₁
   intro v h
   rw [mem_interior]
-  use Metric.ball v ε
-  refine ⟨?_, Metric.isOpen_ball, Metric.mem_ball_self hε.1⟩
+  use Metric.ball v ε₁
+  refine ⟨?_, Metric.isOpen_ball, Metric.mem_ball_self hε₁.1⟩
   rw [mem_convexHull_iff_exists_fintype] at h
   obtain ⟨ι, x, w, g, hwp, hw1, hg, hwv⟩ := h
   intro v1 hv1
   rw [mem_convexHull_iff_exists_fintype]
   use ι, x, w
   -- scale g by (1 / (1 - ε))
-  let g' i : ℝ² := (1 / (1 - ε)) • g i
+  let g' i : ℝ² := (1 / (1 - ε₁)) • g i
   use g'
   refine ⟨hwp, hw1, ?_, ?_⟩
   · sorry
   · sorry
 
-lemma mem_interior_hull {outer : Set ℝ²} {ε : ℝ} (hε : ε ∈ Set.Ioo 0 1)
+lemma mem_interior_hull {outer : Set ℝ²} {ε₀ ε₁ : ℝ}
+    (hε₀ : 0 < ε₀)
+    (hε₁ : ε₁ ∈ Set.Ioo 0 1)
+    (h0 : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer)
     {p : ℝ²}
-    (h0 : 0 ∈ convexHull ℝ outer)
-    (h : p ∈ convexHull ℝ ((fun v : ℝ² ↦ (1 - ε) • v) '' outer)) :
+    (h : p ∈ convexHull ℝ ((fun v : ℝ² ↦ (1 - ε₁) • v) '' outer)) :
     p ∈ interior (convexHull ℝ outer) := by
   revert h p
-  convert subset_interior_hull hε h0
+  convert subset_interior_hull hε₀ hε₁ h0
 
 section square_is_rupert
 /- In this section we aim to show that the square has the rupert property.
@@ -149,7 +153,10 @@ by π/4 radians. No offset translation is needed.
  rw [closure_eq_of_finite hisf] at hx
  obtain ⟨y, ⟨y_in_square, proj_rot_y_eq_x ⟩⟩ := hx
 
- have zero_in_outer : 0 ∈ convexHull ℝ outer_shadow := by
+ let ε₀ : ℝ := 0.01
+ have zero_in_outer : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer_shadow := by
+   sorry
+   /-
    rw [mem_convexHull_iff_exists_fintype]
    use Fin 2, inferInstance, ![1/2, 1/2], ![![-rh * 2, 0], ![rh * 2 , 0]]
    refine ⟨?_, ?_, ?_, ?_⟩
@@ -165,29 +172,31 @@ by π/4 radians. No offset translation is needed.
      · use ![1, 1, 0]; simp
    · ext i
      fin_cases i <;> simp
+-/
 
  -- subset_interior_hull
- let ε : ℝ := 0.001
- have hε : ε ∈ Set.Ioo 0 1 := by norm_num
+ let ε₁ : ℝ := 0.001
+ have hε₁ : ε₁ ∈ Set.Ioo 0 1 := by norm_num
 
  have negx_in_outer : ![-1, 0] ∈ interior (convexHull ℝ outer_shadow) := by
-   apply mem_interior_hull hε zero_in_outer
+   apply mem_interior_hull (by norm_num) hε₁ zero_in_outer
    rw [mem_convexHull_iff_exists_fintype]
    -- we need to write (-1,0) as a convex combination of
    -- (-(1-ε)√2, 0), ((1-ε)√2, 0)
    use Fin 2, inferInstance
-   use ![((1-ε)* √2 - 1) / (2 * (1 - ε) * √2), ((1-ε)* √2 + 1) /(2 * (1 - ε) * √2)]
-   use ![![(1-ε) * √2, 0], ![-(1-ε) * √2, 0]]
+   use ![((1-ε₁)* √2 - 1) / (2 * (1 - ε₁) * √2),
+         ((1-ε₁)* √2 + 1) /(2 * (1 - ε₁) * √2)]
+   use ![![(1-ε₁) * √2, 0], ![-(1-ε₁) * √2, 0]]
    refine ⟨?_, ?_, ?_, ?_⟩
    · intro i; fin_cases i
-     · simp [ε]
+     · simp [ε₁]
        have h1 : 0 ≤ 2 * (1 - 1e-3) * √2 := by positivity
        suffices H : (0:ℝ) ≤ ((1 - 1e-3) * √2 - 1) from div_nonneg H h1
        suffices H : (1:ℝ) ≤ (1 - 1e-3) * √2 by linarith
        refine (sq_le_sq₀ zero_le_one (by positivity)).mp ?_
        rw [mul_pow, Real.sq_sqrt zero_le_two]
        norm_num
-     · simp [ε]
+     · simp [ε₁]
        have h1 : 0 ≤ 2 * (1 - 1e-3) * √2 := by positivity
        suffices H : (0:ℝ) ≤ ((1 - 1e-3) * √2 + 1) from div_nonneg H h1
        suffices H : (1:ℝ) ≤ (1 - 1e-3) * √2 by linarith
