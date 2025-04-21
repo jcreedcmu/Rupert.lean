@@ -171,7 +171,31 @@ by π/4 radians. No offset translation is needed.
 
  have negx_in_outer : ![-1, 0] ∈ interior (convexHull ℝ outer_shadow) := by
    apply mem_interior_hull hε zero_in_outer
-   sorry
+   rw [mem_convexHull_iff_exists_fintype]
+   -- we need to write (-1,0) as a convex combination of
+   -- (-(1-ε)√2, 0), ((1-ε)√2, 0)
+   use Fin 2, inferInstance
+   use ![((1-ε)* √2 - 1) /(2 * (1 - ε) * √2), ((1-ε)* √2 + 1) /(2 * (1 - ε) * √2)]
+   use ![![-(1-ε) * √2, 0], ![(1-ε) * √2, 0]]
+   refine ⟨?_, ?_, ?_, ?_⟩
+   · intro i; fin_cases i
+     · simp [ε]
+       have h1 : 0 ≤ 2 * (1 - 1e-3) * √2 := by positivity
+       suffices H : (0:ℝ) ≤ ((1 - 1e-3) * √2 - 1) from div_nonneg H h1
+       suffices H : (1:ℝ) ≤ (1 - 1e-3) * √2 by linarith
+       refine (sq_le_sq₀ zero_le_one (by positivity)).mp ?_
+       rw [mul_pow, Real.sq_sqrt zero_le_two]
+       norm_num
+     · simp [ε]
+       have h1 : 0 ≤ 2 * (1 - 1e-3) * √2 := by positivity
+       suffices H : (0:ℝ) ≤ ((1 - 1e-3) * √2 + 1) from div_nonneg H h1
+       suffices H : (1:ℝ) ≤ (1 - 1e-3) * √2 by linarith
+       refine (sq_le_sq₀ zero_le_one (by positivity)).mp ?_
+       rw [mul_pow, Real.sq_sqrt zero_le_two]
+       norm_num
+   · sorry
+   · sorry
+   · sorry
  have posx_in_outer : ![1, 0] ∈ interior (convexHull ℝ outer_shadow) := sorry
 
  -- we have y ∈ ℝ³ that came from the square, which after being rotated by
