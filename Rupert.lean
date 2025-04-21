@@ -36,14 +36,29 @@ lemma subset_interior_hull {outer : Set ℝ²} {ε₀ ε₁: ℝ}
   rw [mem_convexHull_iff_exists_fintype] at h
   obtain ⟨ι, x, w, g, hwp, hw1, hg, hwv⟩ := h
   intro v1 hv1
-  rw [mem_convexHull_iff_exists_fintype]
-  use ι ⊕ Unit, inferInstance
-  let w₁ : ι ⊕ Unit → ℝ := fun i ↦ match i with
+  have hb0 : (1 / ε₁) • (v1 - v) ∈ (convexHull ℝ) outer := by
+    refine h0 ?_
+    rw [Metric.mem_ball] at hv1 ⊢
+    rw [dist_eq_norm] at hv1
+    rw [dist_zero_right, norm_smul, Real.norm_eq_abs]
+    have h1 : 0 < 1 / ε₁ := by positivity
+    rw [abs_of_pos h1]
+    suffices H : ‖v1 - v‖ < ε₀ * ε₁ by
+      field_simp
+      have : ‖v1 - v‖ / ε₁ < ε₀ * ε₁ / ε₁ :=
+        (div_lt_div_iff_of_pos_right hε₁0).mpr H
+      have h2 : ε₁ ≠ 0 := by positivity
+      rwa [mul_div_cancel_right₀ _ h2] at this
+    nlinarith only [hv1, hε₁0, hε₀]
+  rw [mem_convexHull_iff_exists_fintype] at hb0 ⊢
+  obtain ⟨ι₀, x₀, w₀, g₀, hwp₀, hw1₀, hg₀, hwv₀⟩ := hb0
+  use ι ⊕ ι₀, inferInstance
+  let w₁ : ι ⊕ ι₀ → ℝ := fun i ↦ match i with
     | .inl ii => (1 - ε₁) * w ii
-    | .inr () => ε₁
-  let g₁ : ι ⊕ Unit → ℝ² := fun i ↦ match i with
+    | .inr ii => ε₁ * w₀ ii
+  let g₁ : ι ⊕ ι₀ → ℝ² := fun i ↦ match i with
     | .inl ii => (1 / (1 - ε₁)) • g ii
-    | .inr () => v1 - v
+    | .inr ii => sorry
   use w₁, g₁
   refine ⟨?_, ?_, ?_, ?_⟩
   · rintro (i | i)
