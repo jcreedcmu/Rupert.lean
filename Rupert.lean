@@ -70,9 +70,22 @@ lemma subset_interior_hull {outer : Set ℝ²} {ε₀ ε₁: ℝ}
       specialize hwp₀ i
       positivity
   · simp [Fintype.sum_sum_type, w₁, ←Finset.mul_sum, hw1₀, hw1]
-  · intro i
+  · rintro (i | i)
+    · dsimp only [g₁]
+      specialize hg i
+      simp at hg
+      obtain ⟨y, hy, hy1⟩ := hg
+      symm at hy1
+      apply_fun ((1/(1-ε₁)) • ·) at hy1
+      rw [←smul_assoc] at hy1
+      have h3 : 0 < 1 - ε₁ := by linarith
+      field_simp at hy1
+      rw [←hy1] at hy
+      exact hy
+    · dsimp only [g₁]
+      exact hg₀ i
+  · simp only [Fintype.sum_sum_type, w₁, g₁]
     sorry
-  · sorry
 
 
 lemma mem_interior_hull {outer : Set ℝ²} {ε₀ ε₁ : ℝ}
