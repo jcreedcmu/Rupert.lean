@@ -136,7 +136,9 @@ by π/4 radians. No offset translation is needed.
  use inner_rot, inner_rot_so3, outer_rot, outer_rot_so3, inner_offset
 
  intro inner_shadow outer_shadow x hx
- have hisf : inner_shadow.Finite := by sorry
+ have hisf : inner_shadow.Finite := by
+   have hsf : square.Finite := by unfold square; exact Set.toFinite _
+   exact Set.Finite.image _ hsf
  rw [closure_eq_of_finite hisf] at hx
  obtain ⟨y, ⟨y_in_square, proj_rot_y_eq_x ⟩⟩ := hx
 
