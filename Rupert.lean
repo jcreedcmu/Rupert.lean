@@ -20,26 +20,24 @@ def IsRupert (p : Set ℝ³) : Prop :=
 section square_is_rupert
 /- In this section we aim to show that the square has the rupert property.
    Status:  
-   - Still need to show that the desired rotations are actually in SO(3)
    - Still need to show that the shadow of any point from the inner square is in the 
-     shadow of the outer square.
+     interior of the shadow of the outer square.
 -/
 open Matrix 
 open Real
 def square : Set ℝ³ := { ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] }
 
 noncomputable
-def rh : ℝ := (√2)/2 -- square root of one-half
+def rh : ℝ := √2/2 -- square root of one-half
 
-theorem rh_norm_lemma : rh * rh + rh * rh = 1 := by
+theorem rh_lemma : rh * rh + rh * rh  = 1 := by
   calc rh * rh + rh * rh 
-    _ = 2 * ((√2) / 2)^2 := by rw[rh]; ring
-    _ = 2 * (((√2) * (√2))/ (2^2))  := by rw[div_pow]; ring
-    _ = 2 * (2 / (2^2))  := by rw[mul_self_sqrt (by norm_num)]
-    _ = 1 := by norm_num
+       _ = 2 * (√2 / 2)^2 := by rw[rh]; ring
+       _ = 2 * ((√2 * √2) / 2^2) := by rw[div_pow]; ring
+       _ = 2 * (2 / 2^2) := by rw[mul_self_sqrt (by norm_num)]
+       _ = 1 := by norm_num
 
 theorem square_is_rupert : IsRupert square := by
-
 /-
 
 The diagram shows the (x,y) plane, the z axis runs through the
@@ -88,16 +86,21 @@ by π/4 radians. No offset translation is needed.
  have outer_rot_so3 : outer_rot ∈ SO3 := by
    have unitary : outer_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
     constructor
-    · sorry
-    · sorry
+    · ext i j
+      simp [outer_rot, Matrix.mul_apply, Fin.sum_univ_succ]
+      fin_cases i, j
+      all_goals simp 
+      all_goals (exact rh_lemma)
+    · ext i j
+      simp [outer_rot]; unfold Matrix.vecMul; 
+      fin_cases i, j
+      all_goals simp
+      all_goals (exact rh_lemma)
+
    constructor
    · exact unitary
    · simp [outer_rot, det_succ_row_zero, Fin.sum_univ_succ]
-     calc rh * rh + rh * rh 
-       _ = 2 * ((√2) / 2)^2 := by rw[rh]; ring
-       _ = 2 * (((√2) * (√2))/ (2^2))  := by rw[div_pow]; ring
-       _ = 2 * (2 / (2^2))  := by rw[mul_self_sqrt (by norm_num)]
-       _ = 1 := by norm_num
+     exact rh_lemma
 
  use inner_rot, inner_rot_so3, outer_rot, outer_rot_so3, inner_offset
 
