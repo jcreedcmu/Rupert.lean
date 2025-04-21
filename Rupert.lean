@@ -75,6 +75,7 @@ theorem rh_lemma : rh * rh + rh * rh  = 1 := by
        _ = 2 * (2 / 2^2) := by rw[mul_self_sqrt (by norm_num)]
        _ = 1 := by norm_num
 
+set_option maxHeartbeats 10000000 in
 theorem square_is_rupert : IsRupert square := by
 /-
 
@@ -175,8 +176,8 @@ by π/4 radians. No offset translation is needed.
    -- we need to write (-1,0) as a convex combination of
    -- (-(1-ε)√2, 0), ((1-ε)√2, 0)
    use Fin 2, inferInstance
-   use ![((1-ε)* √2 - 1) /(2 * (1 - ε) * √2), ((1-ε)* √2 + 1) /(2 * (1 - ε) * √2)]
-   use ![![-(1-ε) * √2, 0], ![(1-ε) * √2, 0]]
+   use ![((1-ε)* √2 - 1) / (2 * (1 - ε) * √2), ((1-ε)* √2 + 1) /(2 * (1 - ε) * √2)]
+   use ![![(1-ε) * √2, 0], ![-(1-ε) * √2, 0]]
    refine ⟨?_, ?_, ?_, ?_⟩
    · intro i; fin_cases i
      · simp [ε]
@@ -193,9 +194,32 @@ by π/4 radians. No offset translation is needed.
        refine (sq_le_sq₀ zero_le_one (by positivity)).mp ?_
        rw [mul_pow, Real.sq_sqrt zero_le_two]
        norm_num
-   · sorry
-   · sorry
-   · sorry
+   · field_simp; ring
+   · intro i
+     fin_cases i
+     · unfold outer_shadow square project32 outer_rot rh
+       simp
+       use ![√2, 0]
+       constructor
+       · right; right; right; rfl
+       · ext i
+         fin_cases i <;> simp
+     · dsimp
+       simp [outer_shadow, square, project32, outer_rot, rh, Matrix.mulVec]
+       use ![-√2, 0]
+       constructor
+       · left
+         ext i; fin_cases i
+         · simp; ring
+         · simp
+       · ext i; fin_cases i
+         · simp; ring
+         · simp
+   · ext i
+     fin_cases i
+     · simp
+       field_simp; ring
+     · field_simp
  have posx_in_outer : ![1, 0] ∈ interior (convexHull ℝ outer_shadow) := sorry
 
  -- we have y ∈ ℝ³ that came from the square, which after being rotated by
