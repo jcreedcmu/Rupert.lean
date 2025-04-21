@@ -85,8 +85,19 @@ lemma subset_interior_hull {outer : Set ℝ²} {ε₀ ε₁: ℝ}
     · dsimp only [g₁]
       exact hg₀ i
   · simp only [Fintype.sum_sum_type, w₁, g₁]
-    sorry
-
+    have h1 : ∀ x : ι₀, (ε₁ * w₀ x) • g₀ x = ε₁ • (w₀ x • g₀ x) := by
+      intro x
+      exact mul_smul ε₁ (w₀ x) (g₀ x)
+    rw [Fintype.sum_congr _ _ h1, ←Finset.smul_sum, hwv₀]
+    have h2 : ∀ x : ι, ((1 - ε₁) * w x) • (1 / (1 - ε₁)) • g x = w x • g x := by
+      intro x
+      rw [smul_comm, mul_smul]
+      rw [←smul_assoc]
+      have h3 : 0 < 1 - ε₁ := by linarith
+      field_simp
+    rw [Fintype.sum_congr _ _ h2, hwv]
+    rw [←smul_assoc]
+    field_simp
 
 lemma mem_interior_hull {outer : Set ℝ²} {ε₀ ε₁ : ℝ}
     (hε₀ : 0 < ε₀)
