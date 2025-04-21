@@ -206,36 +206,41 @@ by π/4 radians. No offset translation is needed.
  rw [closure_eq_of_finite hisf] at hx
  obtain ⟨y, ⟨y_in_square, proj_rot_y_eq_x ⟩⟩ := hx
 
- let ε₀ : ℝ := 0.01
+ obtain ⟨ε₀, hε₀0, hε₀⟩ : ∃ ε₀, 0 < ε₀ ∧ ε₀ < √2/4 := by
+   sorry
  have zero_in_outer : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer_shadow := by
    intro v hv
    simp only [Metric.mem_ball, dist_zero_right, outer_rot, inner_rot] at hv
    rw [mem_convexHull_iff_exists_fintype]
-
-   sorry
-   /-
-   use Fin 2, inferInstance, ![1/2, 1/2], ![![-rh * 2, 0], ![rh * 2 , 0]]
+   use Fin 4, inferInstance
+   use ![1/4 + v 0 / √2, 1/4 - v 0 / √2, 1/4 + v 1 / √2, 1/4 - v 1 / √2]
+   use ![![√2, 0],![-√2, 0], ![0, √2],![0, -√2]]
+   have h0 : v 0 < ε₀ := by sorry
+   have h2 : -ε₀ < v 0 := sorry
+   have h3 : v 1 < ε₀ := by sorry
+   have h4 : -ε₀ < v 1 := sorry
    refine ⟨?_, ?_, ?_, ?_⟩
-   · intro i; fin_cases i <;> simp
-   · norm_num
    · intro i
-     unfold outer_shadow square project32 outer_rot rh
      fin_cases i
-     · use ![-1, -1, 0]
-       simp
-       ext i; fin_cases i <;> simp
-       ring
-     · use ![1, 1, 0]; simp
-   · ext i
-     fin_cases i <;> simp
--/
+     · simp
+       suffices H : 0 ≤ 4⁻¹ + ε₀ / √2 by sorry
+       sorry
+     · simp
+       sorry
+     · simp
+       sorry
+     · simp
+       sorry
+   · sorry
+   · sorry
+   · sorry
 
  -- subset_interior_hull
  let ε₁ : ℝ := 0.001
  have hε₁ : ε₁ ∈ Set.Ioo 0 1 := by norm_num
 
  have negx_in_outer : ![-1, 0] ∈ interior (convexHull ℝ outer_shadow) := by
-   apply mem_interior_hull (by norm_num) hε₁ zero_in_outer
+   apply mem_interior_hull hε₀0 hε₁ zero_in_outer
    rw [mem_convexHull_iff_exists_fintype]
    -- we need to write (-1,0) as a convex combination of
    -- (-(1-ε)√2, 0), ((1-ε)√2, 0)
