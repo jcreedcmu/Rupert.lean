@@ -31,7 +31,7 @@ lemma subset_interior_hull {outer : Set ℝ²} {ε₀ ε₁: ℝ}
   obtain ⟨hε₁0, hε₁1⟩ := hε₁
   intro v h
   rw [mem_interior]
-  use Metric.ball v (ε₀ * ε₁ / 2)
+  use Metric.ball v (ε₀ * ε₁)
   refine ⟨?_, Metric.isOpen_ball, Metric.mem_ball_self (by positivity)⟩
   rw [mem_convexHull_iff_exists_fintype] at h
   obtain ⟨ι, x, w, g, hwp, hw1, hg, hwv⟩ := h
