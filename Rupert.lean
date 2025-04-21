@@ -28,21 +28,16 @@ lemma subset_interior_hull {outer : Set ℝ²} {ε₀ ε₁: ℝ}
     convexHull ℝ ((fun v : ℝ² ↦ (1 - ε₁) • v) '' outer) ⊆
       interior (convexHull ℝ outer) := by
   rw [Set.mem_Ioo] at hε₁
+  obtain ⟨hε₁0, hε₁1⟩ := hε₁
   intro v h
   rw [mem_interior]
-  use Metric.ball v ε₁
-  refine ⟨?_, Metric.isOpen_ball, Metric.mem_ball_self hε₁.1⟩
+  use Metric.ball v (ε₀ * ε₁ / 2)
+  refine ⟨?_, Metric.isOpen_ball, Metric.mem_ball_self (by positivity)⟩
   rw [mem_convexHull_iff_exists_fintype] at h
   obtain ⟨ι, x, w, g, hwp, hw1, hg, hwv⟩ := h
   intro v1 hv1
   rw [mem_convexHull_iff_exists_fintype]
-  use ι, x, w
-  -- scale g by (1 / (1 - ε))
-  let g' i : ℝ² := (1 / (1 - ε₁)) • g i
-  use g'
-  refine ⟨hwp, hw1, ?_, ?_⟩
-  · sorry
-  · sorry
+  sorry
 
 lemma mem_interior_hull {outer : Set ℝ²} {ε₀ ε₁ : ℝ}
     (hε₀ : 0 < ε₀)
