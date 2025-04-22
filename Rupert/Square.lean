@@ -92,7 +92,8 @@ by π/4 radians. No offset translation is needed.
    simp only [Metric.mem_ball, dist_zero_right, outer_rot, inner_rot] at hv
    rw [mem_convexHull_iff_exists_fintype]
    use Fin 4, inferInstance
-   use ![1/4 + v 0 / √2, 1/4 - v 0 / √2, 1/4 + v 1 / √2, 1/4 - v 1 / √2]
+   use ![1/4 + v 0 / (2 * √2), 1/4 - v 0 / (2*√2),
+         1/4 + v 1 / (2 * √2), 1/4 - v 1 / (2 * √2)]
    use ![![√2, 0],![-√2, 0], ![0, √2],![0, -√2]]
    have h0 : v 0 < ε₀ := by sorry
    have h2 : -ε₀ < v 0 := sorry
@@ -110,9 +111,21 @@ by π/4 radians. No offset translation is needed.
        sorry
      · simp
        sorry
-   · sorry
-   · sorry
-   · sorry
+   · simp [Fin.sum_univ_four]
+     ring
+   · intro i
+     fin_cases i
+     · simp [outer_shadow, square, project32, rh]
+     · simp [outer_shadow, square, project32, rh]
+       left; simp[neg_div']
+     · simp [outer_shadow, square, project32, rh]
+     · simp [outer_shadow, square, project32, rh]
+       right; left; simp[neg_div']
+   · rw [Fin.sum_univ_four]
+     ext i
+     fin_cases i
+     · simp; field_simp; ring_nf
+     · simp; field_simp; ring_nf
 
  -- subset_interior_hull
  let ε₁ : ℝ := 0.001
