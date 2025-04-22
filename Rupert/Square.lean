@@ -25,18 +25,12 @@ abbrev inner_rot : Matrix (Fin 3) (Fin 3) ℝ :=
       0, 1, 0]
 
 def inner_rot_so3 : inner_rot ∈ SO3 := by
- have unitary : inner_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
-   change star inner_rot * inner_rot = 1 ∧ inner_rot * star inner_rot = 1
-   constructor
-   · -- to show: star inner_rot * inner_rot = 1
-     ext i j
-     fin_cases i, j <;> simp [Matrix.mul_apply, Fin.sum_univ_three, inner_rot]
-   · -- to show: inner_rot * star inner_rot = 1
-     ext i j
-     fin_cases i, j <;> simp [inner_rot, Matrix.vecMul]
- constructor
- · exact unitary
- · simp [inner_rot, det_succ_row_zero, Fin.sum_univ_three]
+  dsimp only [inner_rot]
+  rw [mem_specialOrthogonalGroup_iff]
+  constructor
+  · constructor <;> (ext i j; fin_cases i, j) <;>
+     simp [Matrix.mul_apply, Fin.sum_univ_three, Matrix.vecMul]
+  · simp [det_succ_row_zero, Fin.sum_univ_three]
 
 noncomputable abbrev outer_rot : Matrix (Fin 3) (Fin 3) ℝ :=
    !![ rh, rh, 0;
@@ -44,17 +38,12 @@ noncomputable abbrev outer_rot : Matrix (Fin 3) (Fin 3) ℝ :=
         0,  0, 1]
 
 def outer_rot_so3 : outer_rot ∈ SO3 := by
-  have unitary : outer_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
-    constructor
-    · ext i j
-      fin_cases i, j <;>
-        simp [outer_rot, Matrix.mul_apply, Fin.sum_univ_three, rh_lemma]
-    · ext i j
-      fin_cases i, j <;>
-        simp [outer_rot, Matrix.vecMul, rh_lemma]
+  dsimp only [outer_rot]
+  rw [mem_specialOrthogonalGroup_iff]
   constructor
-  · exact unitary
-  · simp [outer_rot, det_succ_row_zero, Fin.sum_univ_three, rh_lemma]
+  · constructor <;> (ext i j; fin_cases i, j) <;>
+     simp [Matrix.mul_apply, Fin.sum_univ_three, Matrix.vecMul, rh_lemma]
+  · simp [det_succ_row_zero, Fin.sum_univ_three, rh_lemma]
 
 lemma fst_abs_le_norm (v : EuclideanSpace ℝ (Fin 2)) : |v 0| ≤ ‖v‖ := by
   rw [EuclideanSpace.norm_eq, Fin.sum_univ_two]
