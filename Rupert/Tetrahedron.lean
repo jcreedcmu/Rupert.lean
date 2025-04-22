@@ -52,5 +52,4 @@ def outer_rot_so3 : outer_rot ∈ SO3 := by
           outer_quat, Fin.succAbove]
     norm_num
 
-theorem rupert : IsRupert tetrahedron := by
-  sorry
+proof_wanted rupert : IsRupert tetrahedron
