@@ -1,4 +1,5 @@
 import Rupert.Basic
+import Rupert.Convex
 
 namespace Square
 

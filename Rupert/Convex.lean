@@ -4,22 +4,6 @@ open Pointwise
 abbrev E (n : ℕ) := EuclideanSpace ℝ (Fin n)
 
 /-
-This is an alternative proof of subset_interior_hull as found in
-Basic.lean at time of writing. Instead of relying on
-mem_convexHull_iff_exists_fintype it relies on
-segment_subset_convexHull.
-
-To achieve parity with the other proof, it still needs a corollary
-to replace the assumption
-    h0 : Metric.ball 0 ε ⊆ X
-with
-    h0 : Metric.ball 0 ε ⊆ convexHull ℝ X
-and
-                  ℓ • X ⊆ ⋯
-with
-    convexHull ℝ (ℓ • X) ⊆ ⋯
-in the conclusion. But these should be fairly easy.
-
 Lemma:
 
 If a convex set X of a euclidean space contains an open ball around
@@ -96,3 +80,28 @@ lemma subset_interior_hull' {n : ℕ} {X : Set (E n)} {ε ℓ: ℝ}
           by rw [smul_smul, smul_smul]; field_simp ⟩⟩
 
   exact segment_subset_convexHull seg1_in_X seg2_in_X pt_in_seg
+
+lemma subset_interior_hull {n : ℕ} {X : Set (E n)} {ε₀ ε₁: ℝ}
+    (hε₀ : 0 < ε₀)
+    (hε₁ : ε₁ ∈ Set.Ioo 0 1)
+    (h0 : Metric.ball 0 ε₀ ⊆ convexHull ℝ X) :
+    convexHull ℝ ((1 - ε₁) • X) ⊆
+      interior (convexHull ℝ X) := by
+  rw [convexHull_smul]
+  have h2 : 1 - ε₁ ∈ Set.Ioo 0 1 := by
+    obtain ⟨hε₁0, hε₁1⟩ := hε₁
+    rw [Set.mem_Ioo]
+    constructor <;> linarith
+  have h3 := subset_interior_hull' hε₀ h2 h0
+  rw [ClosureOperator.idempotent] at h3
+  exact h3
+
+lemma mem_interior_hull {n : ℕ} {X : Set (E n)} {ε₀ ε₁ : ℝ}
+    (hε₀ : 0 < ε₀)
+    (hε₁ : ε₁ ∈ Set.Ioo 0 1)
+    (h0 : Metric.ball 0 ε₀ ⊆ convexHull ℝ X)
+    {p : E n}
+    (h : p ∈ convexHull ℝ ((fun v : E n ↦ (1 - ε₁) • v) '' X)) :
+    p ∈ interior (convexHull ℝ X) := by
+  revert h p
+  convert subset_interior_hull hε₀ hε₁ h0
