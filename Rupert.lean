@@ -260,14 +260,22 @@ by π/4 radians. No offset translation is needed.
    · intro i
      fin_cases i
      · unfold outer_shadow square project32 outer_rot rh
-       simp
+       simp only [Fin.isValue, cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
+         neg_mul, one_mul, zero_add, empty_mulVec, cons_val_zero, cons_val_one, Nat.succ_eq_add_one,
+         Nat.reduceAdd, neg_sub, Fin.zero_eta, Set.mem_image, Set.mem_insert_iff,
+         Set.mem_singleton_iff, exists_eq_or_imp, head_cons, mul_neg, mul_one, tail_cons,
+         add_neg_cancel, neg_add_cancel, exists_eq_left]
        use ![√2, 0]
        constructor
-       · right; right; right; rfl
+       · right; right; right; rw [add_halves]
        · ext i
          fin_cases i <;> simp
-     · dsimp
-       simp [outer_shadow, square, project32, outer_rot, rh, Matrix.mulVec]
+     · simp only [project32, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
+        cons_val_fin_one, cons_val_zero, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
+        cons_val_one, neg_mul, square, Nat.succ_eq_add_one, Nat.reduceAdd, neg_sub, Fin.mk_one,
+        Set.mem_image, Set.mem_insert_iff, Set.mem_singleton_iff, exists_eq_or_imp, head_cons,
+        mul_neg, mul_one, tail_cons, neg_neg, add_neg_cancel, neg_add_cancel, add_halves,
+        exists_eq_left, outer_shadow]
        use ![-√2, 0]
        constructor
        · left
@@ -279,8 +287,7 @@ by π/4 radians. No offset translation is needed.
          · simp
    · ext i
      fin_cases i
-     · simp
-       field_simp; ring
+     · field_simp; ring
      · field_simp
  have posx_in_outer : ![1, 0] ∈ interior (convexHull ℝ outer_shadow) := sorry
 
