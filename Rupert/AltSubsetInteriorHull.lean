@@ -15,9 +15,9 @@ to replace the assumption
 with
     h0 : Metric.ball 0 ε ⊆ convexHull ℝ X
 and
-                 ((fun v : ℝ² ↦ (1 - ε₁) • v) '' outer) ⊆ ⋯
+                  ℓ • X ⊆ ⋯
 with
-    convexHull ℝ ((fun v : ℝ² ↦ (1 - ε₁) • v) '' outer) ⊆ ⋯
+    convexHull ℝ (ℓ • X) ⊆ ⋯
 in the conclusion. But these should be fairly easy.
 
 Lemma:
@@ -59,10 +59,8 @@ lemma subset_interior_hull' {n : ℕ} {X : Set (E n)} {ε ℓ: ℝ}
     (hε : 0 < ε)
     (hℓ : ℓ ∈ Set.Ioo 0 1)
     (h0 : Metric.ball 0 ε ⊆ X) :
-    ((fun v : E n ↦ ℓ • v) '' X) ⊆
-      interior (convexHull ℝ X) := by
+    ℓ • X ⊆ interior (convexHull ℝ X) := by
   intro ix hix -- "inner x"
-  let inner := ((fun v ↦ ℓ • v) '' X)
   apply Set.mem_sUnion.mpr
 
   have lnz : ℓ ≠ 0 := ne_of_gt (by (simp_all only [Set.mem_Ioo]))
