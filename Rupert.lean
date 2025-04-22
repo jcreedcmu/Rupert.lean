@@ -132,6 +132,43 @@ theorem rh_lemma : rh * rh + rh * rh  = 1 := by
        _ = 2 * (2 / 2^2) := by rw[mul_self_sqrt (by norm_num)]
        _ = 1 := by norm_num
 
+abbrev inner_rot : Matrix (Fin 3) (Fin 3) ℝ :=
+   !![1, 0, 0;
+      0, 0,-1;
+      0, 1, 0]
+
+def inner_rot_so3 : inner_rot ∈ SO3 := by
+ have unitary : inner_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
+   change star inner_rot * inner_rot = 1 ∧ inner_rot * star inner_rot = 1
+   constructor
+   · -- to show: star inner_rot * inner_rot = 1
+     ext i j
+     fin_cases i, j <;> simp [Matrix.mul_apply, Fin.sum_univ_succ, inner_rot]
+   · -- to show: inner_rot * star inner_rot = 1
+     ext i j
+     fin_cases i, j <;> simp [inner_rot, Matrix.vecMul]
+ constructor
+ · exact unitary
+ · simp [inner_rot, det_succ_row_zero, Fin.sum_univ_succ]
+
+noncomputable abbrev outer_rot : Matrix (Fin 3) (Fin 3) ℝ :=
+   !![ rh, rh, 0;
+      -rh, rh, 0;
+        0,  0, 1]
+
+def outer_rot_so3 : outer_rot ∈ SO3 := by
+  have unitary : outer_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
+    constructor
+    · ext i j
+      fin_cases i, j <;>
+        simp [outer_rot, Matrix.mul_apply, Fin.sum_univ_succ, rh_lemma]
+    · ext i j
+      fin_cases i, j <;>
+        simp [outer_rot, Matrix.vecMul, rh_lemma]
+  constructor
+  · exact unitary
+  · simp [outer_rot, det_succ_row_zero, Fin.sum_univ_succ, rh_lemma]
+
 set_option maxHeartbeats 10000000 in
 theorem square_is_rupert : IsRupert square := by
 /-
@@ -151,45 +188,7 @@ by π/4 radians. No offset translation is needed.
      \ /
       +
 -/
- let inner_rot : Matrix (Fin 3) (Fin 3) ℝ :=
-   !![1, 0, 0;
-      0, 0,-1;
-      0, 1, 0]
- let outer_rot : Matrix (Fin 3) (Fin 3) ℝ :=
-   !![ rh, rh, 0;
-      -rh, rh, 0;
-        0,  0, 1]
  let inner_offset : ℝ² := 0
-
- have inner_rot_so3 : inner_rot ∈ SO3 := by
-   have unitary : inner_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
-     change star inner_rot * inner_rot = 1 ∧ inner_rot * star inner_rot = 1
-     constructor
-     · -- to show: star inner_rot * inner_rot = 1
-       ext i j
-       fin_cases i, j <;> simp [Matrix.mul_apply, Fin.sum_univ_succ, inner_rot]
-     · -- to show: inner_rot * star inner_rot = 1
-       ext i j
-       fin_cases i, j <;> simp [inner_rot, Matrix.vecMul]
-
-   constructor
-   · exact unitary
-   · simp [inner_rot, det_succ_row_zero, Fin.sum_univ_succ]
-
- have outer_rot_so3 : outer_rot ∈ SO3 := by
-   have unitary : outer_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
-    constructor
-    · ext i j
-      fin_cases i, j <;>
-        simp [outer_rot, Matrix.mul_apply, Fin.sum_univ_succ, rh_lemma]
-    · ext i j
-      fin_cases i, j <;>
-        simp [outer_rot, Matrix.vecMul, rh_lemma]
-
-   constructor
-   · exact unitary
-   · simp [outer_rot, det_succ_row_zero, Fin.sum_univ_succ, rh_lemma]
-
  use inner_rot, inner_rot_so3, outer_rot, outer_rot_so3, inner_offset
 
  intro inner_shadow outer_shadow x hx
@@ -246,14 +245,14 @@ by π/4 radians. No offset translation is needed.
      · simp [ε₁]
        have h1 : 0 ≤ 2 * (1 - 1e-3) * √2 := by positivity
        suffices H : (0:ℝ) ≤ ((1 - 1e-3) * √2 - 1) from div_nonneg H h1
-       suffices H : (1:ℝ) ≤ (1 - 1e-3) * √2 by linarith
+       suffices H : (1:ℝ) ≤ (1 - 1e-3) * √2 by linarith only [H]
        refine (sq_le_sq₀ zero_le_one (by positivity)).mp ?_
        rw [mul_pow, Real.sq_sqrt zero_le_two]
        norm_num
      · simp [ε₁]
        have h1 : 0 ≤ 2 * (1 - 1e-3) * √2 := by positivity
        suffices H : (0:ℝ) ≤ ((1 - 1e-3) * √2 + 1) from div_nonneg H h1
-       suffices H : (1:ℝ) ≤ (1 - 1e-3) * √2 by linarith
+       suffices H : (1:ℝ) ≤ (1 - 1e-3) * √2 by linarith only [H]
        refine (sq_le_sq₀ zero_le_one (by positivity)).mp ?_
        rw [mul_pow, Real.sq_sqrt zero_le_two]
        norm_num
@@ -289,7 +288,7 @@ by π/4 radians. No offset translation is needed.
  -- inner_rot and projected, is x
  rw [← proj_rot_y_eq_x]; unfold inner_offset; simp;
  rcases y_in_square with rfl | rfl | rfl | rfl
- all_goals (unfold Matrix.mulVec; simp[inner_rot, project32])
+ all_goals (simp[inner_rot, project32, Matrix.mulVec])
  · exact negx_in_outer
  · exact posx_in_outer
  · exact negx_in_outer
