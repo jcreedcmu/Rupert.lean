@@ -241,7 +241,64 @@ by π/4 radians. No offset translation is needed.
      fin_cases i
      · field_simp; ring
      · field_simp
- have posx_in_outer : ![1, 0] ∈ interior (convexHull ℝ outer_shadow) := sorry
+ have posx_in_outer : ![1, 0] ∈ interior (convexHull ℝ outer_shadow) := by
+   apply mem_interior_hull hε₀0 hε₁ zero_in_outer
+   rw [mem_convexHull_iff_exists_fintype]
+   -- we need to write (1,0) as a convex combination of
+   -- (-(1-ε)√2, 0), ((1-ε)√2, 0)
+   use Fin 2, inferInstance
+   use ![((1-ε₁)* √2 + 1) / (2 * (1 - ε₁) * √2),
+         ((1-ε₁)* √2 - 1) /(2 * (1 - ε₁) * √2)]
+   use ![![(1-ε₁) * √2, 0], ![-(1-ε₁) * √2, 0]]
+   refine ⟨?_, ?_, ?_, ?_⟩
+   · intro i; fin_cases i
+     · simp [ε₁]
+       have h1 : 0 ≤ 2 * (1 - 1e-3) * √2 := by positivity
+       suffices H : (0:ℝ) ≤ ((1 - 1e-3) * √2 + 1) from div_nonneg H h1
+       suffices H : (1:ℝ) ≤ (1 - 1e-3) * √2 by linarith only [H]
+       refine (sq_le_sq₀ zero_le_one (by positivity)).mp ?_
+       rw [mul_pow, Real.sq_sqrt zero_le_two]
+       norm_num
+     · simp [ε₁]
+       have h1 : 0 ≤ 2 * (1 - 1e-3) * √2 := by positivity
+       suffices H : (0:ℝ) ≤ ((1 - 1e-3) * √2 - 1) from div_nonneg H h1
+       suffices H : (1:ℝ) ≤ (1 - 1e-3) * √2 by linarith only [H]
+       refine (sq_le_sq₀ zero_le_one (by positivity)).mp ?_
+       rw [mul_pow, Real.sq_sqrt zero_le_two]
+       norm_num
+   · field_simp; ring
+   · intro i
+     fin_cases i
+     · unfold outer_shadow square project32 outer_rot rh
+       simp only [Fin.isValue, cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
+         neg_mul, one_mul, zero_add, empty_mulVec, cons_val_zero, cons_val_one, Nat.succ_eq_add_one,
+         Nat.reduceAdd, neg_sub, Fin.zero_eta, Set.mem_image, Set.mem_insert_iff,
+         Set.mem_singleton_iff, exists_eq_or_imp, head_cons, mul_neg, mul_one, tail_cons,
+         add_neg_cancel, neg_add_cancel, exists_eq_left]
+       use ![√2, 0]
+       constructor
+       · right; right; right; rw [add_halves]
+       · ext i
+         fin_cases i <;> simp
+     · simp only [project32, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
+        cons_val_fin_one, cons_val_zero, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
+        cons_val_one, neg_mul, square, Nat.succ_eq_add_one, Nat.reduceAdd, neg_sub, Fin.mk_one,
+        Set.mem_image, Set.mem_insert_iff, Set.mem_singleton_iff, exists_eq_or_imp, head_cons,
+        mul_neg, mul_one, tail_cons, neg_neg, add_neg_cancel, neg_add_cancel, add_halves,
+        exists_eq_left, outer_shadow]
+       use ![-√2, 0]
+       constructor
+       · left
+         ext i; fin_cases i
+         · simp; ring
+         · simp
+       · ext i; fin_cases i
+         · simp; ring
+         · simp
+   · ext i
+     fin_cases i
+     · field_simp; ring
+     · field_simp
 
  -- we have y ∈ ℝ³ that came from the square, which after being rotated by
  -- inner_rot and projected, is x
