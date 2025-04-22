@@ -56,6 +56,10 @@ def outer_rot_so3 : outer_rot ∈ SO3 := by
   · exact unitary
   · simp [outer_rot, det_succ_row_zero, Fin.sum_univ_succ, rh_lemma]
 
+lemma fst_abs_le_norm (v : ℝ²) : |v 0| ≤ ‖v‖ := by sorry
+
+lemma snd_abs_le_norm (v : ℝ²) : |v 1| ≤ ‖v‖ := by sorry
+
 set_option maxHeartbeats 10000000 in
 theorem square_is_rupert : IsRupert square := by
 /-
@@ -85,7 +89,7 @@ by π/4 radians. No offset translation is needed.
  rw [closure_eq_of_finite hisf] at hx
  obtain ⟨y, ⟨y_in_square, proj_rot_y_eq_x ⟩⟩ := hx
 
- obtain ⟨ε₀, hε₀0, hε₀⟩ : ∃ ε₀, 0 < ε₀ ∧ ε₀ < √2/4 := by
+ obtain ⟨ε₀, hε₀0, hε₀⟩ : ∃ ε₀, 0 < ε₀ ∧ ε₀ < 1 / √2 := by
    sorry
  have zero_in_outer : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer_shadow := by
    intro v hv
@@ -95,22 +99,43 @@ by π/4 radians. No offset translation is needed.
    use ![1/4 + v 0 / (2 * √2), 1/4 - v 0 / (2*√2),
          1/4 + v 1 / (2 * √2), 1/4 - v 1 / (2 * √2)]
    use ![![√2, 0],![-√2, 0], ![0, √2],![0, -√2]]
-   have h0 : v 0 < ε₀ := by sorry
-   have h2 : -ε₀ < v 0 := sorry
-   have h3 : v 1 < ε₀ := by sorry
-   have h4 : -ε₀ < v 1 := sorry
+   have h0 : v 0 < √2 / 2 := by sorry
+   have h2 : -√2 / 2 < v 0 := sorry
+   have h3 : v 1 < √2 / 2 := by sorry
+   have h4 : -√2 / 2 < v 1 := sorry
    refine ⟨?_, ?_, ?_, ?_⟩
    · intro i
      fin_cases i
      · simp
-       suffices H : 0 ≤ 4⁻¹ + ε₀ / √2 by sorry
-       sorry
+       suffices H : 0 * (2 * √2) ≤ (4⁻¹ + v 0 / (2 * √2)) * (2 * √2) by
+         have : 0 < 2 * √2 := by positivity
+         exact le_of_mul_le_mul_right H this
+       rw [zero_mul]
+       ring_nf
+       rw [mul_assoc]
+       simp
+       linarith
      · simp
-       sorry
+       suffices H : v 0 / (2 * √2) * (2 * √2) ≤ 4⁻¹ * (2 * √2) by
+         have : 0 < 2 * √2 := by positivity
+         exact le_of_mul_le_mul_right H this
+       simp
+       linarith
      · simp
-       sorry
+       suffices H : 0 * (2 * √2) ≤ (4⁻¹ + v 1 / (2 * √2)) * (2 * √2) by
+         have : 0 < 2 * √2 := by positivity
+         exact le_of_mul_le_mul_right H this
+       rw [zero_mul]
+       ring_nf
+       rw [mul_assoc]
+       simp
+       linarith
      · simp
-       sorry
+       suffices H : v 1 / (2 * √2) * (2 * √2) ≤ 4⁻¹ * (2 * √2) by
+         have : 0 < 2 * √2 := by positivity
+         exact le_of_mul_le_mul_right H this
+       simp
+       linarith
    · simp [Fin.sum_univ_four]
      ring
    · intro i
