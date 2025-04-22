@@ -56,9 +56,23 @@ def outer_rot_so3 : outer_rot ∈ SO3 := by
   · exact unitary
   · simp [outer_rot, det_succ_row_zero, Fin.sum_univ_succ, rh_lemma]
 
-lemma fst_abs_le_norm (v : ℝ²) : |v 0| ≤ ‖v‖ := by sorry
+lemma fst_abs_le_norm (v : EuclideanSpace ℝ (Fin 2)) : |v 0| ≤ ‖v‖ := by
+  rw [EuclideanSpace.norm_eq, Fin.sum_univ_two]
+  have h : ‖v 0‖ ^ 2 ≤ ‖v 0‖ ^ 2 + ‖v 1‖ ^ 2 := by nlinarith
+  have h1 : √(‖v 0‖ ^ 2) ≤ √(‖v 0‖ ^ 2 + ‖v 1‖ ^ 2) := sqrt_le_sqrt h
+  have h2 : 0 ≤ ‖v 0‖ := norm_nonneg (v 0)
+  rw [Real.sqrt_sq h2] at h1
+  rw [←norm_eq_abs]
+  linarith
 
-lemma snd_abs_le_norm (v : ℝ²) : |v 1| ≤ ‖v‖ := by sorry
+lemma snd_abs_le_norm (v : ℝ²) : |v 1| ≤ ‖v‖ := by
+  rw [EuclideanSpace.norm_eq, Fin.sum_univ_two]
+  have h : ‖v 1‖ ^ 2 ≤ ‖v 0‖ ^ 2 + ‖v 1‖ ^ 2 := by nlinarith
+  have h1 : √(‖v 1‖ ^ 2) ≤ √(‖v 0‖ ^ 2 + ‖v 1‖ ^ 2) := sqrt_le_sqrt h
+  have h2 : 0 ≤ ‖v 1‖ := norm_nonneg _
+  rw [Real.sqrt_sq h2] at h1
+  rw [←norm_eq_abs]
+  linarith
 
 set_option maxHeartbeats 10000000 in
 theorem square_is_rupert : IsRupert square := by
@@ -89,8 +103,19 @@ by π/4 radians. No offset translation is needed.
  rw [closure_eq_of_finite hisf] at hx
  obtain ⟨y, ⟨y_in_square, proj_rot_y_eq_x ⟩⟩ := hx
 
- obtain ⟨ε₀, hε₀0, hε₀⟩ : ∃ ε₀, 0 < ε₀ ∧ ε₀ < 1 / √2 := by
-   sorry
+ obtain ⟨ε₀, hε₀0, hε₀⟩ : ∃ ε₀, 0 < ε₀ ∧ ε₀ < √2/2 := by
+   use 0.00001
+   have h : 1 / 2 < √2 / 2 := by
+     suffices H : 1 < √2 by linarith
+     suffices H : 1^2 < √2^2 by
+       have h1 : 0 ≤ 1 := by norm_num
+       have h2 : 0 ≤ √2 := by positivity
+       exact lt_of_pow_lt_pow_left₀ 2 h2 H
+     rw [Real.sq_sqrt (by norm_num)]
+     norm_num
+   constructor
+   · norm_num
+   · linarith
  have zero_in_outer : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer_shadow := by
    intro v hv
    simp only [Metric.mem_ball, dist_zero_right, outer_rot, inner_rot] at hv
@@ -99,10 +124,12 @@ by π/4 radians. No offset translation is needed.
    use ![1/4 + v 0 / (2 * √2), 1/4 - v 0 / (2*√2),
          1/4 + v 1 / (2 * √2), 1/4 - v 1 / (2 * √2)]
    use ![![√2, 0],![-√2, 0], ![0, √2],![0, -√2]]
-   have h0 : v 0 < √2 / 2 := by sorry
-   have h2 : -√2 / 2 < v 0 := sorry
-   have h3 : v 1 < √2 / 2 := by sorry
-   have h4 : -√2 / 2 < v 1 := sorry
+   obtain ⟨h2', h0'⟩ := abs_le.mp (fst_abs_le_norm v)
+   obtain ⟨h4', h3'⟩ := abs_le.mp (snd_abs_le_norm v)
+   have h0 : v 0 < √2 / 2 := by linarith only [hε₀, h0', hv]
+   have h2 : -√2 / 2 < v 0 := by linarith only [hε₀, h2', hv]
+   have h3 : v 1 < √2 / 2 := by linarith only [hε₀, h3', hv]
+   have h4 : -√2 / 2 < v 1 := by linarith only [hε₀, h4', hv]
    refine ⟨?_, ?_, ?_, ?_⟩
    · intro i
      fin_cases i
