@@ -36,20 +36,19 @@ def matrix_of_quat {R : Type} [Field R] (q : Quaternion R)
 
 noncomputable def outer_rot := matrix_of_quat outer_quat
 
-set_option maxHeartbeats 10000000 in
 def outer_rot_so3 : outer_rot ∈ SO3 := by
-  have unitary : outer_rot ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
+  have orthogonal : outer_rot ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
+    dsimp only [outer_rot, matrix_of_quat, outer_quat]
+    norm_num1
     constructor
     · ext i j
-      fin_cases i, j <;>
-        norm_num [outer_rot, Matrix.mul_apply, Fin.sum_univ_succ, matrix_of_quat, outer_quat]
-    · ext i j
-      fin_cases i, j <;>
-        norm_num [outer_rot, Matrix.vecMul, matrix_of_quat, outer_quat]
-  constructor
-  · exact unitary
-  · simp [outer_rot, Matrix.det_succ_row_zero, Fin.sum_univ_three, matrix_of_quat,
-          outer_quat, Fin.succAbove]
-    norm_num
+      fin_cases i, j <;> norm_num [Matrix.mul_apply, Fin.sum_univ_succ]
+    · ext i j; fin_cases i, j <;> norm_num [Matrix.vecMul]
+  rw [Matrix.mem_specialOrthogonalGroup_iff]
+  refine ⟨orthogonal, ?_⟩
+  dsimp only [outer_rot, matrix_of_quat, outer_quat]
+  norm_num1
+  simp [Matrix.det_succ_row_zero, Fin.sum_univ_three, Fin.succAbove]
+  norm_num
 
 proof_wanted rupert : IsRupert tetrahedron
