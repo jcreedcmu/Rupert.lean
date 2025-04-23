@@ -1,5 +1,6 @@
 import Mathlib
 
+/-- Converts a quaternion to a normalized rotation matrix. -/
 def matrix_of_quat {R : Type} [Field R] (q : Quaternion R)
     : Matrix (Fin 3) (Fin 3) R :=
   let ⟨w, x, y, z⟩ := q
