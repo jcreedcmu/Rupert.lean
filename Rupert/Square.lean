@@ -25,7 +25,7 @@ abbrev inner_rot : Matrix (Fin 3) (Fin 3) ℝ :=
       0, 0,-1;
       0, 1, 0]
 
-def inner_rot_so3 : inner_rot ∈ SO3 := by
+lemma inner_rot_so3 : inner_rot ∈ SO3 := by
   dsimp only [inner_rot]
   rw [mem_specialOrthogonalGroup_iff]
   constructor
@@ -38,7 +38,7 @@ noncomputable abbrev outer_rot : Matrix (Fin 3) (Fin 3) ℝ :=
       -rh, rh, 0;
         0,  0, 1]
 
-def outer_rot_so3 : outer_rot ∈ SO3 := by
+lemma outer_rot_so3 : outer_rot ∈ SO3 := by
   dsimp only [outer_rot]
   rw [mem_specialOrthogonalGroup_iff]
   constructor
@@ -98,7 +98,6 @@ by π/4 radians. No offset translation is needed.
    have h : 1 / 2 < √2 / 2 := by
      suffices H : 1 < √2 by linarith
      suffices H : 1^2 < √2^2 by
-       have h1 : 0 ≤ 1 := by norm_num
        have h2 : 0 ≤ √2 := by positivity
        exact lt_of_pow_lt_pow_left₀ 2 h2 H
      rw [Real.sq_sqrt (by norm_num)]
@@ -116,10 +115,6 @@ by π/4 radians. No offset translation is needed.
    use ![![√2, 0],![-√2, 0], ![0, √2],![0, -√2]]
    obtain ⟨h2', h0'⟩ := abs_le.mp (fst_abs_le_norm v)
    obtain ⟨h4', h3'⟩ := abs_le.mp (snd_abs_le_norm v)
-   have h0 : v 0 < √2 / 2 := by linarith only [hε₀, h0', hv]
-   have h2 : -√2 / 2 < v 0 := by linarith only [hε₀, h2', hv]
-   have h3 : v 1 < √2 / 2 := by linarith only [hε₀, h3', hv]
-   have h4 : -√2 / 2 < v 1 := by linarith only [hε₀, h4', hv]
    refine ⟨?_, ?_, ?_, ?_⟩
    · intro i
      fin_cases i

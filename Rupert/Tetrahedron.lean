@@ -36,7 +36,7 @@ def matrix_of_quat {R : Type} [Field R] (q : Quaternion R)
 
 noncomputable def outer_rot := matrix_of_quat outer_quat
 
-def outer_rot_so3 : outer_rot ∈ SO3 := by
+lemma outer_rot_so3 : outer_rot ∈ SO3 := by
   have orthogonal : outer_rot ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
     dsimp only [outer_rot, matrix_of_quat, outer_quat]
     norm_num1
