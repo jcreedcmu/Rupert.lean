@@ -5,10 +5,14 @@ namespace Square
 
 open Matrix
 open Real
+
+/--
+A square in the xy-plane, centered at the origin and with side length 2.
+-/
 def square : Set ℝ³ := { ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] }
 
-noncomputable
-def rh : ℝ := √2/2 -- square root of one-half
+/-- square root of one-half -/
+noncomputable def rh : ℝ := √2/2
 
 -- A simple algebraic fact about √2/2 that arises multiple times
 -- FIXME: is there a systematic naming convention that would give me a less
