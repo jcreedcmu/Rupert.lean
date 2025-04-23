@@ -9,7 +9,7 @@ open Real
 /--
 A square in the xy-plane, centered at the origin and with side length 2.
 -/
-def square : Set ℝ³ := { ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] }
+abbrev square : Set ℝ³ := { ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] }
 
 /-- square root of one-half -/
 noncomputable def rh : ℝ := √2/2
@@ -91,9 +91,7 @@ by π/4 radians. No offset translation is needed.
  use inner_rot, inner_rot_so3, outer_rot, outer_rot_so3, inner_offset
 
  intro inner_shadow outer_shadow x hx
- have hisf : inner_shadow.Finite := by
-   have hsf : square.Finite := by unfold square; exact Set.toFinite _
-   exact Set.Finite.image _ hsf
+ have hisf : inner_shadow.Finite := Set.Finite.image _ (Set.toFinite _)
  rw [closure_eq_of_finite hisf] at hx
  obtain ⟨y, ⟨y_in_square, proj_rot_y_eq_x ⟩⟩ := hx
 
@@ -156,11 +154,11 @@ by π/4 radians. No offset translation is needed.
      ring
    · intro i
      fin_cases i
-     · simp [outer_shadow, square, project32, rh]
-     · simp [outer_shadow, square, project32, rh]
+     · simp [outer_shadow, project32, rh]
+     · simp [outer_shadow, project32, rh]
        left; simp[neg_div']
-     · simp [outer_shadow, square, project32, rh]
-     · simp [outer_shadow, square, project32, rh]
+     · simp [outer_shadow, project32, rh]
+     · simp [outer_shadow, project32, rh]
        right; left; simp[neg_div']
    · rw [Fin.sum_univ_four]
      ext i
@@ -200,7 +198,7 @@ by π/4 radians. No offset translation is needed.
    · field_simp; ring
    · intro i
      fin_cases i
-     · unfold outer_shadow square project32 outer_rot rh
+     · unfold outer_shadow project32 outer_rot rh
        simp only [Fin.isValue, cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
          neg_mul, one_mul, zero_add, empty_mulVec, cons_val_zero, cons_val_one, Nat.succ_eq_add_one,
          Nat.reduceAdd, neg_sub, Fin.zero_eta, Set.mem_image, Set.mem_insert_iff,
@@ -213,7 +211,7 @@ by π/4 radians. No offset translation is needed.
          fin_cases i <;> simp
      · simp only [project32, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
         cons_val_fin_one, cons_val_zero, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
-        cons_val_one, neg_mul, square, Nat.succ_eq_add_one, Nat.reduceAdd, neg_sub, Fin.mk_one,
+        cons_val_one, neg_mul, Nat.succ_eq_add_one, Nat.reduceAdd, neg_sub, Fin.mk_one,
         Set.mem_image, Set.mem_insert_iff, Set.mem_singleton_iff, exists_eq_or_imp, head_cons,
         mul_neg, mul_one, tail_cons, neg_neg, add_neg_cancel, neg_add_cancel, add_halves,
         exists_eq_left, outer_shadow]
@@ -258,7 +256,7 @@ by π/4 radians. No offset translation is needed.
    · field_simp; ring
    · intro i
      fin_cases i
-     · unfold outer_shadow square project32 outer_rot rh
+     · unfold outer_shadow project32 outer_rot rh
        simp only [Fin.isValue, cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
          neg_mul, one_mul, zero_add, empty_mulVec, cons_val_zero, cons_val_one, Nat.succ_eq_add_one,
          Nat.reduceAdd, neg_sub, Fin.zero_eta, Set.mem_image, Set.mem_insert_iff,
@@ -271,7 +269,7 @@ by π/4 radians. No offset translation is needed.
          fin_cases i <;> simp
      · simp only [project32, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
         cons_val_fin_one, cons_val_zero, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
-        cons_val_one, neg_mul, square, Nat.succ_eq_add_one, Nat.reduceAdd, neg_sub, Fin.mk_one,
+        cons_val_one, neg_mul, Nat.succ_eq_add_one, Nat.reduceAdd, neg_sub, Fin.mk_one,
         Set.mem_image, Set.mem_insert_iff, Set.mem_singleton_iff, exists_eq_or_imp, head_cons,
         mul_neg, mul_one, tail_cons, neg_neg, add_neg_cancel, neg_add_cancel, add_halves,
         exists_eq_left, outer_shadow]
