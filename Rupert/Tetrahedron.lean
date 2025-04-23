@@ -4,12 +4,11 @@ import Rupert.Quaternion
 
 namespace Tetrahedron
 
-def tetrahedron : Set ℝ³ :=
-  { ![1, 1, 0],
-    ![1, -1, -1],
-    ![-1, 1, -1],
-    ![-1, -1, 1]
-  }
+def tetrahedron : Fin 4 → ℝ³ := ![
+  ![1, 1, 0],
+  ![1, -1, -1],
+  ![-1, 1, -1],
+  ![-1, -1, 1]]
 
 def outer_quat : Quaternion ℝ :=
   ⟨0.3389904789675945, -0.4261829733457893, 0.1736023394555525, -0.8205581978964213⟩

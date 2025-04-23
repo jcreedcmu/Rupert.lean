@@ -9,7 +9,7 @@ open Real
 /--
 A square in the xy-plane, centered at the origin and with side length 2.
 -/
-abbrev square : Set ℝ³ := { ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] }
+abbrev square : Fin 4 → ℝ³ := ![ ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] ]
 
 /-- square root of one-half -/
 noncomputable def rh : ℝ := √2/2
@@ -91,9 +91,7 @@ by π/4 radians. No offset translation is needed.
  use inner_rot, inner_rot_so3, outer_rot, outer_rot_so3, inner_offset
 
  intro inner_shadow outer_shadow x hx
- have hisf : inner_shadow.Finite := Set.Finite.image _ (Set.toFinite _)
- rw [closure_eq_of_finite hisf] at hx
- obtain ⟨y, ⟨y_in_square, proj_rot_y_eq_x ⟩⟩ := hx
+ --obtain ⟨y, ⟨y_in_square, proj_rot_y_eq_x ⟩⟩ := hx
 
  obtain ⟨ε₀, hε₀0, hε₀⟩ : ∃ ε₀, 0 < ε₀ ∧ ε₀ < √2/2 := by
    use 0.00001
@@ -155,11 +153,13 @@ by π/4 radians. No offset translation is needed.
    · intro i
      fin_cases i
      · simp [outer_shadow, project32, rh]
+       use 3; simp
      · simp [outer_shadow, project32, rh]
-       left; simp[neg_div']
+       use 0; simp; ring_nf
      · simp [outer_shadow, project32, rh]
+       use 2; simp
      · simp [outer_shadow, project32, rh]
-       right; left; simp[neg_div']
+       use 1; simp[neg_div']; ring_nf
    · rw [Fin.sum_univ_four]
      ext i
      fin_cases i
@@ -206,7 +206,8 @@ by π/4 radians. No offset translation is needed.
          add_neg_cancel, neg_add_cancel, exists_eq_left]
        use ![√2, 0]
        constructor
-       · right; right; right; rw [add_halves]
+       · rw [Set.mem_range]
+         use 3; simp
        · ext i
          fin_cases i <;> simp
      · simp only [project32, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
@@ -217,10 +218,10 @@ by π/4 radians. No offset translation is needed.
         exists_eq_left, outer_shadow]
        use ![-√2, 0]
        constructor
-       · left
-         ext i; fin_cases i
-         · simp; ring
-         · simp
+       · rw [Set.mem_range]
+         use 0
+         simp
+         ring_nf
        · ext i; fin_cases i
          · simp; ring
          · simp
@@ -264,7 +265,7 @@ by π/4 radians. No offset translation is needed.
          add_neg_cancel, neg_add_cancel, exists_eq_left]
        use ![√2, 0]
        constructor
-       · right; right; right; rw [add_halves]
+       · use 3; simp
        · ext i
          fin_cases i <;> simp
      · simp only [project32, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
@@ -275,10 +276,7 @@ by π/4 radians. No offset translation is needed.
         exists_eq_left, outer_shadow]
        use ![-√2, 0]
        constructor
-       · left
-         ext i; fin_cases i
-         · simp; ring
-         · simp
+       · use 0; simp; ring_nf
        · ext i; fin_cases i
          · simp; ring
          · simp
@@ -289,8 +287,10 @@ by π/4 radians. No offset translation is needed.
 
  -- we have y ∈ ℝ³ that came from the square, which after being rotated by
  -- inner_rot and projected, is x
+ rw [Set.mem_range] at hx
+ obtain ⟨y, proj_rot_y_eq_x⟩ := hx
  rw [← proj_rot_y_eq_x]; unfold inner_offset; simp;
- rcases y_in_square with rfl | rfl | rfl | rfl
+ fin_cases y
  all_goals (simp[inner_rot, project32, Matrix.mulVec])
  · exact negx_in_outer
  · exact posx_in_outer
