@@ -52,4 +52,19 @@ lemma inner_rot_so3 : inner_rot ∈ SO3 := by
 
 def inner_offset : ℝ² := ![0.09841265604345877,-0.165800542996898]
 
-proof_wanted rupert : IsRupert tetrahedron
+theorem rupert : IsRupert tetrahedron := by
+  use outer_rot, outer_rot_so3, inner_rot, inner_rot_so3, inner_offset
+  intro outer_shadow inner_shadow
+  let ε₀ : ℝ := 0.001
+  have hε₀ : ε₀ ∈ Set.Ioo 0 1 := by norm_num
+  have hb : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer_shadow := by
+    refine ball_in_hull_of_corners_in_hull hε₀ ?_ ?_ ?_ ?_
+    · sorry
+    · sorry
+    · sorry
+    · sorry
+  intro v hv
+  let ε₁ : ℝ := 0.00001
+  have hε₁ : ε₁ ∈ Set.Ioo 0 1 := by norm_num
+  refine mem_interior_hull hε₀.1 hε₁ hb ?_
+  sorry
