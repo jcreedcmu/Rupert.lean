@@ -152,13 +152,13 @@ by π/4 radians. No offset translation is needed.
      ring
    · intro i
      fin_cases i
-     · simp [outer_shadow, project32, rh]
+     · simp [outer_shadow, dropz, rh]
        use 3; simp
-     · simp [outer_shadow, project32, rh]
+     · simp [outer_shadow, dropz, rh]
        use 0; simp; ring_nf
-     · simp [outer_shadow, project32, rh]
+     · simp [outer_shadow, dropz, rh]
        use 2; simp
-     · simp [outer_shadow, project32, rh]
+     · simp [outer_shadow, dropz, rh]
        use 1; simp[neg_div']; ring_nf
    · rw [Fin.sum_univ_four]
      ext i
@@ -198,7 +198,7 @@ by π/4 radians. No offset translation is needed.
    · field_simp; ring
    · intro i
      fin_cases i
-     · unfold outer_shadow project32 outer_rot rh
+     · unfold outer_shadow dropz outer_rot rh
        simp only [Fin.isValue, cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
          neg_mul, one_mul, zero_add, empty_mulVec, cons_val_zero, cons_val_one, Nat.succ_eq_add_one,
          Nat.reduceAdd, neg_sub, Fin.zero_eta, Set.mem_image, Set.mem_insert_iff,
@@ -210,7 +210,7 @@ by π/4 radians. No offset translation is needed.
          use 3; simp
        · ext i
          fin_cases i <;> simp
-     · simp only [project32, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
+     · simp only [dropz, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
         cons_val_fin_one, cons_val_zero, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
         cons_val_one, neg_mul, Nat.succ_eq_add_one, Nat.reduceAdd, neg_sub, Fin.mk_one,
         Set.mem_image, Set.mem_insert_iff, Set.mem_singleton_iff, exists_eq_or_imp, head_cons,
@@ -257,7 +257,7 @@ by π/4 radians. No offset translation is needed.
    · field_simp; ring
    · intro i
      fin_cases i
-     · unfold outer_shadow project32 outer_rot rh
+     · unfold outer_shadow dropz outer_rot rh
        simp only [Fin.isValue, cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
          neg_mul, one_mul, zero_add, empty_mulVec, cons_val_zero, cons_val_one, Nat.succ_eq_add_one,
          Nat.reduceAdd, neg_sub, Fin.zero_eta, Set.mem_image, Set.mem_insert_iff,
@@ -268,7 +268,7 @@ by π/4 radians. No offset translation is needed.
        · use 3; simp
        · ext i
          fin_cases i <;> simp
-     · simp only [project32, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
+     · simp only [dropz, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
         cons_val_fin_one, cons_val_zero, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
         cons_val_one, neg_mul, Nat.succ_eq_add_one, Nat.reduceAdd, neg_sub, Fin.mk_one,
         Set.mem_image, Set.mem_insert_iff, Set.mem_singleton_iff, exists_eq_or_imp, head_cons,
@@ -291,7 +291,7 @@ by π/4 radians. No offset translation is needed.
  obtain ⟨y, proj_rot_y_eq_x⟩ := hx
  rw [← proj_rot_y_eq_x]; unfold inner_offset; simp;
  fin_cases y
- all_goals (simp[inner_rot, project32, Matrix.mulVec])
+ all_goals (simp[inner_rot, dropz, Matrix.mulVec])
  · exact negx_in_outer
  · exact posx_in_outer
  · exact negx_in_outer
