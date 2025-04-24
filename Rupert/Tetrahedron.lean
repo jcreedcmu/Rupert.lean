@@ -67,4 +67,11 @@ theorem rupert : IsRupert tetrahedron := by
   let ε₁ : ℝ := 0.00001
   have hε₁ : ε₁ ∈ Set.Ioo 0 1 := by norm_num
   refine mem_interior_hull hε₀.1 hε₁ hb ?_
-  sorry
+  simp only [Set.mem_range, inner_shadow] at hv
+  obtain ⟨y, hy⟩ := hv
+  fin_cases y <;>
+    simp only [tetrahedron, Fin.reduceFinMk, Matrix.cons_val, inner_shadow] at hy
+  · sorry
+  · sorry
+  · sorry
+  · sorry
