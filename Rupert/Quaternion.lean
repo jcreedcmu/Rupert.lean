@@ -85,12 +85,20 @@ lemma matrix_of_quat_is_unitary (q : Quaternion ℝ) (nz : Quaternion.normSq q �
    apply one_smul
 
 lemma denorm_matrix_of_quat_has_normsq_det (q : Quaternion ℝ)
-   : (matrix_of_quat q).det = Quaternion.normSq q := by
+   : (denorm_matrix_of_quat q).det = (Quaternion.normSq q)^3 := by
  let ⟨r, x, y, z⟩ := q
- have h : (r ^ 2 + x ^ 2 + y ^ 2 + z ^ 2 ≠ 0) := sorry
- simp only [Matrix.det_succ_row_zero, Fin.sum_univ_succ, matrix_of_quat];
- simp; simp[Fin.succAbove]; field_simp;
- sorry
+ simp only [Matrix.det_succ_row_zero, Fin.sum_univ_succ, denorm_matrix_of_quat, Quaternion.normSq_def'];
+ simp only [Nat.succ_eq_add_one, Nat.reduceAdd, Fin.isValue, Fin.val_zero, pow_zero,
+   Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_fin_one, one_mul,
+   Fin.succAbove_zero, Matrix.submatrix_apply, Fin.succ_zero_eq_one, Matrix.cons_val_one,
+   Fin.val_eq_zero, Fin.succ_one_eq_two, Matrix.cons_val, Matrix.submatrix_submatrix,
+   Matrix.submatrix_empty, Matrix.det_fin_zero, mul_one, Finset.univ_eq_empty, Matrix.cons_val_succ,
+   Finset.sum_const, Finset.card_empty, smul_add, zero_smul, add_zero, Fin.val_one, pow_one,
+   neg_mul, Fin.succAbove, Fin.castSucc_zero, Fin.lt_one_iff, ↓reduceIte, Fin.castSucc_eq_zero_iff,
+   Finset.sum_empty, Fin.val_succ, zero_add, Fin.succ_pos, Fin.castSucc_lt_succ_iff,
+   le_of_subsingleton, Finset.sum_neg_distrib, neg_zero, Fin.castSucc_one, lt_self_iff_false,
+   Fin.val_two, even_two, Even.neg_pow, one_pow, Fin.reduceLT, neg_sub]
+ ring_nf
 
 lemma matrix_of_quat_has_det_one (q : Quaternion ℝ) (nz : Quaternion.normSq q ≠ 0)
    : (matrix_of_quat q).det = 1 :=
