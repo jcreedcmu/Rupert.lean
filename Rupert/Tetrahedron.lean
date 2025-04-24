@@ -101,9 +101,84 @@ theorem rupert : IsRupert tetrahedron := by
       fin_cases i
       · simp; norm_num
       · simp; norm_num
-  · sorry
-  · sorry
-  · sorry
+  · use ![4183611374521617762351928650236500798224660804096493226244818085853698932075803/
+          5094134272401397362124160033006247763499653762616164782597202714604400000000000,
+          25102339214950593199584615702794485893116570304996511060364674831052848685492563/
+          144333804384706258593517867601843686632490189940791335506920743580458000000000000,
+          0,
+          130464292183092898867863776690314648064043159948909319303666809415690294817441/
+          27062588322132423486284600175345691243591910613898375407547639421335875000000000]
+    use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · intro i; fin_cases i <;> norm_num
+    · norm_num [Fin.sum_univ_four]; simp; norm_num
+    · intro i
+      fin_cases i
+      · use dropz (outer_rot *ᵥ tetrahedron 0); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 1); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 2); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 3); simp [outer_shadow]
+    · simp [Fin.sum_univ_four]
+      rw [←hy]
+      simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
+            inner_offset, inner_rot, inner_quat]
+      norm_num
+      ext i
+      fin_cases i
+      · simp; norm_num
+      · simp; norm_num
+  · use ![8149233408515772505369007668071732737002684771295565308694441951232977358601/
+          1698044757467132454041386677668749254499884587538721594199067571534800000000000,
+          142949325340764770430692464525851563328993579567048454817611738831052848685492563/
+          144333804384706258593517867601843686632490189940791335506920743580458000000000000,
+          0,
+          14412379254534322913938279670958875434403795170474117459791191323965588313049/
+          3006954258014713720698288908371743471510212290433152823060848824592875000000000]
+    use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · intro i; fin_cases i <;> norm_num
+    · norm_num [Fin.sum_univ_four]; simp; norm_num
+    · intro i
+      fin_cases i
+      · use dropz (outer_rot *ᵥ tetrahedron 0); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 1); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 2); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 3); simp [outer_shadow]
+    · simp [Fin.sum_univ_four]
+      rw [←hy]
+      simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
+            inner_offset, inner_rot, inner_quat]
+      norm_num
+      ext i
+      fin_cases i
+      · simp; norm_num
+      · simp; norm_num
+  · use ![85389834878147286665060941385126660155497490856303099963877032772524468001547/
+          103961923926559129839268572102168321704074566584003362910146994175600000000000,
+          14144294721423687846667989826219510591782196043919743728224535327609156846787/
+          2945587844585842012112609542894769114948779386546761949120831501642000000000000,
+          0,
+          96012167809420975391727790091867668740856553045172694953017069579912046833009/
+          552297720859845377271114289292769209052896134977517865460155906557875000000000]
+    use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · intro i; fin_cases i <;> norm_num
+    · norm_num [Fin.sum_univ_four]; simp; norm_num
+    · intro i
+      fin_cases i
+      · use dropz (outer_rot *ᵥ tetrahedron 0); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 1); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 2); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 3); simp [outer_shadow]
+    · simp [Fin.sum_univ_four]
+      rw [←hy]
+      simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
+            inner_offset, inner_rot, inner_quat]
+      norm_num
+      ext i
+      fin_cases i
+      · simp; norm_num
+      · simp; norm_num
 
 /-
 -------------------------------------
@@ -170,7 +245,8 @@ def hack_add (v1 v2 : EuclideanSpace ℚ (Fin 2)) : EuclideanSpace ℚ (Fin 2) :
     (13105064393403673628838342049330405491165323 : Rat)/8333333333333332401234256273586500000000000000],
   ![(4031395966218919861647924803419358422155311667163 : Rat)/4999999999999999440740553764151900000000000000000,
     (-22791776220625072400867592144769008783526504031 : Rat)/24999999999999997203702768820759500000000000000]]
-q = vector(QQ, [4019768719886866306784863677837758422155311667163/4999999999999999440740553764151900000000000000000,
-                34946905166908186857695936394343991216473495969/24999999999999997203702768820759500000000000000])
+
+q = vector(QQ, [4031395966218919861647924803419358422155311667163/4999999999999999440740553764151900000000000000000,
+                -22791776220625072400867592144769008783526504031/24999999999999997203702768820759500000000000000])
 
 -/
