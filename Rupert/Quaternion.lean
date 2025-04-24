@@ -71,7 +71,6 @@ lemma matrix_of_quat_is_unitary (q : Quaternion ℝ) (nz : Quaternion.normSq q �
    : matrix_of_quat q ∈ Matrix.unitaryGroup (Fin 3) ℝ := by
  rw [normalized_denorm_is_matrix q]
  let n2 := (1 / (q.re ^ 2 + q.imI ^ 2 + q.imJ ^ 2 + q.imK ^ 2))
- change n2 • _ ∈ _
  have local_arith : n2 * n2 * (Quaternion.normSq q)^2 = 1 := by
        change n2 * n2 * Quaternion.normSq q ^ 2 = 1
        simp only [n2 ]
@@ -84,7 +83,7 @@ lemma matrix_of_quat_is_unitary (q : Quaternion ℝ) (nz : Quaternion.normSq q �
  · rw[star_smul, smul_mul_smul_comm, denorm_half_unitary, smul_smul, show star n2 = n2 by rfl, local_arith]
    apply one_smul
 
-lemma denorm_matrix_of_quat_has_normsq_det (q : Quaternion ℝ)
+lemma denorm_matrix_of_quat_has_correct_det (q : Quaternion ℝ)
    : (denorm_matrix_of_quat q).det = (Quaternion.normSq q)^3 := by
  let ⟨r, x, y, z⟩ := q
  simp only [Matrix.det_succ_row_zero, Fin.sum_univ_succ, denorm_matrix_of_quat, Quaternion.normSq_def'];
@@ -92,7 +91,7 @@ lemma denorm_matrix_of_quat_has_normsq_det (q : Quaternion ℝ)
    Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_fin_one, one_mul,
    Fin.succAbove_zero, Matrix.submatrix_apply, Fin.succ_zero_eq_one, Matrix.cons_val_one,
    Fin.val_eq_zero, Fin.succ_one_eq_two, Matrix.cons_val, Matrix.submatrix_submatrix,
-   Matrix.submatrix_empty, Matrix.det_fin_zero, mul_one, Finset.univ_eq_empty, Matrix.cons_val_succ,
+   Matrix.submatrix_empty, Matrix.det_fin_zero, Finset.univ_eq_empty, Matrix.cons_val_succ,
    Finset.sum_const, Finset.card_empty, smul_add, zero_smul, add_zero, Fin.val_one, pow_one,
    neg_mul, Fin.succAbove, Fin.castSucc_zero, Fin.lt_one_iff, ↓reduceIte, Fin.castSucc_eq_zero_iff,
    Finset.sum_empty, Fin.val_succ, zero_add, Fin.succ_pos, Fin.castSucc_lt_succ_iff,
@@ -101,8 +100,14 @@ lemma denorm_matrix_of_quat_has_normsq_det (q : Quaternion ℝ)
  ring_nf
 
 lemma matrix_of_quat_has_det_one (q : Quaternion ℝ) (nz : Quaternion.normSq q ≠ 0)
-   : (matrix_of_quat q).det = 1 :=
- sorry
+   : (matrix_of_quat q).det = 1 := by
+ rw [normalized_denorm_is_matrix q]
+ let n2 := (1 / (q.re ^ 2 + q.imI ^ 2 + q.imJ ^ 2 + q.imK ^ 2))
+ rw [Matrix.det_smul, denorm_matrix_of_quat_has_correct_det]
+ change n2 ^ 3 * Quaternion.normSq q ^ 3 = 1
+ simp_all only [← mul_pow, one_div, ← Quaternion.normSq_def',
+                isUnit_iff_ne_zero, ne_eq, not_false_eq_true, 
+                IsUnit.inv_mul_cancel, one_pow, n2]
 
 theorem matrix_of_quat_is_s03 (q : Quaternion ℝ) (nz : Quaternion.normSq q ≠ 0) : matrix_of_quat q ∈ SO3 :=
   ⟨ matrix_of_quat_is_unitary q nz,
