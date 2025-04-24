@@ -105,3 +105,76 @@ lemma mem_interior_hull {n : ℕ} {X : Set (E n)} {ε₀ ε₁ : ℝ}
     p ∈ interior (convexHull ℝ X) := by
   revert h p
   convert subset_interior_hull hε₀ hε₁ h0
+
+
+private lemma fst_abs_le_norm (v : E 2) : |v 0| ≤ ‖v‖ := by
+  rw [EuclideanSpace.norm_eq, Fin.sum_univ_two]
+  have h : ‖v 0‖ ^ 2 ≤ ‖v 0‖ ^ 2 + ‖v 1‖ ^ 2 := by nlinarith
+  have h1 : √(‖v 0‖ ^ 2) ≤ √(‖v 0‖ ^ 2 + ‖v 1‖ ^ 2) := Real.sqrt_le_sqrt h
+  have h2 : 0 ≤ ‖v 0‖ := norm_nonneg (v 0)
+  rw [Real.sqrt_sq h2] at h1
+  rw [←Real.norm_eq_abs]
+  linarith
+
+private lemma snd_abs_le_norm (v : E 2) : |v 1| ≤ ‖v‖ := by
+  rw [EuclideanSpace.norm_eq, Fin.sum_univ_two]
+  have h : ‖v 1‖ ^ 2 ≤ ‖v 0‖ ^ 2 + ‖v 1‖ ^ 2 := by nlinarith
+  have h1 : √(‖v 1‖ ^ 2) ≤ √(‖v 0‖ ^ 2 + ‖v 1‖ ^ 2) := Real.sqrt_le_sqrt h
+  have h2 : 0 ≤ ‖v 1‖ := norm_nonneg _
+  rw [Real.sqrt_sq h2] at h1
+  rw [←Real.norm_eq_abs]
+  linarith
+
+lemma ball_in_hull_of_corners_in_hull {X : Set (E 2)} {ε : ℝ} (hε : ε ∈ Set.Ioo 0 1)
+    (h₀ : ![ε, ε] ∈ convexHull ℝ X)
+    (h₁ : ![-ε, ε] ∈ convexHull ℝ X)
+    (h₂ : ![-ε, -ε] ∈ convexHull ℝ X)
+    (h₃ : ![ε, -ε] ∈ convexHull ℝ X)
+    : Metric.ball 0 ε ⊆ convexHull ℝ X := by
+  intro v hv
+  rw [Set.mem_Ioo] at hε
+  obtain ⟨hε0, hε1⟩ := hε
+  rw [mem_ball_zero_iff] at hv
+  have hva0 := trans (fst_abs_le_norm v) hv
+  rw [abs_lt] at hva0
+  obtain ⟨hva00, hva01⟩ := hva0
+  have hva1 := trans (snd_abs_le_norm v) hv
+  rw [abs_lt] at hva1
+  obtain ⟨hva10, hva11⟩ := hva1
+
+  have hv0 : v 0 / ε < 1 := by bound
+  have hv0' : -1 < v 0 / ε := by
+    have h1 : -ε / ε < v 0 / ε := (div_lt_div_iff_of_pos_right hε0).mpr hva00
+    rw [neg_div] at h1
+    have : ε / ε = 1 := by field_simp
+    rwa [this] at h1
+  have hv1 : v 1 / ε < 1 := by bound
+  have hv1' : -1 < v 1 / ε := by
+    have h1 : -ε / ε < v 1 / ε := (div_lt_div_iff_of_pos_right hε0).mpr hva10
+    rw [neg_div] at h1
+    have : ε / ε = 1 := by field_simp
+    rwa [this] at h1
+  rw [←ClosureOperator.idempotent]
+  rw [mem_convexHull_iff_exists_fintype]
+  use Fin 4, inferInstance
+  let cx := (1 + v 0 / ε) / 2
+  let cy := (1 + v 1 / ε) / 2
+  use ![cx * cy, (1 - cx) * cy, (1 - cx) * (1 - cy), cx * (1 - cy)]
+  use ![![ε, ε], ![-ε, ε], ![-ε, -ε], ![ε, -ε]]
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro i
+    fin_cases i <;> (simp [cx, cy]; nlinarith)
+  · simp [Fin.sum_univ_four]; ring
+  · intro i
+    fin_cases i <;> simp [h₀, h₁, h₂, h₃]
+  · rw [Fin.sum_univ_four]
+    simp only [Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val]
+    simp only [mul_sub, sub_mul, smul_sub, sub_smul, cx, cy, one_mul, mul_one]
+    ext i
+    fin_cases i
+    · simp
+      field_simp
+      ring_nf
+    · simp
+      field_simp
+      ring_nf
