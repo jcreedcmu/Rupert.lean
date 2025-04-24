@@ -1,4 +1,5 @@
 import Mathlib
+import Rupert.Basic
 
 /-- Converts a quaternion to a normalized rotation matrix. -/
 def matrix_of_quat {R : Type} [Field R] (q : Quaternion R)
@@ -14,3 +15,66 @@ def matrix_of_quat {R : Type} [Field R] (q : Quaternion R)
      2 * (z * x - y * w) / normsq,
        2 * (y * z + x * w) / normsq,
        (w^2 - x^2 - y^2 + z^2) / normsq;]
+
+/-- A version of converting quaternions to matrices without
+   normalization, under the assumption that it might be easier to
+   reason about it postponing the divisions until later. -/
+def denorm_matrix_of_quat {R : Type} [Field R] (q : Quaternion R)
+    : Matrix (Fin 3) (Fin 3) R :=
+  let ⟨w, x, y, z⟩ := q
+  !![(w^2  + x^2 - y^2 - z^2) ,
+       2 * (x * y - z * w),
+       2 * (z * x + y * w);
+     2 * (x * y + z * w),
+       (w^2 - x^2 + y^2 - z^2),
+       2 * (y * z - x * w);
+     2 * (z * x - y * w),
+       2 * (y * z + x * w),
+       (w^2 - x^2 - y^2 + z^2);]
+
+/- Here are a couple of lemmas showing that the unnormalized version of the quaternion matrix,
+   when multiplied by its own transpose in either order, is the norm of q to the fourth power. -/
+
+lemma denorm_half_unitary (q : Quaternion ℝ)
+   : (denorm_matrix_of_quat q) * star (denorm_matrix_of_quat q) = (Quaternion.normSq q)^2 • 1 := by
+  let ⟨r,x,y,z⟩ := q; ext i j; fin_cases i, j
+  all_goals simp only [denorm_matrix_of_quat, Matrix.mul_apply, Fin.sum_univ_succ, Quaternion.normSq];
+  all_goals simp only [Fin.zero_eta, Fin.isValue, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
+   Matrix.cons_val_fin_one, star_trivial, Fin.succ_zero_eq_one, Matrix.cons_val_one,
+   Fin.succ_one_eq_two, Matrix.cons_val, Finset.univ_eq_empty, Matrix.cons_val_succ, Finset.sum_const, Finset.card_empty,
+   zero_smul, add_zero, Quaternion.mul_re, Quaternion.star_re, Quaternion.star_imI, mul_neg, sub_neg_eq_add,
+   Quaternion.star_imJ, Quaternion.star_imK, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Matrix.smul_apply,
+   Matrix.one_apply_eq, smul_eq_mul]
+  all_goals (simp; ring_nf)
+
+lemma denorm_half_unitary2 (q : Quaternion ℝ)
+   : star (denorm_matrix_of_quat q) * (denorm_matrix_of_quat q) = (Quaternion.normSq q)^2 • 1 := by
+  let ⟨r,x,y,z⟩ := q; ext i j; fin_cases i, j
+  all_goals simp only [denorm_matrix_of_quat, Matrix.mul_apply, Fin.sum_univ_succ, Quaternion.normSq];
+  all_goals simp only [Fin.zero_eta, Fin.isValue, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
+   Matrix.cons_val_fin_one, star_trivial, Fin.succ_zero_eq_one, Matrix.cons_val_one,
+   Fin.succ_one_eq_two, Matrix.cons_val, Finset.univ_eq_empty, Matrix.cons_val_succ, Finset.sum_const, Finset.card_empty,
+   zero_smul, add_zero, Quaternion.mul_re, Quaternion.star_re, Quaternion.star_imI, mul_neg, sub_neg_eq_add,
+   Quaternion.star_imJ, Quaternion.star_imK, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Matrix.smul_apply,
+   Matrix.one_apply_eq, smul_eq_mul]
+  all_goals (simp; ring_nf)
+
+lemma matrix_of_quat_is_unitary (q : Quaternion ℝ) (nz : Quaternion.normSq q ≠ 0)
+   : matrix_of_quat q ∈ Matrix.unitaryGroup (Fin 3) ℝ :=
+ sorry
+
+lemma denorm_matrix_of_quat_has_normsq_det (q : Quaternion ℝ)
+   : (matrix_of_quat q).det = Quaternion.normSq q := by
+ let ⟨r, x, y, z⟩ := q
+ have h : (r ^ 2 + x ^ 2 + y ^ 2 + z ^ 2 ≠ 0) := sorry
+ simp only [Matrix.det_succ_row_zero, Fin.sum_univ_succ, matrix_of_quat];
+ simp; simp[Fin.succAbove]; field_simp;
+ sorry
+
+lemma matrix_of_quat_has_det_one (q : Quaternion ℝ) (nz : Quaternion.normSq q ≠ 0)
+   : (matrix_of_quat q).det = 1 :=
+ sorry
+
+theorem matrix_of_quat_is_s03 (q : Quaternion ℝ) (nz : Quaternion.normSq q ≠ 0) : matrix_of_quat q ∈ SO3 :=
+  ⟨ matrix_of_quat_is_unitary q nz,
+    matrix_of_quat_has_det_one q nz ⟩
