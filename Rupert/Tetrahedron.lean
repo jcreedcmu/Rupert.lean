@@ -75,12 +75,23 @@ theorem rupert : IsRupert tetrahedron := by
   fin_cases y <;>
     simp only [tetrahedron, Fin.reduceFinMk, Matrix.cons_val, inner_shadow] at hy <;>
     use Fin 4, inferInstance
-  · use ![0, 396403/10347207977, 17279689/1216104112, 103030139/104519263]
+  · use ![24419762003513985479446993192034104101803115609735060626411685853698932075803/
+          5094134272401397362124160033006247763499653762616164782597202714604400000000000,
+          230409983468138546843093944744735640055655643438309323417206877017616228497521/
+          48111268128235419531172622533947895544163396646930445168973581193486000000000000,
+          0,
+          26803252720787927505825797680094096268019775262787608903547648471915690294817441/
+          27062588322132423486284600175345691243591910613898375407547639421335875000000000]
     use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
     refine ⟨?_, ?_, ?_, ?_⟩
     · intro i; fin_cases i <;> norm_num
-    · norm_num [Fin.sum_univ_four]; simp; norm_num; sorry
-    · sorry
+    · norm_num [Fin.sum_univ_four]; simp; norm_num
+    · intro i
+      fin_cases i
+      · use 0; simp; sorry
+      · sorry
+      · sorry
+      · sorry
     · sorry
   · sorry
   · sorry
