@@ -106,7 +106,7 @@ lemma matrix_of_quat_has_det_one (q : Quaternion ℝ) (nz : Quaternion.normSq q 
  rw [Matrix.det_smul, denorm_matrix_of_quat_has_correct_det]
  change n2 ^ 3 * Quaternion.normSq q ^ 3 = 1
  simp_all only [← mul_pow, one_div, ← Quaternion.normSq_def',
-                isUnit_iff_ne_zero, ne_eq, not_false_eq_true, 
+                isUnit_iff_ne_zero, ne_eq, not_false_eq_true,
                 IsUnit.inv_mul_cancel, one_pow, n2]
 
 theorem matrix_of_quat_is_s03 (q : Quaternion ℝ) (nz : Quaternion.normSq q ≠ 0) : matrix_of_quat q ∈ SO3 :=
