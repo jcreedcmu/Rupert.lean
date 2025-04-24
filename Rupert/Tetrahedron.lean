@@ -54,17 +54,88 @@ lemma inner_rot_so3 : inner_rot ∈ SO3 := by
 
 def inner_offset : ℝ² := ![0.09841265604345877,-0.165800542996898]
 
+set_option maxHeartbeats 10000000 in
 theorem rupert : IsRupert tetrahedron := by
   use outer_rot, outer_rot_so3, inner_rot, inner_rot_so3, inner_offset
   intro outer_shadow inner_shadow
   let ε₀ : ℝ := 0.001
   have hε₀ : ε₀ ∈ Set.Ioo 0 1 := by norm_num
   have hb : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer_shadow := by
-    refine ball_in_hull_of_corners_in_hull hε₀ ?_ ?_ ?_ ?_
-    · sorry
-    · sorry
-    · sorry
-    · sorry
+    refine ball_in_hull_of_corners_in_hull hε₀ ?_ ?_ ?_ ?_ <;>
+      apply mem_convexHull_iff_exists_fintype.mpr <;>
+      use Fin 4, inferInstance
+    · use ![3617692820440792570723946381530661/10825143580288773493049423263931750,
+            28853668423492178798094341203953803/86601148642310187944395386111454000,
+            0,
+            28805937655291668580509473855254909/86601148642310187944395386111454000]
+      use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
+      refine ⟨?_, ?_, ?_, ?_⟩
+      · intro i; fin_cases i <;> norm_num
+      · norm_num [Fin.sum_univ_four]; simp; norm_num
+      · intro i
+        fin_cases i
+        · use 0; simp [outer_shadow]
+        · use 1; simp [outer_shadow]
+        · use 2; simp [outer_shadow]
+        · use 3; simp [outer_shadow]
+      · simp [Fin.sum_univ_four]
+        simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
+              inner_offset, inner_rot, inner_quat]
+        norm_num
+    · use ![14453062835504034374561893618111559/43300574321155093972197693055727000,
+            28924377969556131455075376623438997/86601148642310187944395386111454000,
+            0,
+            5754129000349197548039244450358377/17320229728462037588879077222290800]
+      use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
+      refine ⟨?_, ?_, ?_, ?_⟩
+      · intro i; fin_cases i <;> norm_num
+      · norm_num [Fin.sum_univ_four]; simp; norm_num
+      · intro i
+        fin_cases i
+        · use 0; simp [outer_shadow]
+        · use 1; simp [outer_shadow]
+        · use 2; simp [outer_shadow]
+        · use 3; simp [outer_shadow]
+      · simp [Fin.sum_univ_four]
+        simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
+              inner_offset, inner_rot, inner_quat]
+        norm_num
+    · use ![3620915846390810535401128268562339/10825143580288773493049423263931750,
+            28924450122247859295397377743840197/86601148642310187944395386111454000,
+            0,
+           28709371748935844365788982219115091/86601148642310187944395386111454000]
+      use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
+      refine ⟨?_, ?_, ?_, ?_⟩
+      · intro i; fin_cases i <;> norm_num
+      · norm_num [Fin.sum_univ_four]; simp; norm_num
+      · intro i
+        fin_cases i
+        · use 0; simp [outer_shadow]
+        · use 1; simp [outer_shadow]
+        · use 2; simp [outer_shadow]
+        · use 3; simp [outer_shadow]
+      · simp [Fin.sum_univ_four]
+        simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
+              inner_offset, inner_rot, inner_quat]
+        norm_num
+    · use ![14501371831822378049938404982260441/43300574321155093972197693055727000,
+            28853740576183906638416342324355003/86601148642310187944395386111454000,
+            0,
+            5748932880496305041220446764515623/17320229728462037588879077222290800]
+      use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
+      refine ⟨?_, ?_, ?_, ?_⟩
+      · intro i; fin_cases i <;> norm_num
+      · norm_num [Fin.sum_univ_four]; simp; norm_num
+      · intro i
+        fin_cases i
+        · use 0; simp [outer_shadow]
+        · use 1; simp [outer_shadow]
+        · use 2; simp [outer_shadow]
+        · use 3; simp [outer_shadow]
+      · simp [Fin.sum_univ_four]
+        simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
+              inner_offset, inner_rot, inner_quat]
+        norm_num
   intro v hv
   let ε₁ : ℝ := 0.00001
   have hε₁ : ε₁ ∈ Set.Ioo 0 1 := by norm_num
@@ -179,74 +250,3 @@ theorem rupert : IsRupert tetrahedron := by
       fin_cases i
       · simp; norm_num
       · simp; norm_num
-
-/-
--------------------------------------
-
-Below we compute the coefficients...
-
--/
-
-namespace Coeff
-
-def tetrahedron : Fin 4 → EuclideanSpace ℚ (Fin 3) := ![
-  ![ 1,  1,  1],
-  ![ 1, -1, -1],
-  ![-1,  1, -1],
-  ![-1, -1,  1]]
-
-def outer_quat : Quaternion ℚ :=
-  ⟨0.3389904789675945, -0.4261829733457893, 0.1736023394555525, -0.8205581978964213⟩
-
-def outer_rot := matrix_of_quat outer_quat
-
-def inner_quat : Quaternion ℚ :=
-  ⟨0.8577016212029301, -0.1191615236085398, 0.4439711748359327, 0.2302999265999848⟩
-
-def inner_rot := matrix_of_quat inner_quat
-
-def inner_offset : EuclideanSpace ℚ (Fin 2) := ![0.09841265604345877,-0.165800542996898]
-
-def ε₁ : ℚ := 0.00001
-
-open scoped Matrix
-
-#eval fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
-/-
-![![(2046374534559867373214391065442134733 : Rat)/2500000000000000658609538959436700000,
-    (-3525336312241614680105804688074985933 : Rat)/2500000000000000658609538959436700000],
-  ![(-4080889473201659924135204962204588473 : Rat)/2500000000000000658609538959436700000,
-    (3893749672923670379042406623951043 : Rat)/2500000000000000658609538959436700000],
-  ![(-663485556854645419112447097154599 : Rat)/357142857142857236944219851348100000,
-    (-3443574576985150801999134796270569 : Rat)/357142857142857236944219851348100000],
-  ![(2039159337539775068854601026442535933 : Rat)/2500000000000000658609538959436700000,
-    (3545547584607587065340756225024928873 : Rat)/2500000000000000658609538959436700000]]
-
-p1 = vector(QQ, [2046374534559867373214391065442134733/2500000000000000658609538959436700000,
-                 -3525336312241614680105804688074985933/2500000000000000658609538959436700000])
-p2 = vector(QQ, [-4080889473201659924135204962204588473/2500000000000000658609538959436700000,
-                  3893749672923670379042406623951043/2500000000000000658609538959436700000])
-p3 = vector(QQ, [-663485556854645419112447097154599/357142857142857236944219851348100000,
-                 -3443574576985150801999134796270569/357142857142857236944219851348100000])
-p4 = vector(QQ, [2039159337539775068854601026442535933/2500000000000000658609538959436700000,
-                 3545547584607587065340756225024928873/2500000000000000658609538959436700000])
--/
-
-def hack_add (v1 v2 : EuclideanSpace ℚ (Fin 2)) : EuclideanSpace ℚ (Fin 2) :=
-  ![v1 0 + v2 0, v1 1 + v2 1]
-
-#eval fun i ↦ hack_add inner_offset (dropz (inner_rot *ᵥ (tetrahedron i)))
-/-
-![![(4019768719886866306784863677837758422155311667163 : Rat)/4999999999999999440740553764151900000000000000000,
-    (34946905166908186857695936394343991216473495969 : Rat)/24999999999999997203702768820759500000000000000],
-  ![(1961388635004586013639940024331958422155311667163 : Rat)/4999999999999999440740553764151900000000000000000,
-    (-28774498439153123623204462034761008783526504031 : Rat)/24999999999999997203702768820759500000000000000],
-  ![(-2681433400080399000741852863814680525948229444279 : Rat)/1666666666666666480246851254717300000000000000000,
-    (13105064393403673628838342049330405491165323 : Rat)/8333333333333332401234256273586500000000000000],
-  ![(4031395966218919861647924803419358422155311667163 : Rat)/4999999999999999440740553764151900000000000000000,
-    (-22791776220625072400867592144769008783526504031 : Rat)/24999999999999997203702768820759500000000000000]]
-
-q = vector(QQ, [4031395966218919861647924803419358422155311667163/4999999999999999440740553764151900000000000000000,
-                -22791776220625072400867592144769008783526504031/24999999999999997203702768820759500000000000000])
-
--/
