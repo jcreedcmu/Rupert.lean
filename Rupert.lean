@@ -5,3 +5,4 @@ import Rupert.Quaternion
 import Rupert.SnubCube
 import Rupert.Square
 import Rupert.Tetrahedron
+import Rupert.TriakisTetrahedron
