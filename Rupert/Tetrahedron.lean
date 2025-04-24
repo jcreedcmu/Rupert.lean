@@ -88,11 +88,19 @@ theorem rupert : IsRupert tetrahedron := by
     · norm_num [Fin.sum_univ_four]; simp; norm_num
     · intro i
       fin_cases i
-      · use 0; simp; sorry
-      · sorry
-      · sorry
-      · sorry
-    · sorry
+      · use dropz (outer_rot *ᵥ tetrahedron 0); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 1); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 2); simp [outer_shadow]
+      · use dropz (outer_rot *ᵥ tetrahedron 3); simp [outer_shadow]
+    · simp [Fin.sum_univ_four]
+      rw [←hy]
+      simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
+            inner_offset, inner_rot, inner_quat]
+      norm_num
+      ext i
+      fin_cases i
+      · simp; norm_num
+      · simp; norm_num
   · sorry
   · sorry
   · sorry
