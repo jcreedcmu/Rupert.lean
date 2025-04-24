@@ -71,13 +71,8 @@ theorem rupert : IsRupert tetrahedron := by
       use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
-      · norm_num [Fin.sum_univ_four]; simp; norm_num
-      · intro i
-        fin_cases i
-        · use 0; simp [outer_shadow]
-        · use 1; simp [outer_shadow]
-        · use 2; simp [outer_shadow]
-        · use 3; simp [outer_shadow]
+      · simp [Fin.sum_univ_four]; norm_num
+      · exact fun i ↦ ⟨i, rfl⟩
       · simp [Fin.sum_univ_four]
         simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
               inner_offset, inner_rot, inner_quat]
@@ -89,13 +84,8 @@ theorem rupert : IsRupert tetrahedron := by
       use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
-      · norm_num [Fin.sum_univ_four]; simp; norm_num
-      · intro i
-        fin_cases i
-        · use 0; simp [outer_shadow]
-        · use 1; simp [outer_shadow]
-        · use 2; simp [outer_shadow]
-        · use 3; simp [outer_shadow]
+      · simp [Fin.sum_univ_four]; norm_num
+      · exact fun i ↦ ⟨i, rfl⟩
       · simp [Fin.sum_univ_four]
         simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
               inner_offset, inner_rot, inner_quat]
@@ -107,13 +97,8 @@ theorem rupert : IsRupert tetrahedron := by
       use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
-      · norm_num [Fin.sum_univ_four]; simp; norm_num
-      · intro i
-        fin_cases i
-        · use 0; simp [outer_shadow]
-        · use 1; simp [outer_shadow]
-        · use 2; simp [outer_shadow]
-        · use 3; simp [outer_shadow]
+      · simp [Fin.sum_univ_four]; norm_num
+      · exact fun i ↦ ⟨i, rfl⟩
       · simp [Fin.sum_univ_four]
         simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
               inner_offset, inner_rot, inner_quat]
@@ -125,13 +110,8 @@ theorem rupert : IsRupert tetrahedron := by
       use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
-      · norm_num [Fin.sum_univ_four]; simp; norm_num
-      · intro i
-        fin_cases i
-        · use 0; simp [outer_shadow]
-        · use 1; simp [outer_shadow]
-        · use 2; simp [outer_shadow]
-        · use 3; simp [outer_shadow]
+      · simp [Fin.sum_univ_four]; norm_num
+      · exact fun i ↦ ⟨i, rfl⟩
       · simp [Fin.sum_univ_four]
         simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
               inner_offset, inner_rot, inner_quat]
