@@ -13,7 +13,7 @@ def dropz {k : Type} [Field k] (v : EuclideanSpace k (Fin 3)) : EuclideanSpace k
 
 /-- The Rupert Property for a convex polyhedron given as an indexed finite set of vertices. -/
 def IsRupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : Prop :=
-   ∃ inner_rot ∈ SO3, ∃ outer_rot ∈ SO3, ∃ inner_offset : ℝ²,
-   let inner_shadow := Set.range (fun i ↦ inner_offset + dropz (inner_rot *ᵥ v i))
+   ∃ outer_rot ∈ SO3, ∃ inner_rot ∈ SO3, ∃ inner_offset : ℝ²,
    let outer_shadow := Set.range (fun i ↦ dropz (outer_rot *ᵥ v i))
+   let inner_shadow := Set.range (fun i ↦ inner_offset + dropz (inner_rot *ᵥ v i))
    inner_shadow ⊆ interior (convexHull ℝ outer_shadow)

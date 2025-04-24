@@ -88,10 +88,9 @@ by π/4 radians. No offset translation is needed.
       +
 -/
  let inner_offset : ℝ² := 0
- use inner_rot, inner_rot_so3, outer_rot, outer_rot_so3, inner_offset
+ use outer_rot, outer_rot_so3, inner_rot, inner_rot_so3, inner_offset
 
- intro inner_shadow outer_shadow x hx
- --obtain ⟨y, ⟨y_in_square, proj_rot_y_eq_x ⟩⟩ := hx
+ intro outer_shadow inner_shadow x hx
 
  obtain ⟨ε₀, hε₀0, hε₀⟩ : ∃ ε₀, 0 < ε₀ ∧ ε₀ < √2/2 := by
    use 0.00001
