@@ -5,11 +5,6 @@ open Matrix
 
 abbrev E (n : ℕ) := EuclideanSpace ℝ (Fin n)
 
-/-- The interior of a convex set is convex -/
-theorem interior_of_convex_convex {n : ℕ} {S : Set (E n)} :
-  Convex ℝ S → Convex ℝ (interior S) := by
-   sorry
-
 /-- Projecting from ℝ³ to ℝ² is linear -/
 def projection_linear : ℝ³ →ₗ[ℝ] ℝ² :=
   ⟨ ⟨ dropz, by sorry⟩ , by sorry⟩
@@ -56,7 +51,7 @@ theorem rupert_imp_rupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRuper
  change inner_shadow ⊆ interior outer_shadow
  rw [← inner_lemma, ← outer_lemma]
  let interior_convex : Convex ℝ (interior (convexHull ℝ raw_outer_shadow)) :=
-   interior_of_convex_convex (convex_convexHull ℝ raw_outer_shadow)
+    Convex.interior (convex_convexHull ℝ raw_outer_shadow)
  exact (Convex.convexHull_subset_iff interior_convex).mpr rupert
 
 theorem rupert'_imp_rupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRupert' v → IsRupert v := by
