@@ -24,4 +24,4 @@ def IsRupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : Prop :=
    let hull := convexHull ℝ (Set.range v)
    let outer_shadow := (fun p ↦ dropz (outer_rot *ᵥ p)) '' hull
    let inner_shadow := (fun p ↦ inner_offset + dropz (inner_rot *ᵥ p)) '' hull
-   inner_shadow ⊆ interior (convexHull ℝ outer_shadow)
+   inner_shadow ⊆ interior outer_shadow
