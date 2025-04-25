@@ -112,3 +112,35 @@ lemma matrix_of_quat_has_det_one (q : Quaternion ℝ) (nz : Quaternion.normSq q 
 theorem matrix_of_quat_is_s03 {q : Quaternion ℝ} (nz : Quaternion.normSq q ≠ 0) : matrix_of_quat q ∈ SO3 :=
   ⟨ matrix_of_quat_is_unitary q nz,
     matrix_of_quat_has_det_one q nz ⟩
+
+/- Some lemmas about specific rotations -/
+section Rotations
+open Real
+open Matrix
+
+noncomputable
+def rotate_x_quat (θ : ℝ) : Quaternion ℝ :=
+   ⟨cos (θ/2), sin (θ/2), 0, 0⟩
+
+noncomputable
+def rotate_x_mat (θ : ℝ) : Matrix (Fin 3) (Fin 3) ℝ :=
+   !![1,       0,        0;
+      0, cos (θ), -sin (θ);
+      0, sin (θ),  cos (θ) ]
+
+
+theorem rotate_x (θ : ℝ) : matrix_of_quat (rotate_x_quat θ) = rotate_x_mat θ := by
+  simp only [rotate_x_quat, matrix_of_quat, rotate_x_mat]
+  have arith : 2 * (θ / 2) = θ := by
+    rw [← mul_div_assoc, mul_comm, mul_div_cancel_of_invertible]
+  ext i j; fin_cases i, j
+  all_goals simp only [cos_sq_add_sin_sq, ne_eq, OfNat.ofNat_ne_zero,
+    not_false_eq_true, zero_pow,
+    sub_zero, add_zero, mul_zero, zero_mul, div_one,
+    of_apply, Fin.reduceFinMk, cons_val]
+  · rw [← cos_two_mul', arith];
+  · rw [zero_sub, mul_neg,  ← mul_assoc, ← sin_two_mul, arith]
+  · rw [zero_add, ← mul_assoc, ← sin_two_mul, arith]
+  · rw [← cos_two_mul', arith];
+
+end Rotations
