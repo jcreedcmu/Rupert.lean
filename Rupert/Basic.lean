@@ -17,3 +17,11 @@ def IsRupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : Prop :=
    let outer_shadow := Set.range (fun i ↦ dropz (outer_rot *ᵥ v i))
    let inner_shadow := Set.range (fun i ↦ inner_offset + dropz (inner_rot *ᵥ v i))
    inner_shadow ⊆ interior (convexHull ℝ outer_shadow)
+
+/-- Alternate formulation of the Rupert Property -/
+def IsRupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : Prop :=
+   ∃ outer_rot ∈ SO3, ∃ inner_rot ∈ SO3, ∃ inner_offset : ℝ²,
+   let hull := convexHull ℝ (Set.range v)
+   let outer_shadow := (fun p ↦ dropz (outer_rot *ᵥ p)) '' hull
+   let inner_shadow := (fun p ↦ inner_offset + dropz (inner_rot *ᵥ p)) '' hull
+   inner_shadow ⊆ interior (convexHull ℝ outer_shadow)
