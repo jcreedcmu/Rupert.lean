@@ -112,3 +112,64 @@ lemma matrix_of_quat_has_det_one (q : Quaternion ℝ) (nz : Quaternion.normSq q 
 theorem matrix_of_quat_is_s03 {q : Quaternion ℝ} (nz : Quaternion.normSq q ≠ 0) : matrix_of_quat q ∈ SO3 :=
   ⟨ matrix_of_quat_is_unitary q nz,
     matrix_of_quat_has_det_one q nz ⟩
+
+/- Some lemmas about specific rotations -/
+section Rotations
+open Real
+open Matrix
+
+noncomputable
+def rotate_x_quat (θ : ℝ) : Quaternion ℝ :=
+   ⟨cos (θ/2), sin (θ/2), 0, 0⟩
+
+noncomputable
+def rotate_x_mat (θ : ℝ) : Matrix (Fin 3) (Fin 3) ℝ :=
+   !![1,       0,        0;
+      0, cos (θ), -sin (θ);
+      0, sin (θ),  cos (θ) ]
+
+
+theorem rotate_x (θ : ℝ) : matrix_of_quat (rotate_x_quat θ) = rotate_x_mat θ := by
+  simp only [rotate_x_quat, matrix_of_quat, rotate_x_mat]
+  have arith : 2 * (θ / 2) = θ := by
+    rw [← mul_div_assoc, mul_comm, mul_div_cancel_of_invertible]
+  ext i j; fin_cases i, j
+  all_goals simp only [cos_sq_add_sin_sq, ne_eq, OfNat.ofNat_ne_zero,
+    not_false_eq_true, zero_pow,
+    sub_zero, add_zero, mul_zero, zero_mul, div_one,
+    of_apply, Fin.reduceFinMk, cons_val]
+  · rw [← cos_two_mul', arith];
+  · rw [zero_sub, mul_neg,  ← mul_assoc, ← sin_two_mul, arith]
+  · rw [zero_add, ← mul_assoc, ← sin_two_mul, arith]
+  · rw [← cos_two_mul', arith];
+
+/- Given a pair of vectors src, tgt, return a rotation that rotates src
+   to be parallel to tgt -/
+noncomputable
+def rotateToTarget (src tgt : ℝ³) : Quaternion ℝ :=
+   let θ := cos⁻¹ (inner src tgt / (2 * ‖src‖  * ‖tgt‖))
+   let v := src ×₃ tgt
+   ⟨cos (θ/2), sin (θ/2) * v 0, sin (θ/2) * v 1, sin (θ/2) * v 2⟩
+
+theorem rotate_parallel_target (src tgt : ℝ³) : ∃ ℓ : ℝ,
+        matrix_of_quat (rotateToTarget src tgt) *ᵥ src = ℓ • tgt := by
+  use ?wit
+  · let θ := cos⁻¹ (inner src tgt / (2 * ‖src‖  * ‖tgt‖))
+    let v := src ×₃ tgt
+    simp only [matrix_of_quat]
+    rw [show rotateToTarget src tgt = ⟨cos (θ/2), sin (θ/2) * v 0, sin (θ/2) * v 1, sin (θ/2) * v 2⟩ by rfl]
+    dsimp only;
+    ext i; fin_cases i;
+    · beta_reduce; simp only [Matrix.mulVec];
+      dsimp only [Fin.isValue, Fin.zero_eta, of_apply, cons_val_zero, PiLp.smul_apply, smul_eq_mul];
+      dsimp only [dotProduct]
+      simp only [Fin.sum_univ_succ, Fin.sum_univ_zero]
+      simp only [Fin.isValue, cons_val_zero, Fin.succ_zero_eq_one, cons_val_one,
+        Fin.succ_one_eq_two, cons_val, add_zero]
+      dsimp only [v, crossProduct]; simp;
+      sorry
+    · sorry
+    · sorry
+  · sorry
+
+end Rotations
