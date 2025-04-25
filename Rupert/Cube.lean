@@ -40,7 +40,7 @@ def outer_rot1 : Matrix.specialOrthogonalGroup (Fin 3) ℝ :=
      head_cons, tail_cons, add_zero]; sorry
    · sorry
    · sorry
- ⟨M, matrix_of_quat_is_s03 q qnz⟩
+ ⟨M, matrix_of_quat_is_s03 qnz⟩
 
 noncomputable
 def outer_rot := outer_rot2 * outer_rot1
