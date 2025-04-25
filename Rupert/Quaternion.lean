@@ -143,4 +143,33 @@ theorem rotate_x (θ : ℝ) : matrix_of_quat (rotate_x_quat θ) = rotate_x_mat �
   · rw [zero_add, ← mul_assoc, ← sin_two_mul, arith]
   · rw [← cos_two_mul', arith];
 
+/- Given a pair of vectors src, tgt, return a rotation that rotates src
+   to be parallel to tgt -/
+noncomputable
+def rotateToTarget (src tgt : ℝ³) : Quaternion ℝ :=
+   let θ := cos⁻¹ (inner src tgt / (2 * ‖src‖  * ‖tgt‖))
+   let v := src ×₃ tgt
+   ⟨cos (θ/2), sin (θ/2) * v 0, sin (θ/2) * v 1, sin (θ/2) * v 2⟩
+
+theorem rotate_parallel_target (src tgt : ℝ³) : ∃ ℓ : ℝ,
+        matrix_of_quat (rotateToTarget src tgt) *ᵥ src = ℓ • tgt := by
+  use ?wit
+  · let θ := cos⁻¹ (inner src tgt / (2 * ‖src‖  * ‖tgt‖))
+    let v := src ×₃ tgt
+    simp only [matrix_of_quat]
+    rw [show rotateToTarget src tgt = ⟨cos (θ/2), sin (θ/2) * v 0, sin (θ/2) * v 1, sin (θ/2) * v 2⟩ by rfl]
+    dsimp only;
+    ext i; fin_cases i;
+    · beta_reduce; simp only [Matrix.mulVec];
+      dsimp only [Fin.isValue, Fin.zero_eta, of_apply, cons_val_zero, PiLp.smul_apply, smul_eq_mul];
+      dsimp only [dotProduct]
+      simp only [Fin.sum_univ_succ, Fin.sum_univ_zero]
+      simp only [Fin.isValue, cons_val_zero, Fin.succ_zero_eq_one, cons_val_one,
+        Fin.succ_one_eq_two, cons_val, add_zero]
+      dsimp only [v, crossProduct]; simp;
+      sorry
+    · sorry
+    · sorry
+  · sorry
+
 end Rotations
