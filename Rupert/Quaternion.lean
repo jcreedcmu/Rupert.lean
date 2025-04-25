@@ -109,6 +109,6 @@ lemma matrix_of_quat_has_det_one (q : Quaternion ℝ) (nz : Quaternion.normSq q 
                 isUnit_iff_ne_zero, ne_eq, not_false_eq_true,
                 IsUnit.inv_mul_cancel, one_pow, n2]
 
-theorem matrix_of_quat_is_s03 (q : Quaternion ℝ) (nz : Quaternion.normSq q ≠ 0) : matrix_of_quat q ∈ SO3 :=
+theorem matrix_of_quat_is_s03 {q : Quaternion ℝ} (nz : Quaternion.normSq q ≠ 0) : matrix_of_quat q ∈ SO3 :=
   ⟨ matrix_of_quat_is_unitary q nz,
     matrix_of_quat_has_det_one q nz ⟩
