@@ -8,7 +8,39 @@ abbrev E (n : ℕ) := EuclideanSpace ℝ (Fin n)
 /-- The interior of a convex set is convex -/
 theorem interior_of_convex_convex {n : ℕ} {S : Set (E n)} :
   Convex ℝ S → Convex ℝ (interior S) := by
-   sorry
+   intro convex
+   intro a ha b hb wa wb hwa hwb hwsum
+   rw [mem_interior] at ha hb ⊢
+   obtain ⟨ua, hua, ua_open, a_in_ua⟩ := ha
+   obtain ⟨ub, hub, ub_open, b_in_ub⟩ := hb
+
+   obtain ⟨ arad, arad_pos, aball_sub ⟩  := Metric.isOpen_iff.mp  ua_open a a_in_ua
+   obtain ⟨ brad, brad_pos, bball_sub ⟩  := Metric.isOpen_iff.mp  ub_open b b_in_ub
+
+   let mrad :=  min arad brad
+   let m := wa • a + wb • b
+   let mball := Metric.ball m mrad
+   have mrad_pos : mrad > 0 := by simp_all only [gt_iff_lt, lt_inf_iff, and_self, mrad]
+   use mball
+   refine ⟨?_, ?_, ?_⟩
+   · intro x hx;
+     let v := x - m
+     have av_in_S : a + v ∈ S := sorry
+     have bv_in_S : b + v ∈ S := sorry
+
+     have arith : wa • (a + v) + wb • (b + v) = m + v :=
+      calc wa • (a + v) + wb • (b + v)
+        _ = (wa • a + wa • v) + (wb • b + wb • v) := by rw [smul_add, smul_add]
+        _ = (wa • a + wb • b) + (wa • v + wb • v) := by rw [add_add_add_comm]
+        _ = (wa • a + wb • b) + ((wa + wb) • v) := by rw[← add_smul]
+        _ = (wa • a + wb • b) + v := by rw [hwsum, MulAction.one_smul]
+
+     let subgoal := convex av_in_S bv_in_S hwa hwb hwsum
+     rw [arith, add_sub_cancel m x] at subgoal
+     exact subgoal
+   · exact Metric.isOpen_ball
+   · exact Metric.mem_ball_self mrad_pos
+
 
 /-- Projecting from ℝ³ to ℝ² is linear -/
 def projection_linear : ℝ³ →ₗ[ℝ] ℝ² :=
