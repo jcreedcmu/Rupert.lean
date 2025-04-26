@@ -61,7 +61,7 @@ theorem rupert'_imp_rupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRuper
  rw [← inner_lemma, ← outer_lemma]
  let interior_convex : Convex ℝ (interior (convexHull ℝ raw_outer_shadow)) :=
     Convex.interior (convex_convexHull ℝ raw_outer_shadow)
- exact (Convex.convexHull_subset_iff interior_convex).mpr rupert
+ exact convexHull_min rupert interior_convex
 
 theorem rupert_imp_rupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRupert v → IsRupert' v := by
  intro ⟨ outer_rot,  outer_so3, inner_rot, inner_so3, offset, rupert⟩
