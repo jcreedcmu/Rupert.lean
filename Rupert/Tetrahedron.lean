@@ -51,9 +51,12 @@ theorem rupert : IsRupert tetrahedron := by
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp [Fin.sum_univ_four]
-        simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-              inner_offset, inner_rot, inner_quat]
+      · simp only [Nat.succ_eq_add_one, Nat.reduceAdd, dropz, outer_rot, matrix_of_quat,
+          outer_quat, even_two, Even.neg_pow, neg_mul, sub_neg_eq_add, mul_neg, neg_neg, tetrahedron,
+          Fin.isValue, Matrix.cons_mulVec, Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero,
+          Matrix.empty_mulVec, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.smul_cons,
+          smul_eq_mul, Matrix.smul_empty, Fin.sum_univ_four, Matrix.head_cons, mul_one,
+          Matrix.tail_cons, Matrix.add_cons, Matrix.empty_add_empty, Matrix.cons_val, zero_mul]
         norm_num
     · use ![14453062835504034374561893618111559/43300574321155093972197693055727000,
             28924377969556131455075376623438997/86601148642310187944395386111454000,
@@ -64,9 +67,12 @@ theorem rupert : IsRupert tetrahedron := by
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp [Fin.sum_univ_four]
-        simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-              inner_offset, inner_rot, inner_quat]
+      · simp only [Nat.succ_eq_add_one, Nat.reduceAdd, dropz, outer_rot, matrix_of_quat,
+          outer_quat, even_two, Even.neg_pow, neg_mul, sub_neg_eq_add, mul_neg, neg_neg, tetrahedron,
+          Fin.isValue, Matrix.cons_mulVec, Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero,
+          Matrix.empty_mulVec, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.smul_cons,
+          smul_eq_mul, Matrix.smul_empty, Fin.sum_univ_four, Matrix.head_cons, mul_one,
+          Matrix.tail_cons, Matrix.add_cons, Matrix.empty_add_empty, Matrix.cons_val, zero_mul]
         norm_num
     · use ![3620915846390810535401128268562339/10825143580288773493049423263931750,
             28924450122247859295397377743840197/86601148642310187944395386111454000,
@@ -77,9 +83,12 @@ theorem rupert : IsRupert tetrahedron := by
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp [Fin.sum_univ_four]
-        simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-              inner_offset, inner_rot, inner_quat]
+      · simp only [Nat.succ_eq_add_one, Nat.reduceAdd, dropz, outer_rot, matrix_of_quat,
+          outer_quat, even_two, Even.neg_pow, neg_mul, sub_neg_eq_add, mul_neg, neg_neg, tetrahedron,
+          Fin.isValue, Matrix.cons_mulVec, Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero,
+          Matrix.empty_mulVec, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.smul_cons,
+          smul_eq_mul, Matrix.smul_empty, Fin.sum_univ_four, Matrix.head_cons, mul_one,
+          Matrix.tail_cons, Matrix.add_cons, Matrix.empty_add_empty, Matrix.cons_val, zero_mul]
         norm_num
     · use ![14501371831822378049938404982260441/43300574321155093972197693055727000,
             28853740576183906638416342324355003/86601148642310187944395386111454000,
@@ -90,9 +99,12 @@ theorem rupert : IsRupert tetrahedron := by
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp [Fin.sum_univ_four]
-        simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-              inner_offset, inner_rot, inner_quat]
+      · simp only [Nat.succ_eq_add_one, Nat.reduceAdd, dropz, outer_rot, matrix_of_quat,
+          outer_quat, even_two, Even.neg_pow, neg_mul, sub_neg_eq_add, mul_neg, neg_neg, tetrahedron,
+          Fin.isValue, Matrix.cons_mulVec, Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero,
+          Matrix.empty_mulVec, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.smul_cons,
+          smul_eq_mul, Matrix.smul_empty, Fin.sum_univ_four, Matrix.head_cons, mul_one,
+          Matrix.tail_cons, Matrix.add_cons, Matrix.empty_add_empty, Matrix.cons_val, zero_mul]
         norm_num
   intro v hv
   let ε₁ : ℝ := 0.00001
@@ -116,10 +128,14 @@ theorem rupert : IsRupert tetrahedron := by
     · intro i; fin_cases i <;> norm_num
     · norm_num [Fin.sum_univ_four]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
-    · simp [Fin.sum_univ_four]
-      rw [←hy]
-      simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-            inner_offset, inner_rot, inner_quat, ε₁, smul_smul, Matrix.smul_vec2]
+    · rw [←hy]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, neg_mul,
+        sub_neg_eq_add, mul_neg, neg_neg, tetrahedron, Fin.isValue, Matrix.cons_mulVec,
+        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
+        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_four, Matrix.head_cons,
+        mul_one, Matrix.tail_cons, Matrix.cons_val, zero_mul, zero_smul, inner_offset, inner_rot,
+        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, one_smul,
+        Matrix.mulVec_empty, Pi.add_apply, Function.comp_apply, ε₁, inner_shadow, outer_shadow]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -135,10 +151,15 @@ theorem rupert : IsRupert tetrahedron := by
     · intro i; fin_cases i <;> norm_num
     · norm_num [Fin.sum_univ_four]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
-    · simp [Fin.sum_univ_four]
-      rw [←hy]
-      simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-            inner_offset, inner_rot, inner_quat, ε₁, smul_smul, Matrix.smul_vec2]
+    · rw [←hy]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, neg_mul,
+        sub_neg_eq_add, mul_neg, neg_neg, tetrahedron, Fin.isValue, Matrix.cons_mulVec,
+        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
+        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_four, Matrix.head_cons,
+        mul_one, Matrix.tail_cons, Matrix.cons_val, zero_mul, zero_smul, inner_offset, inner_rot,
+        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, one_smul, neg_smul,
+        Matrix.mulVec_empty, Pi.add_apply, Function.comp_apply, Pi.neg_apply, ε₁, inner_shadow,
+        outer_shadow]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -154,10 +175,15 @@ theorem rupert : IsRupert tetrahedron := by
     · intro i; fin_cases i <;> norm_num
     · norm_num [Fin.sum_univ_four]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
-    · simp [Fin.sum_univ_four]
-      rw [←hy]
-      simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-            inner_offset, inner_rot, inner_quat, ε₁, smul_smul, Matrix.smul_vec2]
+    · rw [←hy]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, neg_mul,
+        sub_neg_eq_add, mul_neg, neg_neg, tetrahedron, Fin.isValue, Matrix.cons_mulVec,
+        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
+        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_four, Matrix.head_cons,
+        mul_one, Matrix.tail_cons, Matrix.cons_val, zero_mul, zero_smul, inner_offset, inner_rot,
+        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, neg_smul, one_smul,
+        Matrix.mulVec_empty, Pi.add_apply, Pi.neg_apply, Function.comp_apply, ε₁, inner_shadow,
+        outer_shadow]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -173,10 +199,15 @@ theorem rupert : IsRupert tetrahedron := by
     · intro i; fin_cases i <;> norm_num
     · norm_num [Fin.sum_univ_four]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
-    · simp [Fin.sum_univ_four]
-      rw [←hy]
-      simp [tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-            inner_offset, inner_rot, inner_quat, ε₁, smul_smul, Matrix.smul_vec2]
+    · rw [←hy]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, neg_mul,
+        sub_neg_eq_add, mul_neg, neg_neg, tetrahedron, Fin.isValue, Matrix.cons_mulVec,
+        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
+        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_four, Matrix.head_cons,
+        mul_one, Matrix.tail_cons, Matrix.cons_val, zero_mul, zero_smul, inner_offset, inner_rot,
+        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, neg_smul, one_smul,
+        Matrix.mulVec_empty, Pi.add_apply, Pi.neg_apply, Function.comp_apply, ε₁, inner_shadow,
+        outer_shadow]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add,Matrix.vec2_add, Matrix.vec2_add]
       norm_num
