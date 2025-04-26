@@ -1,7 +1,11 @@
+import Rupert.Attr
 import Rupert.Basic
 import Rupert.Convex
 import Rupert.Cube
+import Rupert.MatrixSimps
 import Rupert.Quaternion
+import Rupert.RelatingRupertDefs
+import Rupert.Set
 import Rupert.SnubCube
 import Rupert.Square
 import Rupert.Tetrahedron

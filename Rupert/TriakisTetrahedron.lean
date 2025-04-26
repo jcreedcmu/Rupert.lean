@@ -1,5 +1,6 @@
 import Rupert.Basic
 import Rupert.Convex
+import Rupert.MatrixSimps
 import Rupert.Quaternion
 import Rupert.RelatingRupertDefs
 
@@ -59,9 +60,8 @@ theorem rupert : IsRupert triakis_tetrahedron := by
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_eight]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp [Fin.sum_univ_eight]
-        simp [triakis_tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-              inner_offset, inner_rot, inner_quat]
+      · simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+                   Fin.sum_univ_eight, ε₀, outer_shadow, matrix_simps]
         norm_num
     · use ![0,
             420792525388638879671739273/1131235202838720101867562400,
@@ -74,9 +74,8 @@ theorem rupert : IsRupert triakis_tetrahedron := by
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_eight]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp [Fin.sum_univ_eight]
-        simp [triakis_tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-              inner_offset, inner_rot, inner_quat]
+      · simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+                   Fin.sum_univ_eight, ε₀, outer_shadow, matrix_simps]
         norm_num
     · use ![140204724479442774822495653/285905211542650912387345000,
             9101248215348123613887828/35738151442831364048418125,
@@ -88,9 +87,8 @@ theorem rupert : IsRupert triakis_tetrahedron := by
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_eight]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp [Fin.sum_univ_eight]
-        simp [triakis_tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-              inner_offset, inner_rot, inner_quat]
+      · simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+                   Fin.sum_univ_eight, ε₀, outer_shadow, matrix_simps]
         norm_num
     · use ![0,
             2190210027139292884895349/707022001774200063667226500,
@@ -104,9 +102,8 @@ theorem rupert : IsRupert triakis_tetrahedron := by
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_eight]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp [Fin.sum_univ_eight]
-        simp [triakis_tetrahedron, dropz, outer_rot, matrix_of_quat, outer_quat,
-              inner_offset, inner_rot, inner_quat]
+      · simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+                   Fin.sum_univ_eight, ε₀, outer_shadow, matrix_simps]
         norm_num
   intro v hv
   let ε₁ : ℝ := 1e-12
@@ -132,14 +129,9 @@ theorem rupert : IsRupert triakis_tetrahedron := by
     · norm_num [Fin.sum_univ_eight]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ triakis_tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, mul_neg,
-        neg_mul, neg_neg, sub_neg_eq_add, triakis_tetrahedron, Fin.isValue, Matrix.cons_mulVec,
-        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
-        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_eight, Matrix.head_cons,
-        Matrix.tail_cons, Matrix.cons_val, zero_mul, zero_smul, mul_one, inner_offset, inner_rot,
-        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, Matrix.mulVec_empty,
-        Pi.add_apply, Pi.smul_apply, Function.comp_apply, smul_eq_mul, ε₁, inner_shadow,
-        outer_shadow]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
+        outer_shadow, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -157,14 +149,9 @@ theorem rupert : IsRupert triakis_tetrahedron := by
     · norm_num [Fin.sum_univ_eight]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ triakis_tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, mul_neg,
-        neg_mul, neg_neg, sub_neg_eq_add, triakis_tetrahedron, Fin.isValue, Matrix.cons_mulVec,
-        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
-        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_eight, Matrix.head_cons,
-        Matrix.tail_cons, Matrix.cons_val, zero_mul, zero_smul, mul_one, inner_offset, inner_rot,
-        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, Matrix.mulVec_empty,
-        Pi.add_apply, Pi.smul_apply, Function.comp_apply, smul_eq_mul, ε₁, inner_shadow,
-        outer_shadow]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
+        outer_shadow, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -183,14 +170,9 @@ theorem rupert : IsRupert triakis_tetrahedron := by
     · norm_num [Fin.sum_univ_eight]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ triakis_tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, mul_neg,
-        neg_mul, neg_neg, sub_neg_eq_add, triakis_tetrahedron, Fin.isValue, Matrix.cons_mulVec,
-        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
-        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_eight, Matrix.head_cons,
-        Matrix.tail_cons, zero_mul, zero_smul, Matrix.cons_val, mul_one, inner_offset, inner_rot,
-        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, Matrix.mulVec_empty,
-        Pi.add_apply, Pi.smul_apply, Function.comp_apply, smul_eq_mul, ε₁, inner_shadow,
-        outer_shadow]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
+        outer_shadow, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -209,14 +191,9 @@ theorem rupert : IsRupert triakis_tetrahedron := by
     · norm_num [Fin.sum_univ_eight]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ triakis_tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, mul_neg,
-        neg_mul, neg_neg, sub_neg_eq_add, triakis_tetrahedron, Fin.isValue, Matrix.cons_mulVec,
-        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
-        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_eight, Matrix.head_cons,
-        Matrix.tail_cons, zero_mul, zero_smul, Matrix.cons_val, mul_one, inner_offset, inner_rot,
-        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, Matrix.mulVec_empty,
-        Pi.add_apply, Pi.smul_apply, Function.comp_apply, smul_eq_mul, ε₁, inner_shadow,
-        outer_shadow]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
+        outer_shadow, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -235,14 +212,9 @@ theorem rupert : IsRupert triakis_tetrahedron := by
     · norm_num [Fin.sum_univ_eight]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ triakis_tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, mul_neg,
-        neg_mul, neg_neg, sub_neg_eq_add, triakis_tetrahedron, Fin.isValue, Matrix.cons_mulVec,
-        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
-        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_eight, Matrix.head_cons,
-        Matrix.tail_cons, zero_mul, zero_smul, Matrix.cons_val, mul_one, inner_offset, inner_rot,
-        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, neg_smul, one_smul,
-        Matrix.mulVec_empty, Pi.add_apply, Pi.neg_apply, Function.comp_apply, ε₁, inner_shadow,
-        outer_shadow]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
+        outer_shadow, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -260,14 +232,9 @@ theorem rupert : IsRupert triakis_tetrahedron := by
     · norm_num [Fin.sum_univ_eight]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ triakis_tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, mul_neg,
-        neg_mul, neg_neg, sub_neg_eq_add, triakis_tetrahedron, Fin.isValue, Matrix.cons_mulVec,
-        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
-        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_eight, Matrix.head_cons,
-        Matrix.tail_cons, Matrix.cons_val, zero_mul, zero_smul, mul_one, inner_offset, inner_rot,
-        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, one_smul, neg_smul,
-        Matrix.mulVec_empty, Pi.add_apply, Function.comp_apply, Pi.neg_apply, ε₁, inner_shadow,
-        outer_shadow]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
+        outer_shadow, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -285,14 +252,9 @@ theorem rupert : IsRupert triakis_tetrahedron := by
     · norm_num [Fin.sum_univ_eight]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ triakis_tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, mul_neg,
-        neg_mul, neg_neg, sub_neg_eq_add, triakis_tetrahedron, Fin.isValue, Matrix.cons_mulVec,
-        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
-        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_eight, Matrix.head_cons,
-        Matrix.tail_cons, Matrix.cons_val, zero_mul, zero_smul, mul_one, inner_offset, inner_rot,
-        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, one_smul, neg_smul,
-        Matrix.mulVec_empty, Pi.add_apply, Function.comp_apply, Pi.neg_apply, ε₁, inner_shadow,
-        outer_shadow]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
+        outer_shadow, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -311,14 +273,9 @@ theorem rupert : IsRupert triakis_tetrahedron := by
     · norm_num [Fin.sum_univ_eight]; simp; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ triakis_tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, even_two, Even.neg_pow, mul_neg,
-        neg_mul, neg_neg, sub_neg_eq_add, triakis_tetrahedron, Fin.isValue, Matrix.cons_mulVec,
-        Matrix.cons_dotProduct, Matrix.dotProduct_empty, add_zero, Matrix.empty_mulVec,
-        Matrix.cons_val_zero, Matrix.cons_val_one, smul_smul, Fin.sum_univ_eight, Matrix.head_cons,
-        Matrix.tail_cons, zero_mul, zero_smul, Matrix.cons_val, mul_one, inner_offset, inner_rot,
-        inner_quat, Matrix.mulVec_cons, Nat.succ_eq_add_one, Nat.reduceAdd, neg_smul, one_smul,
-        Matrix.mulVec_empty, Pi.add_apply, Pi.neg_apply, Function.comp_apply, ε₁, inner_shadow,
-        outer_shadow]
+      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, triakis_tetrahedron,
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
+        outer_shadow, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
