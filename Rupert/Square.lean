@@ -1,5 +1,6 @@
 import Rupert.Basic
 import Rupert.Convex
+import Rupert.RelatingRupertDefs
 
 namespace Square
 
@@ -87,6 +88,7 @@ by π/4 radians. No offset translation is needed.
      \ /
       +
 -/
+ rw [rupert_iff_rupert']
  let inner_offset : ℝ² := 0
  use outer_rot, outer_rot_so3, inner_rot, inner_rot_so3, inner_offset
 
@@ -170,7 +172,7 @@ by π/4 radians. No offset translation is needed.
  have hε₁ : ε₁ ∈ Set.Ioo 0 1 := by norm_num
 
  have negx_in_outer : ![-1, 0] ∈ interior (convexHull ℝ outer_shadow) := by
-   apply mem_interior_hull hε₀0 hε₁ zero_in_outer
+   apply Convex.mem_interior_hull hε₀0 hε₁ zero_in_outer
    rw [mem_convexHull_iff_exists_fintype]
    -- we need to write (-1,0) as a convex combination of
    -- (-(1-ε)√2, 0), ((1-ε)√2, 0)
@@ -229,7 +231,7 @@ by π/4 radians. No offset translation is needed.
      · field_simp; ring
      · field_simp
  have posx_in_outer : ![1, 0] ∈ interior (convexHull ℝ outer_shadow) := by
-   apply mem_interior_hull hε₀0 hε₁ zero_in_outer
+   apply Convex.mem_interior_hull hε₀0 hε₁ zero_in_outer
    rw [mem_convexHull_iff_exists_fintype]
    -- we need to write (1,0) as a convex combination of
    -- (-(1-ε)√2, 0), ((1-ε)√2, 0)

@@ -1,6 +1,7 @@
 import Rupert.Basic
 import Rupert.Convex
 import Rupert.Quaternion
+import Rupert.RelatingRupertDefs
 
 namespace TriakisTetrahedron
 
@@ -38,12 +39,13 @@ def inner_offset : ℝ² := ![0.000142715774602, 0.000148978750753]
 
 set_option maxHeartbeats 10000000 in
 theorem rupert : IsRupert triakis_tetrahedron := by
+  rw [rupert_iff_rupert']
   use outer_rot, outer_rot_so3, inner_rot, inner_rot_so3, inner_offset
   intro outer_shadow inner_shadow
   let ε₀ : ℝ := 0.01
   have hε₀ : ε₀ ∈ Set.Ioo 0 1 := by norm_num
   have hb : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer_shadow := by
-    refine ball_in_hull_of_corners_in_hull hε₀ ?_ ?_ ?_ ?_ <;>
+    refine Convex.ball_in_hull_of_corners_in_hull hε₀ ?_ ?_ ?_ ?_ <;>
       apply mem_convexHull_iff_exists_fintype.mpr <;>
       use Fin 8, inferInstance
     · use ![0, 0, 0,
@@ -109,7 +111,7 @@ theorem rupert : IsRupert triakis_tetrahedron := by
   intro v hv
   let ε₁ : ℝ := 1e-12
   have hε₁ : ε₁ ∈ Set.Ioo 0 1 := by norm_num
-  refine mem_interior_hull hε₀.1 hε₁ hb ?_
+  refine Convex.mem_interior_hull hε₀.1 hε₁ hb ?_
   simp only [Set.mem_range, inner_shadow] at hv
   obtain ⟨y, hy⟩ := hv
   rw [mem_convexHull_iff_exists_fintype]

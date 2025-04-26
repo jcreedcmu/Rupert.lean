@@ -1,6 +1,8 @@
 import Mathlib
 open Pointwise
 
+namespace Convex
+
 abbrev E (n : ℕ) := EuclideanSpace ℝ (Fin n)
 
 /-
