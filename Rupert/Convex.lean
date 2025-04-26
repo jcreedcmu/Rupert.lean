@@ -90,11 +90,7 @@ lemma subset_interior_hull {n : ℕ} {X : Set (E n)} {ε₀ ε₁: ℝ}
     convexHull ℝ ((1 - ε₁) • X) ⊆
       interior (convexHull ℝ X) := by
   rw [convexHull_smul]
-  have h2 : 1 - ε₁ ∈ Set.Ioo 0 1 := by
-    obtain ⟨hε₁0, hε₁1⟩ := hε₁
-    rw [Set.mem_Ioo]
-    constructor <;> linarith
-  have h3 := subset_interior_hull' hε₀ h2 h0
+  have h3 := subset_interior_hull' hε₀ (Set.Ioo.one_sub_mem hε₁) h0
   rw [ClosureOperator.idempotent] at h3
   exact h3
 
