@@ -1,9 +1,8 @@
 import Mathlib
 import Rupert.Basic
+import Rupert.Set
 open Pointwise
 open Matrix
-
-abbrev E (n : ℕ) := EuclideanSpace ℝ (Fin n)
 
 /-- Projecting from ℝ³ to ℝ² is linear -/
 noncomputable
@@ -90,3 +89,25 @@ theorem rupert_imp_rupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRuper
 
 theorem rupert_iff_rupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRupert v ↔ IsRupert' v :=
   ⟨rupert_imp_rupert' v, rupert'_imp_rupert v⟩
+
+theorem rupert_imp_rupert_set {ι : Type} [Fintype ι] (v : ι → ℝ³) :
+    IsRupert v → IsRupertSet (convexHull ℝ (Set.range v)) := by
+  intro ⟨ outer_rot,  outer_so3, inner_rot, inner_so3, inner_offset, rupert⟩
+  use outer_rot,  outer_so3, inner_rot, inner_so3, inner_offset
+  intro outer_shadow inner_shadow
+  let map := offset_transform_is_affine inner_offset ⟨inner_rot, inner_so3⟩
+  have inner_shadow_closed : IsClosed inner_shadow := by
+    apply affine_imp_closed map
+    apply Set.Finite.isClosed_convexHull (Set.finite_range v)
+  rw [closure_eq_iff_isClosed.mpr inner_shadow_closed]
+  exact rupert
+
+theorem rupert_set_imp_rupert {ι : Type} [Fintype ι] (v : ι → ℝ³) :
+    IsRupertSet (convexHull ℝ (Set.range v)) → IsRupert v := by
+  intro ⟨ outer_rot,  outer_so3, inner_rot, inner_so3, inner_offset, rupert⟩
+  use outer_rot,  outer_so3, inner_rot, inner_so3, inner_offset
+  intro _ _ _ _ ha
+  exact rupert (subset_closure ha)
+
+theorem rupert_iff_rupert_set {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRupert v ↔ IsRupertSet (convexHull ℝ (Set.range v)) :=
+  ⟨rupert_imp_rupert_set v, rupert_set_imp_rupert v⟩
