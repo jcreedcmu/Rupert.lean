@@ -78,7 +78,7 @@ lemma subset_interior_hull' {n : ℕ} {X : Set (E n)} {ε ℓ: ℝ}
   have pt_in_seg : u ∈ segment ℝ seg1 seg2 := ⟨ ℓ, 1 - ℓ,
         ⟨ le_of_lt (by simp_all only [Set.mem_Ioo]),
           le_of_lt olgz,
-          by simp_all only [add_sub_cancel],
+          add_sub_cancel _ _,
           by rw [smul_smul, smul_smul]; field_simp ⟩⟩
 
   exact segment_subset_convexHull seg1_in_X seg2_in_X pt_in_seg
