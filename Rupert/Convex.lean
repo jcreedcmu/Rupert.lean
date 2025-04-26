@@ -112,7 +112,7 @@ private lemma fst_abs_le_norm (v : E 2) : |v 0| ≤ ‖v‖ := by
   have h2 : 0 ≤ ‖v 0‖ := norm_nonneg (v 0)
   rw [Real.sqrt_sq h2] at h1
   rw [←Real.norm_eq_abs]
-  linarith
+  exact h1
 
 private lemma snd_abs_le_norm (v : E 2) : |v 1| ≤ ‖v‖ := by
   rw [EuclideanSpace.norm_eq, Fin.sum_univ_two]
@@ -121,7 +121,7 @@ private lemma snd_abs_le_norm (v : E 2) : |v 1| ≤ ‖v‖ := by
   have h2 : 0 ≤ ‖v 1‖ := norm_nonneg _
   rw [Real.sqrt_sq h2] at h1
   rw [←Real.norm_eq_abs]
-  linarith
+  exact h1
 
 lemma ball_in_hull_of_corners_in_hull {X : Set (E 2)} {ε : ℝ} (hε : ε ∈ Set.Ioo 0 1)
     (h₀ : ![ε, ε] ∈ convexHull ℝ X)
