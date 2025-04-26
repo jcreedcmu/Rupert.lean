@@ -5,11 +5,24 @@ open Matrix
 
 abbrev E (n : ℕ) := EuclideanSpace ℝ (Fin n)
 
-
-/-- Projecting from ℝ³ to ℝ² is affine -/
+/-- Projecting from ℝ³ to ℝ² is linear -/
 noncomputable
-def projection_affine : ℝ³ →ᵃ[ℝ] ℝ² :=
-  {toFun := dropz, linear := sorry, map_vadd':= sorry }
+def dropz_linear : ℝ³ →ₗ[ℝ] ℝ² :=
+  {
+   toFun := dropz,
+   map_add' := by
+     intro x y;
+     ext i; fin_cases i;
+     · simp only [dropz, Fin.isValue, PiLp.add_apply, Fin.zero_eta, cons_val_zero];
+     · simp only [dropz, Fin.isValue, PiLp.add_apply, Fin.mk_one, cons_val_one, cons_val_fin_one]
+   ,
+   map_smul' := by
+     intro x y; ext i; fin_cases i;
+     · simp only [dropz, Fin.isValue, PiLp.smul_apply, smul_eq_mul, Fin.zero_eta, cons_val_zero,
+       RingHom.id_apply];
+     · simp only [dropz, Fin.isValue, PiLp.smul_apply, smul_eq_mul, Fin.mk_one, cons_val_one,
+       cons_val_fin_one, RingHom.id_apply]
+   }
 
 noncomputable
 def rotation_affine (rot : SO3) : ℝ³ →ᵃ[ℝ] ℝ³ := (Matrix.mulVecLin rot).toAffineMap
@@ -20,12 +33,12 @@ def offset_affine (off : E 2) : ℝ² →ᵃ[ℝ] ℝ² :=
   {toFun v := off + v, linear := LinearMap.id, map_vadd' p v := add_vadd_comm v off p }
 
 noncomputable
-def projection_rotation_is_affine (rot : SO3) : ℝ³ →ᵃ[ℝ] ℝ² :=
-  AffineMap.comp projection_affine (rotation_affine rot)
+def dropz_rotation_is_affine (rot : SO3) : ℝ³ →ᵃ[ℝ] ℝ² :=
+  AffineMap.comp dropz_linear.toAffineMap (rotation_affine rot)
 
 noncomputable
 def offset_transform_is_affine (off : E 2) (rot : SO3) : ℝ³ →ᵃ[ℝ] ℝ² :=
-  AffineMap.comp (offset_affine off) (projection_rotation_is_affine rot)
+  AffineMap.comp (offset_affine off) (dropz_rotation_is_affine rot)
 
 theorem rupert_imp_rupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRupert v → IsRupert' v := by
  intro ⟨ outer_rot,  outer_so3, inner_rot, inner_so3, offset, rupert⟩
@@ -42,7 +55,7 @@ theorem rupert_imp_rupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRuper
  have outer_lemma : convexHull ℝ raw_outer_shadow = outer_shadow := by
    dsimp only [raw_outer_shadow, outer_shadow, hull]
    symm; rw [Set.range_comp' (fun p ↦ dropz (outer_rot *ᵥ p)) v]
-   apply (AffineMap.image_convexHull (projection_rotation_is_affine ⟨outer_rot, outer_so3⟩))
+   apply (AffineMap.image_convexHull (dropz_rotation_is_affine ⟨outer_rot, outer_so3⟩))
 
  change raw_inner_shadow ⊆ interior (convexHull ℝ raw_outer_shadow) at rupert
  change inner_shadow ⊆ interior outer_shadow
@@ -66,7 +79,7 @@ theorem rupert'_imp_rupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRuper
  have outer_lemma : convexHull ℝ raw_outer_shadow = outer_shadow := by
    dsimp only [raw_outer_shadow, outer_shadow, hull]
    symm; rw [Set.range_comp' (fun p ↦ dropz (outer_rot *ᵥ p)) v]
-   apply (AffineMap.image_convexHull (projection_rotation_is_affine ⟨outer_rot, outer_so3⟩))
+   apply (AffineMap.image_convexHull (dropz_rotation_is_affine ⟨outer_rot, outer_so3⟩))
 
  change raw_inner_shadow ⊆ interior (convexHull ℝ raw_outer_shadow)
  change inner_shadow ⊆ interior outer_shadow at rupert
