@@ -51,24 +51,6 @@ lemma outer_rot_so3 : outer_rot ∈ SO3 := by
      simp [Matrix.mul_apply, Fin.sum_univ_three, Matrix.vecMul, rh_lemma]
   · simp [det_succ_row_zero, Fin.sum_univ_three, rh_lemma]
 
-lemma fst_abs_le_norm (v : EuclideanSpace ℝ (Fin 2)) : |v 0| ≤ ‖v‖ := by
-  rw [EuclideanSpace.norm_eq, Fin.sum_univ_two]
-  have h : ‖v 0‖ ^ 2 ≤ ‖v 0‖ ^ 2 + ‖v 1‖ ^ 2 := by nlinarith
-  have h1 : √(‖v 0‖ ^ 2) ≤ √(‖v 0‖ ^ 2 + ‖v 1‖ ^ 2) := sqrt_le_sqrt h
-  have h2 : 0 ≤ ‖v 0‖ := norm_nonneg (v 0)
-  rw [Real.sqrt_sq h2] at h1
-  rw [←norm_eq_abs]
-  exact h1
-
-lemma snd_abs_le_norm (v : ℝ²) : |v 1| ≤ ‖v‖ := by
-  rw [EuclideanSpace.norm_eq, Fin.sum_univ_two]
-  have h : ‖v 1‖ ^ 2 ≤ ‖v 0‖ ^ 2 + ‖v 1‖ ^ 2 := by nlinarith
-  have h1 : √(‖v 1‖ ^ 2) ≤ √(‖v 0‖ ^ 2 + ‖v 1‖ ^ 2) := sqrt_le_sqrt h
-  have h2 : 0 ≤ ‖v 1‖ := norm_nonneg _
-  rw [Real.sqrt_sq h2] at h1
-  rw [←norm_eq_abs]
-  exact h1
-
 set_option maxHeartbeats 10000000 in
 theorem square_is_rupert : IsRupert square := by
 /-
@@ -114,8 +96,8 @@ by π/4 radians. No offset translation is needed.
    use ![1/4 + v 0 / (2 * √2), 1/4 - v 0 / (2*√2),
          1/4 + v 1 / (2 * √2), 1/4 - v 1 / (2 * √2)]
    use ![![√2, 0],![-√2, 0], ![0, √2],![0, -√2]]
-   obtain ⟨h2', h0'⟩ := abs_le.mp (fst_abs_le_norm v)
-   obtain ⟨h4', h3'⟩ := abs_le.mp (snd_abs_le_norm v)
+   obtain ⟨h2', h0'⟩ := abs_le.mp (Real.norm_eq_abs _ ▸ (PiLp.norm_apply_le v 0))
+   obtain ⟨h4', h3'⟩ := abs_le.mp (Real.norm_eq_abs _ ▸ (PiLp.norm_apply_le v 1))
    refine ⟨?_, ?_, ?_, ?_⟩
    · intro i
      fin_cases i

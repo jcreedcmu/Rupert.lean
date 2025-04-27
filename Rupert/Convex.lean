@@ -104,25 +104,6 @@ lemma mem_interior_hull {n : ℕ} {X : Set (E n)} {ε₀ ε₁ : ℝ}
   revert h p
   convert subset_interior_hull hε₀ hε₁ h0
 
-
-private lemma fst_abs_le_norm (v : E 2) : |v 0| ≤ ‖v‖ := by
-  rw [EuclideanSpace.norm_eq, Fin.sum_univ_two]
-  have h : ‖v 0‖ ^ 2 ≤ ‖v 0‖ ^ 2 + ‖v 1‖ ^ 2 := by nlinarith
-  have h1 : √(‖v 0‖ ^ 2) ≤ √(‖v 0‖ ^ 2 + ‖v 1‖ ^ 2) := Real.sqrt_le_sqrt h
-  have h2 : 0 ≤ ‖v 0‖ := norm_nonneg (v 0)
-  rw [Real.sqrt_sq h2] at h1
-  rw [←Real.norm_eq_abs]
-  exact h1
-
-private lemma snd_abs_le_norm (v : E 2) : |v 1| ≤ ‖v‖ := by
-  rw [EuclideanSpace.norm_eq, Fin.sum_univ_two]
-  have h : ‖v 1‖ ^ 2 ≤ ‖v 0‖ ^ 2 + ‖v 1‖ ^ 2 := by nlinarith
-  have h1 : √(‖v 1‖ ^ 2) ≤ √(‖v 0‖ ^ 2 + ‖v 1‖ ^ 2) := Real.sqrt_le_sqrt h
-  have h2 : 0 ≤ ‖v 1‖ := norm_nonneg _
-  rw [Real.sqrt_sq h2] at h1
-  rw [←Real.norm_eq_abs]
-  exact h1
-
 lemma ball_in_hull_of_corners_in_hull {X : Set (E 2)} {ε : ℝ} (hε : ε ∈ Set.Ioo 0 1)
     (h₀ : ![ε, ε] ∈ convexHull ℝ X)
     (h₁ : ![-ε, ε] ∈ convexHull ℝ X)
@@ -133,10 +114,10 @@ lemma ball_in_hull_of_corners_in_hull {X : Set (E 2)} {ε : ℝ} (hε : ε ∈ S
   rw [Set.mem_Ioo] at hε
   obtain ⟨hε0, hε1⟩ := hε
   rw [mem_ball_zero_iff] at hv
-  have hva0 := trans (fst_abs_le_norm v) hv
+  have hva0 := trans (Real.norm_eq_abs _ ▸ (PiLp.norm_apply_le v 0)) hv
   rw [abs_lt] at hva0
   obtain ⟨hva00, hva01⟩ := hva0
-  have hva1 := trans (snd_abs_le_norm v) hv
+  have hva1 := trans (Real.norm_eq_abs _ ▸ (PiLp.norm_apply_le v 1)) hv
   rw [abs_lt] at hva1
   obtain ⟨hva10, hva11⟩ := hva1
 
