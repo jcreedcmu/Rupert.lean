@@ -2,6 +2,7 @@ import Rupert.Attr
 import Rupert.Basic
 import Rupert.Convex
 import Rupert.Cube
+import Rupert.Icosahedron
 import Rupert.MatrixSimps
 import Rupert.Quaternion
 import Rupert.RelatingRupertDefs
