@@ -8,4 +8,5 @@ attribute [matrix_simps] Matrix.cons_dotProduct even_two Even.neg_pow neg_mul Na
             mul_one Matrix.tail_cons Matrix.cons_val zero_mul zero_smul
             Matrix.mulVec_cons Nat.succ_eq_add_one neg_smul one_smul
             Matrix.mulVec_empty Pi.add_apply Pi.neg_apply Function.comp_apply
-
+            Matrix.smul_cons smul_eq_mul Matrix.smul_empty Matrix.add_cons
+            Matrix.head_cons Matrix.tail_cons Matrix.empty_add_empty
