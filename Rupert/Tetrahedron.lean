@@ -113,7 +113,7 @@ theorem rupert : IsRupert tetrahedron := by
     use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
     refine ⟨?_, ?_, ?_, ?_⟩
     · intro i; fin_cases i <;> norm_num
-    · norm_num [Fin.sum_univ_four]; simp; norm_num
+    · simp only [Fin.sum_univ_four, matrix_simps]; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
@@ -131,7 +131,7 @@ theorem rupert : IsRupert tetrahedron := by
     use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
     refine ⟨?_, ?_, ?_, ?_⟩
     · intro i; fin_cases i <;> norm_num
-    · norm_num [Fin.sum_univ_four]; simp; norm_num
+    · simp only [Fin.sum_univ_four, matrix_simps]; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
@@ -149,7 +149,7 @@ theorem rupert : IsRupert tetrahedron := by
     use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
     refine ⟨?_, ?_, ?_, ?_⟩
     · intro i; fin_cases i <;> norm_num
-    · norm_num [Fin.sum_univ_four]; simp; norm_num
+    · simp only [Fin.sum_univ_four, matrix_simps]; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
@@ -167,7 +167,7 @@ theorem rupert : IsRupert tetrahedron := by
     use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
     refine ⟨?_, ?_, ?_, ?_⟩
     · intro i; fin_cases i <;> norm_num
-    · norm_num [Fin.sum_univ_four]; simp; norm_num
+    · simp only [Fin.sum_univ_four, matrix_simps]; norm_num
     · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
