@@ -32,7 +32,6 @@ lemma inner_rot_so3 : inner_rot ∈ SO3 := by
 
 def inner_offset : ℝ² := ![0.098412,-0.165800]
 
-set_option maxHeartbeats 10000000 in
 theorem rupert : IsRupert tetrahedron := by
   rw [rupert_iff_rupert']
   use outer_rot, outer_rot_so3, inner_rot, inner_rot_so3, inner_offset
