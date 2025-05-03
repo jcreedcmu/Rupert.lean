@@ -147,14 +147,14 @@ theorem rotate_x (θ : ℝ) : matrix_of_quat (rotate_x_quat θ) = rotate_x_mat �
    to be parallel to tgt -/
 noncomputable
 def rotateToTarget (src tgt : ℝ³) : Quaternion ℝ :=
-   let θ := cos⁻¹ (inner src tgt / (2 * ‖src‖  * ‖tgt‖))
+   let θ := cos⁻¹ (inner _ src tgt / (2 * ‖src‖  * ‖tgt‖))
    let v := src ×₃ tgt
    ⟨cos (θ/2), sin (θ/2) * v 0, sin (θ/2) * v 1, sin (θ/2) * v 2⟩
 
 theorem rotate_parallel_target (src tgt : ℝ³) : ∃ ℓ : ℝ,
         matrix_of_quat (rotateToTarget src tgt) *ᵥ src = ℓ • tgt := by
   use ?wit
-  · let θ := cos⁻¹ (inner src tgt / (2 * ‖src‖  * ‖tgt‖))
+  · let θ := cos⁻¹ (inner _ src tgt / (2 * ‖src‖  * ‖tgt‖))
     let v := src ×₃ tgt
     simp only [matrix_of_quat]
     rw [show rotateToTarget src tgt = ⟨cos (θ/2), sin (θ/2) * v 0, sin (θ/2) * v 1, sin (θ/2) * v 2⟩ by rfl]
