@@ -8,18 +8,18 @@ namespace TriakisTetrahedron
 
 open scoped Matrix
 
-noncomputable def triakis_tetrahedron : Fin 8 → ℝ³ := ![
-  ![ 5/3,  5/3,  5/3],
-  ![ 5/3, -5/3, -5/3],
-  ![-5/3,  5/3, -5/3],
-  ![-5/3, -5/3,  5/3],
-  ![-1,  1,  1],
-  ![ 1, -1,  1],
-  ![ 1,  1, -1],
-  ![-1, -1, -1]]
+noncomputable def triakis_tetrahedron : Fin 8 → ℝ³ :=
+  ![![ 5/3,  5/3,  5/3],
+    ![ 5/3, -5/3, -5/3],
+    ![-5/3,  5/3, -5/3],
+    ![-5/3, -5/3,  5/3],
+    ![  -1,    1,    1],
+    ![   1,   -1,    1],
+    ![   1,    1,   -1],
+    ![  -1,   -1,   -1]]
 
 def outer_quat : Quaternion ℝ :=
-  ⟨0.858732110065,-0.148912807308,-0.352436516202,-0.340870416742⟩
+  ⟨0.858732110065, -0.148912807308, -0.352436516202, -0.340870416742⟩
 
 noncomputable def outer_rot := matrix_of_quat outer_quat
 
@@ -28,7 +28,7 @@ lemma outer_rot_so3 : outer_rot ∈ SO3 := by
   exact matrix_of_quat_is_s03 h
 
 def inner_quat : Quaternion ℝ :=
-  ⟨0.144873924125,0.365747658601,-0.854692879512,-0.338733343572⟩
+  ⟨0.144873924125, 0.365747658601, -0.854692879512, -0.338733343572⟩
 
 noncomputable def inner_rot := matrix_of_quat inner_quat
 
