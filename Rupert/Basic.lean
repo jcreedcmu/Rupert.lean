@@ -10,21 +10,21 @@ abbrev E (n : ℕ) := EuclideanSpace ℝ (Fin n)
 abbrev SO3 := Matrix.specialOrthogonalGroup (Fin 3) ℝ
 
 /-- Projects a vector from 3-space to 2-space by dropping the third coordinate. -/
-def dropz {k : Type} [Field k] (v : EuclideanSpace k (Fin 3)) : EuclideanSpace k (Fin 2) :=
+def proj_xy {k : Type} [Field k] (v : EuclideanSpace k (Fin 3)) : EuclideanSpace k (Fin 2) :=
   ![v 0, v 1]
 
 /-- The Rupert Property for a convex polyhedron given as an indexed finite set of vertices. -/
 def IsRupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : Prop :=
    ∃ outer_rot ∈ SO3, ∃ inner_rot ∈ SO3, ∃ inner_offset : ℝ²,
    let hull := convexHull ℝ { v i | i }
-   let outer_shadow := { dropz (outer_rot *ᵥ p) | p ∈ hull }
-   let inner_shadow := { inner_offset + dropz (inner_rot *ᵥ p) | p ∈ hull }
+   let outer_shadow := { proj_xy (outer_rot *ᵥ p) | p ∈ hull }
+   let inner_shadow := { inner_offset + proj_xy (inner_rot *ᵥ p) | p ∈ hull }
    inner_shadow ⊆ interior outer_shadow
 
 /-- Alternate formulation of the Rupert Property. This is equivalent to IsRupert and
     should be easier to prove. -/
 def IsRupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : Prop :=
    ∃ outer_rot ∈ SO3, ∃ inner_rot ∈ SO3, ∃ inner_offset : ℝ²,
-   let outer_shadow := { dropz (outer_rot *ᵥ v i) | i }
-   let inner_shadow := { inner_offset + dropz (inner_rot *ᵥ v i) | i }
+   let outer_shadow := { proj_xy (outer_rot *ᵥ v i) | i }
+   let inner_shadow := { inner_offset + proj_xy (inner_rot *ᵥ v i) | i }
    inner_shadow ⊆ interior (convexHull ℝ outer_shadow)

@@ -46,48 +46,48 @@ theorem rupert : IsRupert tetrahedron := by
             14426795957911/43300505182000,
             0,
             900184459008/2706281573875]
-      use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
+      use fun i ↦ (proj_xy (outer_rot *ᵥ (tetrahedron i)))
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
+      · simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
                    ε₀, matrix_simps]
         norm_num
     · use ![72265247417243/216502525910000,
             72310753372299/216502525910000,
             0,
             35963262560229/108251262955000]
-      use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
+      use fun i ↦ (proj_xy (outer_rot *ᵥ (tetrahedron i)))
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
+      · simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
                    ε₀, matrix_simps]
         norm_num
     · use ![14483649997239/43300505182000,
             14462186725689/43300505182000,
             0,
             897166778692/2706281573875]
-      use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
+      use fun i ↦ (proj_xy (outer_rot *ᵥ (tetrahedron i)))
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
+      · simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
                    ε₀, matrix_simps]
         norm_num
     · use ![72506791968757/216502525910000,
             72134160045701/216502525910000,
             0,
             35930786947771/108251262955000]
-      use fun i ↦ (dropz (outer_rot *ᵥ (tetrahedron i)))
+      use fun i ↦ (proj_xy (outer_rot *ᵥ (tetrahedron i)))
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
-      · simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
+      · simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
                    ε₀, matrix_simps]
         norm_num
   intro v hv
@@ -104,13 +104,13 @@ theorem rupert : IsRupert tetrahedron := by
           64386129031453492435586819/13530030747431979580288854750,
           0,
           13401180729710257216451792593/13530030747431979580288854750]
-    use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
+    use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ (tetrahedron i)))
     refine ⟨?_, ?_, ?_, ?_⟩
     · intro i; fin_cases i <;> norm_num
     · simp only [Fin.sum_univ_four, matrix_simps]; norm_num
-    · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
+    · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
+      simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
                  inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
@@ -119,13 +119,13 @@ theorem rupert : IsRupert tetrahedron := by
           2352935973121235655284086819/13530030747431979580288854750,
           0,
           21608493216190040014597531/4510010249143993193429618250]
-    use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
+    use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ (tetrahedron i)))
     refine ⟨?_, ?_, ?_, ?_⟩
     · intro i; fin_cases i <;> norm_num
     · simp only [Fin.sum_univ_four, matrix_simps]; norm_num
-    · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
+    · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
+      simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
                  inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
@@ -134,13 +134,13 @@ theorem rupert : IsRupert tetrahedron := by
           1914434962235023371784298117/1932861535347425654326979250,
           0,
           3069680123370456843013933/644287178449141884775659750]
-    use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
+    use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ (tetrahedron i)))
     refine ⟨?_, ?_, ?_, ?_⟩
     · intro i; fin_cases i <;> norm_num
     · simp only [Fin.sum_univ_four, matrix_simps]; norm_num
-    · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
+    · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
+      simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
                  inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
@@ -149,13 +149,13 @@ theorem rupert : IsRupert tetrahedron := by
           64569206997427958451586819/13530030747431979580288854750,
           0,
           2351884362789884221156292593/13530030747431979580288854750]
-    use fun i ↦ (1 - ε₁) • (dropz (outer_rot *ᵥ (tetrahedron i)))
+    use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ (tetrahedron i)))
     refine ⟨?_, ?_, ?_, ?_⟩
     · intro i; fin_cases i <;> norm_num
     · simp only [Fin.sum_univ_four, matrix_simps]; norm_num
-    · exact fun i ↦ ⟨dropz (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
+    · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ tetrahedron i), by simp [outer_shadow]⟩
     · rw [←hy]
-      simp only [dropz, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
+      simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, tetrahedron, Fin.sum_univ_four,
                  inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add,Matrix.vec2_add, Matrix.vec2_add]
