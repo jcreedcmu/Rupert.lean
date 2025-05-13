@@ -17,8 +17,8 @@ def dropz {k : Type} [Field k] (v : EuclideanSpace k (Fin 3)) : EuclideanSpace k
 def IsRupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : Prop :=
    ∃ outer_rot ∈ SO3, ∃ inner_rot ∈ SO3, ∃ inner_offset : ℝ²,
    let hull := convexHull ℝ { v i | i }
-   let outer_shadow := (fun p ↦ dropz (outer_rot *ᵥ p)) '' hull
-   let inner_shadow := (fun p ↦ inner_offset + dropz (inner_rot *ᵥ p)) '' hull
+   let outer_shadow := { dropz (outer_rot *ᵥ p) | p ∈ hull }
+   let inner_shadow := { inner_offset + dropz (inner_rot *ᵥ p) | p ∈ hull }
    inner_shadow ⊆ interior outer_shadow
 
 /-- Alternate formulation of the Rupert Property. This is equivalent to IsRupert and
