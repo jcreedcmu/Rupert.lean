@@ -189,7 +189,7 @@ by π/4 radians. No offset translation is needed.
          add_neg_cancel, neg_add_cancel, exists_eq_left]
        use ![√2, 0]
        constructor
-       · rw [Set.mem_range]
+       · rw [Set.mem_setOf]
          use 3; simp
        · ext i
          fin_cases i <;> simp
@@ -201,7 +201,7 @@ by π/4 radians. No offset translation is needed.
         exists_eq_left, outer_shadow]
        use ![-√2, 0]
        constructor
-       · rw [Set.mem_range]
+       · rw [Set.mem_setOf]
          use 0
          simp
          ring_nf
@@ -270,7 +270,7 @@ by π/4 radians. No offset translation is needed.
 
  -- we have y ∈ ℝ³ that came from the square, which after being rotated by
  -- inner_rot and projected, is x
- rw [Set.mem_range] at hx
+ rw [Set.mem_setOf] at hx
  obtain ⟨y, proj_rot_y_eq_x⟩ := hx
  rw [← proj_rot_y_eq_x]; unfold inner_offset; simp;
  fin_cases y
