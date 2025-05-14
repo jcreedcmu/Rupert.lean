@@ -10,7 +10,7 @@ open Real
 /--
 A square in the xy-plane, centered at the origin and with side length 2.
 -/
-abbrev square : Fin 4 → ℝ³ := ![ ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] ]
+abbrev vertices : Fin 4 → ℝ³ := ![ ![-1, -1, 0], ![1, -1, 0], ![-1, 1, 0], ![1, 1, 0] ]
 
 /-- square root of one-half -/
 noncomputable def rh : ℝ := √2/2
@@ -52,7 +52,7 @@ lemma outer_rot_so3 : outer_rot ∈ SO3 := by
   · simp [det_succ_row_zero, Fin.sum_univ_three, rh_lemma]
 
 set_option maxHeartbeats 10000000 in
-theorem square_is_rupert : IsRupert square := by
+theorem square_is_rupert : IsRupert vertices := by
 /-
 
 The diagram shows the (x,y) plane, the z axis runs through the
