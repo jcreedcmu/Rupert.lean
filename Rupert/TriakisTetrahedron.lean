@@ -8,15 +8,20 @@ namespace TriakisTetrahedron
 
 open scoped Matrix
 
+/- This is the tom7's triakis tetrahedron scaled by 3/5, so that
+   the first four vertices make up a regular tetrahedron with nice unit
+   coordinates, and the remaining vertices represent the augmentations
+   of each of the faces of that tetrahedron. -/
+
 noncomputable def vertices : Fin 8 → ℝ³ :=
-  ![![ 5/3,  5/3,  5/3],
-    ![ 5/3, -5/3, -5/3],
-    ![-5/3,  5/3, -5/3],
-    ![-5/3, -5/3,  5/3],
-    ![  -1,    1,    1],
-    ![   1,   -1,    1],
-    ![   1,    1,   -1],
-    ![  -1,   -1,   -1]]
+  ![![   1,    1,    1],
+    ![   1,   -1,   -1],
+    ![  -1,    1,   -1],
+    ![  -1,   -1,    1],
+    ![-3/5,  3/5,  3/5],
+    ![ 3/5, -3/5,  3/5],
+    ![ 3/5,  3/5, -3/5],
+    ![-3/5, -3/5, -3/5]]
 
 def outer_quat : Quaternion ℝ :=
   ⟨0.858732110065, -0.148912807308, -0.352436516202, -0.340870416742⟩
@@ -36,14 +41,16 @@ lemma inner_rot_so3 : inner_rot ∈ SO3 := by
   have h : inner_quat.normSq ≠ 0 := by norm_num [inner_quat, Quaternion.normSq_def]
   exact matrix_of_quat_is_s03 h
 
-def inner_offset : ℝ² := ![0.000142715774602, 0.000148978750753]
+/- We scale tom7's solution by 3/5. -/
+
+noncomputable def inner_offset : ℝ² := ![0.000142715774602 * 3/5, 0.000148978750753 * 3/5]
 
 set_option maxHeartbeats 10000000 in
 theorem rupert : IsRupert vertices := by
   rw [rupert_iff_rupert']
   use outer_rot, outer_rot_so3, inner_rot, inner_rot_so3, inner_offset
   intro outer_shadow inner_shadow
-  let ε₀ : ℝ := 0.01
+  let ε₀ : ℝ := 0.006
   have hε₀ : ε₀ ∈ Set.Ioo 0 1 := by norm_num
   have hb : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer_shadow := by
     refine Convex.ball_in_hull_of_corners_in_hull hε₀ ?_ ?_ ?_ ?_ <;>
