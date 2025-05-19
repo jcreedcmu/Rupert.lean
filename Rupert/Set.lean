@@ -9,9 +9,9 @@ open scoped Matrix
     a subset of the interior of the other. This definition rules out
     trivial cases of a set fitting inside itself. -/
 def IsRupertPair (inner outer : Set ℝ³) : Prop :=
-   ∃ outer_rot ∈ SO3, ∃ inner_rot ∈ SO3, ∃ inner_offset : ℝ²,
-   let outer_shadow := { proj_xy (outer_rot *ᵥ p) | p ∈  outer }
+   ∃ inner_rot ∈ SO3, ∃ inner_offset : ℝ², ∃ outer_rot ∈ SO3,
    let inner_shadow := { inner_offset + proj_xy (inner_rot *ᵥ p) | p ∈ inner }
+   let outer_shadow := { proj_xy (outer_rot *ᵥ p) | p ∈  outer }
    closure inner_shadow ⊆ interior outer_shadow
 
 /-- The Rupert Property for a subset S of ℝ³. S has the Rupert property if there

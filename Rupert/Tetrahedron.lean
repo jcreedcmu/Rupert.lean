@@ -34,8 +34,8 @@ def inner_offset : ℝ² := ![0.098412,-0.165800]
 
 theorem rupert : IsRupert vertices := by
   rw [rupert_iff_rupert']
-  use outer_rot, outer_rot_so3, inner_rot, inner_rot_so3, inner_offset
-  intro outer_shadow inner_shadow
+  use inner_rot, inner_rot_so3, inner_offset, outer_rot, outer_rot_so3
+  intro inner_shadow outer_shadow
   let ε₀ : ℝ := 0.001
   have hε₀ : ε₀ ∈ Set.Ioo 0 1 := by norm_num
   have hb : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer_shadow := by

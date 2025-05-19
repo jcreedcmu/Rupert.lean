@@ -40,8 +40,8 @@ def offset_transform_is_affine (off : E 2) (rot : SO3) : ℝ³ →ᵃ[ℝ] ℝ²
   AffineMap.comp (offset_affine off) (proj_xy_rotation_is_affine rot)
 
 theorem rupert'_imp_rupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRupert' v → IsRupert v := by
- intro ⟨ outer_rot,  outer_so3, inner_rot, inner_so3, offset, rupert⟩
- use outer_rot, outer_so3, inner_rot, inner_so3, offset
+ intro ⟨ inner_rot, inner_so3, offset, outer_rot,  outer_so3, rupert⟩
+ use inner_rot, inner_so3, offset, outer_rot, outer_so3
  let raw_outer_shadow := Set.range fun i ↦ proj_xy (outer_rot *ᵥ v i)
  let raw_inner_shadow := Set.range fun i ↦ offset + proj_xy (inner_rot *ᵥ v i)
  let hull := convexHull ℝ (Set.range v)
@@ -64,8 +64,8 @@ theorem rupert'_imp_rupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRuper
  exact convexHull_min rupert interior_convex
 
 theorem rupert_imp_rupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRupert v → IsRupert' v := by
- intro ⟨ outer_rot,  outer_so3, inner_rot, inner_so3, offset, rupert⟩
- use outer_rot, outer_so3, inner_rot, inner_so3, offset
+ intro ⟨ inner_rot, inner_so3, offset, outer_rot,  outer_so3, rupert⟩
+ use inner_rot, inner_so3, offset, outer_rot, outer_so3
  let raw_outer_shadow := Set.range fun i ↦ proj_xy (outer_rot *ᵥ v i)
  let raw_inner_shadow := Set.range fun i ↦ offset + proj_xy (inner_rot *ᵥ v i)
  let hull := convexHull ℝ (Set.range v)
@@ -92,9 +92,9 @@ theorem rupert_iff_rupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRuper
 
 theorem rupert_imp_rupert_set {ι : Type} [Fintype ι] (v : ι → ℝ³) :
     IsRupert v → IsRupertSet (convexHull ℝ (Set.range v)) := by
-  intro ⟨ outer_rot,  outer_so3, inner_rot, inner_so3, inner_offset, rupert⟩
-  use outer_rot,  outer_so3, inner_rot, inner_so3, inner_offset
-  intro outer_shadow inner_shadow
+  intro ⟨ inner_rot, inner_so3, inner_offset, outer_rot, outer_so3, rupert⟩
+  use inner_rot, inner_so3, inner_offset, outer_rot, outer_so3
+  intro inner_shadow outer_shadow
   let map := offset_transform_is_affine inner_offset ⟨inner_rot, inner_so3⟩
   have inner_shadow_closed : IsClosed inner_shadow := by
     apply affine_imp_closed map
@@ -104,8 +104,8 @@ theorem rupert_imp_rupert_set {ι : Type} [Fintype ι] (v : ι → ℝ³) :
 
 theorem rupert_set_imp_rupert {ι : Type} [Fintype ι] (v : ι → ℝ³) :
     IsRupertSet (convexHull ℝ (Set.range v)) → IsRupert v := by
-  intro ⟨ outer_rot,  outer_so3, inner_rot, inner_so3, inner_offset, rupert⟩
-  use outer_rot,  outer_so3, inner_rot, inner_so3, inner_offset
+  intro ⟨ inner_rot, inner_so3, inner_offset, outer_rot, outer_so3, rupert⟩
+  use inner_rot, inner_so3, inner_offset, outer_rot, outer_so3
   intro _ _ _ _ ha
   exact rupert (subset_closure ha)
 
