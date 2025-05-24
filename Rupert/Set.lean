@@ -18,8 +18,3 @@ def IsRupertPair (inner outer : Set ℝ³) : Prop :=
     are rotations and translations such that one 2-dimensional "shadow" of S can
     be made to fit entirely inside the interior of another such "shadow". -/
 def IsRupertSet (S : Set ℝ³) : Prop := IsRupertPair S S
-
-/-- This is a lemma required for showing that the rupert property as defined
-    for convex polyhedra is equivalent to the above property. -/
-lemma affine_imp_closed {n m : ℕ} (f : E n →ᵃ[ℝ] E m) : IsClosedMap f :=
- sorry
