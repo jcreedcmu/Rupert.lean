@@ -143,15 +143,58 @@ theorem rotate_x (θ : ℝ) : matrix_of_quat (rotate_x_quat θ) = rotate_x_mat �
   · rw [zero_add, ← mul_assoc, ← sin_two_mul, arith]
   · rw [← cos_two_mul', arith];
 
+
+def rotateAux (c s : ℝ) (v : ℝ³) : Quaternion ℝ :=
+   ⟨c, s * v 0, s * v 1, s * v 2⟩
+
+theorem rotate_aux_normal (c s : ℝ) (v : ℝ³)
+      (h1 : c ^ 2 + s ^ 2 = 1) (h2 : ‖v‖ ^ 2 = 1) :
+      matrix_of_quat (rotateAux c s v) = denorm_matrix_of_quat (rotateAux c s v) := by
+  have alg : (c ^ 2 + (s * v 0) ^ 2 + (s * v 1) ^ 2 + (s * v 2) ^ 2) = 1 := by
+     ring_nf
+     have : c ^ 2 + s ^ 2 * v 0 ^ 2 + s ^ 2 * v 1 ^ 2 + s ^ 2 * v 2 ^ 2 =
+            c ^ 2 + s ^ 2 * (v 0 ^ 2 + v 1 ^ 2 + v 2 ^ 2) := by
+            ring_nf
+     rw[this]
+     have sqnorm : ‖v‖^2 = (v 0 ^ 2 + v 1 ^ 2 + v 2 ^ 2) := by
+       rw [← real_inner_self_eq_norm_sq ]
+       simp_all only  [inner, Fin.sum_univ_succ]
+       simp only [ RCLike.inner_apply, conj_trivial, Fin.succ_zero_eq_one,
+         Fin.succ_one_eq_two]
+       ring_nf
+     rw [← sqnorm, h2]
+     ring_nf
+     exact h1
+
+  ext i j
+  simp [matrix_of_quat, denorm_matrix_of_quat, rotateAux, alg]
+
 /- Given a pair of vectors src, tgt, return a rotation that rotates src
    to be parallel to tgt -/
 noncomputable
 def rotateToTarget (src tgt : ℝ³) : Quaternion ℝ :=
-   let θ := cos⁻¹ (inner _ src tgt / (2 * ‖src‖  * ‖tgt‖))
+   let θ := cos⁻¹ (inner ℝ src tgt / (2 * ‖src‖ * ‖tgt‖))
    let v := src ×₃ tgt
    ⟨cos (θ/2), sin (θ/2) * v 0, sin (θ/2) * v 1, sin (θ/2) * v 2⟩
 
-proof_wanted rotate_parallel_target (src tgt : ℝ³) : ∃ ℓ : ℝ,
-        matrix_of_quat (rotateToTarget src tgt) *ᵥ src = ℓ • tgt
-
+theorem rotate_parallel_target (src tgt : ℝ³) : ∃ ℓ : ℝ,
+        matrix_of_quat (rotateToTarget src tgt) *ᵥ src = ℓ • tgt := by
+  use ?wit
+  · let θ := cos⁻¹ (inner ℝ src tgt / (2 * ‖src‖  * ‖tgt‖))
+    let v := src ×₃ tgt
+    simp only [matrix_of_quat]
+    rw [show rotateToTarget src tgt = ⟨cos (θ/2), sin (θ/2) * v 0, sin (θ/2) * v 1, sin (θ/2) * v 2⟩ by rfl]
+    dsimp only;
+    ext i; fin_cases i;
+    · beta_reduce; simp only [Matrix.mulVec];
+      dsimp only [Fin.isValue, Fin.zero_eta, of_apply, cons_val_zero, PiLp.smul_apply, smul_eq_mul];
+      dsimp only [dotProduct]
+      simp only [Fin.sum_univ_succ, Fin.sum_univ_zero]
+      simp only [Fin.isValue, cons_val_zero, Fin.succ_zero_eq_one, cons_val_one,
+        Fin.succ_one_eq_two, cons_val, add_zero]
+      dsimp only [v, crossProduct]; simp;
+      sorry
+    · sorry
+    · sorry
+  sorry
 end Rotations
