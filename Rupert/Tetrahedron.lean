@@ -46,7 +46,7 @@ theorem rupert : IsRupert vertices := by
             14426795957911/43300505182000,
             0,
             900184459008/2706281573875]
-      use fun i ↦ (proj_xy (outer_rot *ᵥ vertices i))
+      use fun i ↦ proj_xy (outer_rot *ᵥ vertices i)
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
@@ -58,7 +58,7 @@ theorem rupert : IsRupert vertices := by
             72310753372299/216502525910000,
             0,
             35963262560229/108251262955000]
-      use fun i ↦ (proj_xy (outer_rot *ᵥ vertices i))
+      use fun i ↦ proj_xy (outer_rot *ᵥ vertices i)
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
@@ -70,7 +70,7 @@ theorem rupert : IsRupert vertices := by
             14462186725689/43300505182000,
             0,
             897166778692/2706281573875]
-      use fun i ↦ (proj_xy (outer_rot *ᵥ vertices i))
+      use fun i ↦ proj_xy (outer_rot *ᵥ vertices i)
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
@@ -82,7 +82,7 @@ theorem rupert : IsRupert vertices := by
             72134160045701/216502525910000,
             0,
             35930786947771/108251262955000]
-      use fun i ↦ (proj_xy (outer_rot *ᵥ vertices i))
+      use fun i ↦ proj_xy (outer_rot *ᵥ vertices i)
       refine ⟨?_, ?_, ?_, ?_⟩
       · intro i; fin_cases i <;> norm_num
       · simp [Fin.sum_univ_four]; norm_num
