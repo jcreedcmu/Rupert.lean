@@ -147,8 +147,18 @@ theorem rotate_x (θ : ℝ) : matrix_of_quat (rotate_x_quat θ) = rotate_x_mat �
 def rotateAux (c s : ℝ) (v : ℝ³) : Quaternion ℝ :=
    ⟨c, s * v 0, s * v 1, s * v 2⟩
 
-theorem rotate_aux_normal (c s : ℝ) (v : ℝ³)
-      (h1 : c ^ 2 + s ^ 2 = 1) (h2 : ‖v‖ ^ 2 = 1) :
+noncomputable
+def mynorm : ℝ³ → ℝ := λ v => ‖v‖
+
+noncomputable
+def nmize (v : ℝ³) : ℝ³ := (1/(mynorm v)) • v
+
+
+def IsNormal (v : ℝ³) : Prop := ‖v‖ = 1
+theorem nmized_is_normal (v : ℝ³) (nz : ‖v‖ ≠ 0) : IsNormal (nmize v) := sorry
+
+lemma rotate_aux_normal (c s : ℝ) (v : ℝ³)
+      (h1 : c ^ 2 + s ^ 2 = 1) (h2 : IsNormal v) :
       matrix_of_quat (rotateAux c s v) = denorm_matrix_of_quat (rotateAux c s v) := by
   have alg : (c ^ 2 + (s * v 0) ^ 2 + (s * v 1) ^ 2 + (s * v 2) ^ 2) = 1 := by
      ring_nf
@@ -157,10 +167,7 @@ theorem rotate_aux_normal (c s : ℝ) (v : ℝ³)
             ring_nf
      rw[this]
      have sqnorm : ‖v‖^2 = (v 0 ^ 2 + v 1 ^ 2 + v 2 ^ 2) := by
-       rw [← real_inner_self_eq_norm_sq ]
-       simp_all only  [inner, Fin.sum_univ_succ]
-       simp only [ RCLike.inner_apply, conj_trivial, Fin.succ_zero_eq_one,
-         Fin.succ_one_eq_two]
+       simp only [← real_inner_self_eq_norm_sq, inner, Fin.sum_univ_three, RCLike.inner_apply, conj_trivial]
        ring_nf
      rw [← sqnorm, h2]
      ring_nf
@@ -174,14 +181,19 @@ theorem rotate_aux_normal (c s : ℝ) (v : ℝ³)
 noncomputable
 def rotateToTarget (src tgt : ℝ³) : Quaternion ℝ :=
    let θ := cos⁻¹ (inner ℝ src tgt / (2 * ‖src‖ * ‖tgt‖))
-   let v := src ×₃ tgt
+   let v := nmize ((src ×₃ tgt) : ℝ³)
    ⟨cos (θ/2), sin (θ/2) * v 0, sin (θ/2) * v 1, sin (θ/2) * v 2⟩
 
-theorem rotate_parallel_target (src tgt : ℝ³) : ∃ ℓ : ℝ,
-        matrix_of_quat (rotateToTarget src tgt) *ᵥ src = ℓ • tgt := by
-  use ?wit
-  · let θ := cos⁻¹ (inner ℝ src tgt / (2 * ‖src‖  * ‖tgt‖))
-    let v := src ×₃ tgt
+-- XXX why can't I inline mynorm in the following line?
+theorem rotate_parallel_target (src tgt : ℝ³) (cpnez : mynorm (src ×₃ tgt) ≠ 0) :
+        ‖tgt‖ • (matrix_of_quat (rotateToTarget src tgt) *ᵥ src) = ‖src‖ • tgt := by
+
+    let θ := cos⁻¹ (inner ℝ src tgt / (2 * ‖src‖ * ‖tgt‖))
+    let v := nmize (src ×₃ tgt)
+
+    have hv : IsNormal v := nmized_is_normal (src ×₃ tgt) cpnez
+
+
     simp only [matrix_of_quat]
     rw [show rotateToTarget src tgt = ⟨cos (θ/2), sin (θ/2) * v 0, sin (θ/2) * v 1, sin (θ/2) * v 2⟩ by rfl]
     dsimp only;
@@ -196,5 +208,5 @@ theorem rotate_parallel_target (src tgt : ℝ³) : ∃ ℓ : ℝ,
       sorry
     · sorry
     · sorry
-  sorry
+
 end Rotations
