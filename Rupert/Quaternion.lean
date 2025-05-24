@@ -151,7 +151,7 @@ noncomputable
 def mynorm : ℝ³ → ℝ := λ v => ‖v‖
 
 noncomputable
-def nmize (v : ℝ³) : ℝ³ := (1/(mynorm v)) • v
+def nmize (v : ℝ³) : ℝ³ := (1/‖v‖) • v
 
 
 def IsNormal (v : ℝ³) : Prop := ‖v‖ = 1
@@ -190,21 +190,40 @@ theorem rotate_parallel_target (src tgt : ℝ³) (cpnez : mynorm (src ×₃ tgt)
 
     let θ := cos⁻¹ (inner ℝ src tgt / (2 * ‖src‖ * ‖tgt‖))
     let v := nmize (src ×₃ tgt)
-
+    let c := cos (θ/2)
+    let s := sin (θ/2)
     have hv : IsNormal v := nmized_is_normal (src ×₃ tgt) cpnez
 
-
-    simp only [matrix_of_quat]
-    rw [show rotateToTarget src tgt = ⟨cos (θ/2), sin (θ/2) * v 0, sin (θ/2) * v 1, sin (θ/2) * v 2⟩ by rfl]
-    dsimp only;
+    have denorm : matrix_of_quat (rotateToTarget src tgt) = denorm_matrix_of_quat (rotateToTarget src tgt) := by
+      sorry
+    rw [denorm]
+    simp only [denorm_matrix_of_quat]
+    rw [show rotateToTarget src tgt = ⟨c, s * v 0, s * v 1, s * v 2⟩ by rfl]
+    dsimp only
+    ring_nf
     ext i; fin_cases i;
     · beta_reduce; simp only [Matrix.mulVec];
       dsimp only [Fin.isValue, Fin.zero_eta, of_apply, cons_val_zero, PiLp.smul_apply, smul_eq_mul];
-      dsimp only [dotProduct]
-      simp only [Fin.sum_univ_succ, Fin.sum_univ_zero]
-      simp only [Fin.isValue, cons_val_zero, Fin.succ_zero_eq_one, cons_val_one,
-        Fin.succ_one_eq_two, cons_val, add_zero]
-      dsimp only [v, crossProduct]; simp;
+      simp only [Fin.isValue, cons_mulVec, cons_dotProduct, dotProduct_empty, add_zero,
+        empty_mulVec, Pi.smul_apply, cons_val_zero, smul_eq_mul]
+      rw[show vecHead src = src 0 by rfl]
+      rw[show vecHead (vecTail src) = src 1 by rfl]
+      rw[show vecHead (vecTail (vecTail src)) = src 2 by rfl]
+
+      dsimp[v]
+      rw [show nmize (src ×₃ tgt) = (1 / (‖src‖ * ‖tgt‖)) • ( src ×₃ tgt) by sorry]
+      simp only [one_div, _root_.mul_inv_rev, Fin.isValue, Pi.smul_apply, smul_eq_mul, v]
+      simp only [crossProduct, Nat.succ_eq_add_one, Nat.reduceAdd, Fin.isValue, LinearMap.mk₂_apply,
+        cons_val_zero, cons_val_one, cons_val]
+      let t := ‖tgt‖⁻¹ * ‖src‖⁻¹
+      rw [show ‖tgt‖⁻¹ * ‖src‖⁻¹ = t by rfl]
+
+
+      -- dsimp only [dotProduct]
+      -- simp only [Fin.sum_univ_succ, Fin.sum_univ_zero]
+      -- simp only [Fin.isValue, cons_val_zero, Fin.succ_zero_eq_one, cons_val_one,
+      --   Fin.succ_one_eq_two, cons_val, add_zero]
+      -- dsimp only [v, crossProduct]; simp;
       sorry
     · sorry
     · sorry
