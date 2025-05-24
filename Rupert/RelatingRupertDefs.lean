@@ -36,7 +36,7 @@ def proj_xy_rotation_is_affine (rot : SO3) : ℝ³ →ᵃ[ℝ] ℝ² :=
   AffineMap.comp proj_xy_linear.toAffineMap (rotation_affine rot)
 
 noncomputable
-def offset_transform_is_affine (off : E 2) (rot : SO3) : ℝ³ →ᵃ[ℝ] ℝ² :=
+def full_transform_affine (off : E 2) (rot : SO3) : ℝ³ →ᵃ[ℝ] ℝ² :=
   AffineMap.comp (offset_affine off) (proj_xy_rotation_is_affine rot)
 
 theorem rupert'_imp_rupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRupert' v → IsRupert v := by
@@ -50,7 +50,7 @@ theorem rupert'_imp_rupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRuper
  have inner_lemma : convexHull ℝ raw_inner_shadow = inner_shadow := by
    dsimp only [raw_inner_shadow, inner_shadow, hull]
    symm; rw [Set.range_comp' (fun p ↦ offset + proj_xy (inner_rot *ᵥ p)) v]
-   apply (AffineMap.image_convexHull (offset_transform_is_affine offset ⟨inner_rot, inner_so3⟩))
+   apply (AffineMap.image_convexHull (full_transform_affine offset ⟨inner_rot, inner_so3⟩))
  have outer_lemma : convexHull ℝ raw_outer_shadow = outer_shadow := by
    dsimp only [raw_outer_shadow, outer_shadow, hull]
    symm; rw [Set.range_comp' (fun p ↦ proj_xy (outer_rot *ᵥ p)) v]
@@ -74,7 +74,7 @@ theorem rupert_imp_rupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRuper
  have inner_lemma : convexHull ℝ raw_inner_shadow = inner_shadow := by
    dsimp only [raw_inner_shadow, inner_shadow, hull]
    symm; rw [Set.range_comp' (fun p ↦ offset + proj_xy (inner_rot *ᵥ p)) v]
-   apply (AffineMap.image_convexHull (offset_transform_is_affine offset ⟨inner_rot, inner_so3⟩))
+   apply (AffineMap.image_convexHull (full_transform_affine offset ⟨inner_rot, inner_so3⟩))
  have outer_lemma : convexHull ℝ raw_outer_shadow = outer_shadow := by
    dsimp only [raw_outer_shadow, outer_shadow, hull]
    symm; rw [Set.range_comp' (fun p ↦ proj_xy (outer_rot *ᵥ p)) v]
@@ -95,10 +95,15 @@ theorem rupert_imp_rupert_set {ι : Type} [Fintype ι] (v : ι → ℝ³) :
   intro ⟨ inner_rot, inner_so3, inner_offset, outer_rot, outer_so3, rupert⟩
   use inner_rot, inner_so3, inner_offset, outer_rot, outer_so3
   intro inner_shadow outer_shadow
-  let map := offset_transform_is_affine inner_offset ⟨inner_rot, inner_so3⟩
+  let tx := full_transform_affine inner_offset ⟨inner_rot, inner_so3⟩
+
   have inner_shadow_closed : IsClosed inner_shadow := by
-    apply affine_imp_closed map
-    apply Set.Finite.isClosed_convexHull (Set.finite_range v)
+    have inner_shadow_is_txed_convex_hull : tx '' (convexHull ℝ (Set.range v)) = convexHull ℝ (tx '' Set.range v) := by
+      apply AffineMap.image_convexHull
+    change inner_shadow = convexHull ℝ (tx '' Set.range v) at inner_shadow_is_txed_convex_hull
+    rw [inner_shadow_is_txed_convex_hull, ← Set.range_comp]
+    exact Set.Finite.isClosed_convexHull (Set.finite_range (tx ∘ v))
+
   rw [closure_eq_iff_isClosed.mpr inner_shadow_closed]
   exact rupert
 
