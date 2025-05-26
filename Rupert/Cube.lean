@@ -1,7 +1,7 @@
 import Rupert.Basic
 import Rupert.Convex
 import Rupert.Quaternion
-
+import Rupert.MatrixSimps
 
 namespace Cube
 
@@ -53,16 +53,15 @@ lemma outer_rot_so3 : outer_rot ∈ SO3 := by
      simp only [one_div, star_trivial, nsmul_eq_mul, Nat.cast_ofNat, mul_one]
      rw [← h, smul_smul, h2, one_smul]
  · have : (Fin.succAbove 2 1 : Fin 3) = 1 := by rfl
-   simp only [one_div, Matrix.smul_of, Matrix.smul_cons, smul_eq_mul, mul_zero, Matrix.smul_empty,
-     mul_neg, mul_one, Matrix.det_succ_row_zero, Nat.succ_eq_add_one, Nat.reduceAdd, Fin.isValue,
-     Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_fin_one, Matrix.cons_val_zero,
-     Matrix.submatrix_apply, Fin.succ_zero_eq_one, Matrix.cons_val_one, Matrix.submatrix_submatrix,
-     Matrix.det_unique, Fin.default_eq_zero, Function.comp_apply, Fin.succ_one_eq_two,
-     Matrix.cons_val, Fin.sum_univ_two, Fin.val_zero, pow_zero, one_mul, Fin.zero_succAbove,
-     Fin.val_one, pow_one, neg_mul, ne_eq, one_ne_zero, not_false_eq_true,
-     Fin.succAbove_ne_zero_zero, Fin.sum_univ_three, neg_neg, zero_mul, Fin.one_succAbove_one,
-     zero_add, Fin.val_two, even_two, Even.neg_pow, one_pow, Fin.reduceEq]
-   simp_all only [Matrix.cons_val]
+   simp_all only [one_div, Matrix.smul_of,  mul_zero,
+     Matrix.det_succ_row_zero,
+     Matrix.of_apply,
+     Matrix.submatrix_apply, Fin.succ_zero_eq_one,
+     Matrix.det_unique, Fin.default_eq_zero,  Fin.succ_one_eq_two,
+     Fin.sum_univ_two, Fin.val_zero,  Fin.zero_succAbove,
+     Fin.val_one,  ne_eq, one_ne_zero, not_false_eq_true,
+     Fin.succAbove_ne_zero_zero, Fin.sum_univ_three,  Fin.one_succAbove_one,
+     Fin.val_two,  Fin.reduceEq, matrix_simps]
    ring_nf
    suffices h : (r * r * 6) * (√3 * √2) * r = 1 by (ring_nf at h; exact h)
    simp_all only [h2]
