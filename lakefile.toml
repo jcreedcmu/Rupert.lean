@@ -13,6 +13,11 @@ git = "https://github.com/leanprover-community/mathlib4"
 rev = "master"
 
 [[require]]
+name = "lean4checker"
+git = "https://github.com/leanprover/lean4checker"
+rev = "master"
+
+[[require]]
 name = "tryAtEachStep"
 git = "https://github.com/dwrensha/tryAtEachStep"
 rev = "main"
