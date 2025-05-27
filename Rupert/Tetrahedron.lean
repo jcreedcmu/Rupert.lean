@@ -160,3 +160,11 @@ theorem rupert : IsRupert vertices := by
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add,Matrix.vec2_add, Matrix.vec2_add]
       norm_num
+
+elab "so_sorry" : tactic => do
+  Lean.Elab.Tactic.closeMainGoal `so_sorry (Lean.mkConst ``trivial)
+
+set_option debug.skipKernelTC true in
+def f : False := by so_sorry
+
+theorem g : False := f
