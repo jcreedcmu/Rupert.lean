@@ -41,9 +41,7 @@ lemma inner_rot_so3 : inner_rot ∈ SO3 := by
   have h : inner_quat.normSq ≠ 0 := by norm_num [inner_quat, Quaternion.normSq_def]
   exact matrix_of_quat_is_s03 h
 
-/- We scale tom7's solution by 3/5. -/
-
-noncomputable def inner_offset : ℝ² := ![0.000142715774602 * 3/5, 0.000148978750753 * 3/5]
+def inner_offset : ℝ² := ![8.56294647612e-05, 8.93872504518e-05]
 
 set_option maxHeartbeats 1000000 in
 theorem rupert : IsRupert vertices := by
