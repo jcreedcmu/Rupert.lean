@@ -43,7 +43,7 @@ lemma inner_rot_so3 : inner_rot ∈ SO3 := by
 
 def inner_offset : ℝ² := ![8.56294647612e-05, 8.93872504518e-05]
 
-set_option maxHeartbeats 1000000 in
+set_option maxHeartbeats 207000 in
 theorem rupert : IsRupert vertices := by
   rw [rupert_iff_rupert']
   use inner_rot, inner_rot_so3, inner_offset, outer_rot, outer_rot_so3
