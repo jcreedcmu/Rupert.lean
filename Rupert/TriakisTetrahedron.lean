@@ -8,8 +8,8 @@ namespace TriakisTetrahedron
 
 open scoped Matrix
 
-/- This is the tom7's triakis tetrahedron scaled by 3/5, so that
-   the first four vertices make up a regular tetrahedron with nice unit
+/- This is tom7's triakis tetrahedron scaled by 3/5, so that the
+   first four vertices make up a regular tetrahedron with nice unit
    coordinates, and the remaining vertices represent the augmentations
    of each of the faces of that tetrahedron. -/
 
