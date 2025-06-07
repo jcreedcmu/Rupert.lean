@@ -1,5 +1,6 @@
 import Rupert.Basic
 import Rupert.Convex
+import Rupert.FinCases
 import Rupert.MatrixSimps
 import Rupert.Quaternion
 import Rupert.RelatingRupertDefs
@@ -40,12 +41,6 @@ lemma inner_rot_so3 : inner_rot ∈ SO3 := by
   exact matrix_of_quat_is_s03 h
 
 def inner_offset : ℝ² := ![8.5629464761e-05, 8.9387250451e-05]
-
-lemma all_fin_8_vec {a b c d e f g h : ℝ} (p : ℝ → Prop) :
-    p a → p b → p c → p d → p e → p f → p g → p h →
-    ∀ ii : Fin 8, p (![a,b,c,d,e,f,g,h] ii) := by
-  intro ha hb hc hd he hf hg hh ii
-  fin_cases ii <;> simp_all
 
 theorem rupert : IsRupert vertices := by
   rw [rupert_iff_rupert']
