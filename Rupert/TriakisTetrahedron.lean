@@ -24,15 +24,11 @@ noncomputable def vertices : Fin 8 → ℝ³ :=
     ![ 3/5,  3/5, -3/5],
     ![-3/5, -3/5, -3/5]]
 
-def outer_quat : Quaternion ℝ := ⟨0.858732110, -0.148912807, -0.352436516, -0.340870417⟩
-
-noncomputable def outer_rot := matrix_of_quat outer_quat
-
-lemma outer_rot_so3 : outer_rot ∈ SO3 := by
-  have h : outer_quat.normSq ≠ 0 := by norm_num [outer_quat, Quaternion.normSq_def]
-  exact matrix_of_quat_is_s03 h
-
 def inner_quat : Quaternion ℝ := ⟨0.144873924, 0.365747659, -0.854692880, -0.338733344⟩
+
+def inner_offset : ℝ² := ![8.5629464761e-05, 8.9387250451e-05]
+
+def outer_quat : Quaternion ℝ := ⟨0.858732110, -0.148912807, -0.352436516, -0.340870417⟩
 
 noncomputable def inner_rot := matrix_of_quat inner_quat
 
@@ -40,7 +36,11 @@ lemma inner_rot_so3 : inner_rot ∈ SO3 := by
   have h : inner_quat.normSq ≠ 0 := by norm_num [inner_quat, Quaternion.normSq_def]
   exact matrix_of_quat_is_s03 h
 
-def inner_offset : ℝ² := ![8.5629464761e-05, 8.9387250451e-05]
+noncomputable def outer_rot := matrix_of_quat outer_quat
+
+lemma outer_rot_so3 : outer_rot ∈ SO3 := by
+  have h : outer_quat.normSq ≠ 0 := by norm_num [outer_quat, Quaternion.normSq_def]
+  exact matrix_of_quat_is_s03 h
 
 theorem rupert : IsRupert vertices := by
   rw [rupert_iff_rupert']
