@@ -41,7 +41,6 @@ lemma inner_rot_so3 : inner_rot ∈ SO3 := by
 
 def inner_offset : ℝ² := ![8.5629464761e-05, 8.9387250451e-05]
 
-set_option maxHeartbeats 207000 in
 theorem rupert : IsRupert vertices := by
   rw [rupert_iff_rupert']
   use inner_rot, inner_rot_so3, inner_offset, outer_rot, outer_rot_so3
@@ -51,7 +50,7 @@ theorem rupert : IsRupert vertices := by
   have hb : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer_shadow := by
     refine Convex.ball_in_hull_of_corners_in_hull hε₀ ?_ ?_ ?_ ?_ <;>
       apply mem_convexHull_iff_exists_fintype.mpr <;>
-      use Fin 8, inferInstance
+      use Fin 8, Fin.fintype 8
     · use ![0, 0, 0,
             209107410810126884571/565617601328354816800,
             245824061168864729/35351100083022176050,
@@ -117,7 +116,7 @@ theorem rupert : IsRupert vertices := by
   rw [mem_convexHull_iff_exists_fintype]
   fin_cases y <;>
     simp only [vertices, Fin.reduceFinMk, Matrix.cons_val, inner_shadow] at hy <;>
-    use Fin 8, inferInstance
+    use Fin 8, Fin.fintype 8
   · use ![320050956502833201167751985054675539223111361/
           158836228761182627011085302790150062539835294740000,
           37478789684155822552149249633100762035628799779/
@@ -128,7 +127,7 @@ theorem rupert : IsRupert vertices := by
           0, 0, 0, 0]
     use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ vertices i))
     refine ⟨?_, ?_, ?_, ?_⟩
-    · intro i; fin_cases i <;> norm_num
+    · intro i; fin_cases i <;> dsimp only <;> norm_num
     · simp only [Fin.sum_univ_eight, matrix_simps]; norm_num
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
@@ -148,7 +147,7 @@ theorem rupert : IsRupert vertices := by
           0, 0, 0, 0]
     use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ vertices i))
     refine ⟨?_, ?_, ?_, ?_⟩
-    · intro i; fin_cases i <;> norm_num
+    · intro i; fin_cases i <;> dsimp only <;> norm_num
     · simp only [Fin.sum_univ_eight, matrix_simps]; norm_num
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
@@ -169,7 +168,7 @@ theorem rupert : IsRupert vertices := by
           0]
     use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ vertices i))
     refine ⟨?_, ?_, ?_, ?_⟩
-    · intro i; fin_cases i <;> norm_num
+    · intro i; fin_cases i <;> dsimp only <;> norm_num
     · simp only [Fin.sum_univ_eight, matrix_simps]; norm_num
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
@@ -190,7 +189,7 @@ theorem rupert : IsRupert vertices := by
           0]
     use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ vertices i))
     refine ⟨?_, ?_, ?_, ?_⟩
-    · intro i; fin_cases i <;> norm_num
+    · intro i; fin_cases i <;> dsimp only <;> norm_num
     · simp only [Fin.sum_univ_eight, matrix_simps]; norm_num
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
@@ -211,7 +210,7 @@ theorem rupert : IsRupert vertices := by
           0]
     use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ vertices i))
     refine ⟨?_, ?_, ?_, ?_⟩
-    · intro i; fin_cases i <;> norm_num
+    · intro i; fin_cases i <;> dsimp only <;> norm_num
     · simp only [Fin.sum_univ_eight, matrix_simps]; norm_num
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
@@ -231,7 +230,7 @@ theorem rupert : IsRupert vertices := by
           0, 0, 0, 0]
     use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ vertices i))
     refine ⟨?_, ?_, ?_, ?_⟩
-    · intro i; fin_cases i <;> norm_num
+    · intro i; fin_cases i <;> dsimp only <;> norm_num
     · simp only [Fin.sum_univ_eight, matrix_simps]; norm_num
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
@@ -251,7 +250,7 @@ theorem rupert : IsRupert vertices := by
           0, 0, 0, 0]
     use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ vertices i))
     refine ⟨?_, ?_, ?_, ?_⟩
-    · intro i; fin_cases i <;> norm_num
+    · intro i; fin_cases i <;> dsimp only <;> norm_num
     · simp only [Fin.sum_univ_eight, matrix_simps]; norm_num
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
@@ -272,7 +271,7 @@ theorem rupert : IsRupert vertices := by
           0]
     use fun i ↦ (1 - ε₁) • (proj_xy (outer_rot *ᵥ vertices i))
     refine ⟨?_, ?_, ?_, ?_⟩
-    · intro i; fin_cases i <;> norm_num
+    · intro i; fin_cases i <;> dsimp only <;> norm_num
     · simp only [Fin.sum_univ_eight, matrix_simps]; norm_num
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
