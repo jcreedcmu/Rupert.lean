@@ -28,13 +28,13 @@ abbrev outer_rot : Matrix (Fin 3) (Fin 3) ℝ :=
    (1/√6) • outer_rot_denorm
 
 private
-lemma outer_rot_o3_lemma1 : (star outer_rot_denorm) * outer_rot_denorm = 6 • 1:= by
+lemma outer_rot_o3_lemma1 : (star outer_rot_denorm) * outer_rot_denorm = 6 • 1 := by
   (ext i j; fin_cases i, j) <;>
   · simp only [mul_apply, of_apply, cons_val', star_apply, Fin.sum_univ_three, cons_val]
-    try norm_num
+    norm_num
 
 private
-lemma outer_rot_o3_lemma2 : (outer_rot_denorm) * (star outer_rot_denorm) = 6 • 1:= by
+lemma outer_rot_o3_lemma2 : (outer_rot_denorm) * (star outer_rot_denorm) = 6 • 1 := by
   (ext i j; fin_cases i, j) <;>
   · simp only [mul_apply, of_apply, cons_val', star_apply, Fin.sum_univ_three, cons_val]
     try norm_num
