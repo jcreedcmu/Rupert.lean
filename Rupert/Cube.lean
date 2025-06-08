@@ -77,9 +77,9 @@ lemma outer_rot_so3 : outer_rot ∈ SO3 := by
    change 1 * √6 * (√6)⁻¹ = 1
    field_simp
 
-def outer_shadow : Set ℝ² :=  {x | ∃ i, proj_xy (outer_rot.mulVec (cube i)) = x}
+def outer_shadow : Set ℝ² :=  {x | ∃ i, proj_xy (outer_rot *ᵥ cube i) = x}
 
-def outer_shadow_denorm : Set ℝ² :=  {x | ∃ i, proj_xy (outer_rot_denorm.mulVec (cube i)) = x}
+def outer_shadow_denorm : Set ℝ² :=  {x | ∃ i, proj_xy (outer_rot_denorm *ᵥ cube i) = x}
 
 noncomputable
 def outer_shadow_points_denorm : Fin 8 → ℝ² := ![
