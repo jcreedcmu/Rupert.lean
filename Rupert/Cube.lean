@@ -41,7 +41,7 @@ lemma outer_rot_o3_lemma2 : (outer_rot_denorm) * (star outer_rot_denorm) = 6 •
     try ring_nf
 
 lemma two_three_six : √3 * √2 = √6 := by calc √3 * √2
-     _ = √(3 * 2) := by exact Eq.symm (Real.sqrt_mul' 3 (show 0 ≤ 2 by positivity))
+     _ = √(3 * 2) := (Real.sqrt_mul' 3 zero_le_two).symm
      _ = √6 := by norm_num
 
 lemma outer_rot_so3 : outer_rot ∈ SO3 := by
