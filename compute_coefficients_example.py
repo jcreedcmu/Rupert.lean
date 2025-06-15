@@ -14,19 +14,19 @@ q = vector(QQ, [1/1000, -1/1000])
 n = len(points)
 
 lp = MixedIntegerLinearProgram(solver='PPL')
-lam = lp.new_variable(real=True)
+x = lp.new_variable(real=True)
 
-# 1) λ_i ≥ 0
-for i in range(n):
-    lp.add_constraint(lam[i] >= 0)
+# 1) x_i ≥ 0
+for i in range(len(points)):
+    lp.add_constraint(x[i] >= 0)
 
-# 2) ∑ λ_i = 1
-lp.add_constraint(sum(lam[i] for i in range(n)) == 1)
+# 2) ∑ x_i = 1
+lp.add_constraint(sum(x) == 1)
 
-# 3) ∑ λ_i p_i = q
+# 3) ∑ x_i p_i = q
 for coord in range(len(q)):
     lp.add_constraint(
-        sum(lam[i] * points[i][coord] for i in range(len(lam)))
+        sum(xi * points[i][coord] for i,xi in enumerate(x))
         == q[coord]
     )
 
@@ -35,6 +35,6 @@ lp.set_objective(0)
 
 # Solve and extract
 lp.solve()
-Lambda = vector(QQ, [lp.get_values(lam[i]) for i in range(n)])
+solution = vector(QQ, [lp.get_values(xi) for xi in x])
 
-print("Convex coefficients :", Lambda)
+print("Convex coefficients :", solution)
