@@ -1,6 +1,6 @@
 # Rupert.lean
 
-This project is a (work in progress) formalization of the
+This project is a formalization of the
 [Rupert Problem](https://en.wikipedia.org/wiki/Prince_Rupert%27s_cube) in
 the [Lean](https://lean-lang.org/) theorem prover.
 
