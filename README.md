@@ -8,6 +8,10 @@ Roughly speaking, the problem asks:
 given two congruent copies of a convex polyhedron,
 can we cut a hole in one copy, such that the other copy fits through the hole?
 
+The proof for the triakis tetrahedron is explained in this video:
+
+[<img src="http://img.youtube.com/vi/jDTPBdxmxKw/maxresdefault.jpg" height="300px">](https://youtu.be/jDTPBdxmxKw)
+
 Known solutions for Platonic, Catalan, and Archimedean solids are
 visualized in this video:
 
