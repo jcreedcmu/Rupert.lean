@@ -1,3 +1,4 @@
+import Rupert.Affine
 import Rupert.Attr
 import Rupert.Basic
 import Rupert.Convex
@@ -8,6 +9,7 @@ import Rupert.MatrixSimps
 import Rupert.Quaternion
 import Rupert.Equivalences.RupertEquivRupertPrime
 import Rupert.Equivalences.RupertEquivRupertSet
+import Rupert.Equivalences.AffineRupertEquivRupertSet
 import Rupert.Set
 import Rupert.SnubCube
 import Rupert.Square
