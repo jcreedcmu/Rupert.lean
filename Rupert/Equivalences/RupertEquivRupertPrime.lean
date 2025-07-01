@@ -1,43 +1,7 @@
 import Mathlib
 import Rupert.Basic
-import Rupert.Set
-open Pointwise
+import Rupert.Equivalences.Util
 open Matrix
-
-/-- Projecting from ℝ³ to ℝ² is linear -/
-noncomputable
-def proj_xy_linear : ℝ³ →ₗ[ℝ] ℝ² :=
-  {
-   toFun := proj_xy,
-   map_add' := by
-     intro x y;
-     ext i; fin_cases i;
-     · simp only [proj_xy, Fin.isValue, PiLp.add_apply, Fin.zero_eta, cons_val_zero];
-     · simp only [proj_xy, Fin.isValue, PiLp.add_apply, Fin.mk_one, cons_val_one, cons_val_fin_one]
-   ,
-   map_smul' := by
-     intro x y; ext i; fin_cases i;
-     · simp only [proj_xy, Fin.isValue, PiLp.smul_apply, smul_eq_mul, Fin.zero_eta, cons_val_zero,
-       RingHom.id_apply];
-     · simp only [proj_xy, Fin.isValue, PiLp.smul_apply, smul_eq_mul, Fin.mk_one, cons_val_one,
-       cons_val_fin_one, RingHom.id_apply]
-   }
-
-noncomputable
-def rotation_affine (rot : SO3) : ℝ³ →ᵃ[ℝ] ℝ³ := (Matrix.mulVecLin rot).toAffineMap
-
-/-- Translating is affine. -/
-noncomputable
-def offset_affine (off : E 2) : ℝ² →ᵃ[ℝ] ℝ² :=
-  {toFun v := off + v, linear := LinearMap.id, map_vadd' p v := add_vadd_comm v off p }
-
-noncomputable
-def proj_xy_rotation_is_affine (rot : SO3) : ℝ³ →ᵃ[ℝ] ℝ² :=
-  AffineMap.comp proj_xy_linear.toAffineMap (rotation_affine rot)
-
-noncomputable
-def full_transform_affine (off : E 2) (rot : SO3) : ℝ³ →ᵃ[ℝ] ℝ² :=
-  AffineMap.comp (offset_affine off) (proj_xy_rotation_is_affine rot)
 
 theorem rupert'_imp_rupert {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRupert' v → IsRupert v := by
  intro ⟨ inner_rot, inner_so3, offset, outer_rot,  outer_so3, rupert⟩
@@ -89,30 +53,3 @@ theorem rupert_imp_rupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRuper
 
 theorem rupert_iff_rupert' {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRupert v ↔ IsRupert' v :=
   ⟨rupert_imp_rupert' v, rupert'_imp_rupert v⟩
-
-theorem rupert_imp_rupert_set {ι : Type} [Fintype ι] (v : ι → ℝ³) :
-    IsRupert v → IsRupertSet (convexHull ℝ (Set.range v)) := by
-  intro ⟨ inner_rot, inner_so3, inner_offset, outer_rot, outer_so3, rupert⟩
-  use inner_rot, inner_so3, inner_offset, outer_rot, outer_so3
-  intro inner_shadow outer_shadow
-  let tx := full_transform_affine inner_offset ⟨inner_rot, inner_so3⟩
-
-  have inner_shadow_closed : IsClosed inner_shadow := by
-    have inner_shadow_is_txed_convex_hull : tx '' (convexHull ℝ (Set.range v)) = convexHull ℝ (tx '' Set.range v) := by
-      apply AffineMap.image_convexHull
-    change inner_shadow = convexHull ℝ (tx '' Set.range v) at inner_shadow_is_txed_convex_hull
-    rw [inner_shadow_is_txed_convex_hull, ← Set.range_comp]
-    exact Set.Finite.isClosed_convexHull (Set.finite_range (tx ∘ v))
-
-  rw [closure_eq_iff_isClosed.mpr inner_shadow_closed]
-  exact rupert
-
-theorem rupert_set_imp_rupert {ι : Type} [Fintype ι] (v : ι → ℝ³) :
-    IsRupertSet (convexHull ℝ (Set.range v)) → IsRupert v := by
-  intro ⟨ inner_rot, inner_so3, inner_offset, outer_rot, outer_so3, rupert⟩
-  use inner_rot, inner_so3, inner_offset, outer_rot, outer_so3
-  intro _ _ _ _ ha
-  exact rupert (subset_closure ha)
-
-theorem rupert_iff_rupert_set {ι : Type} [Fintype ι] (v : ι → ℝ³) : IsRupert v ↔ IsRupertSet (convexHull ℝ (Set.range v)) :=
-  ⟨rupert_imp_rupert_set v, rupert_set_imp_rupert v⟩

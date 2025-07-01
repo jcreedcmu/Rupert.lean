@@ -3,7 +3,7 @@ import Rupert.Basic
 import Rupert.Convex
 import Rupert.MatrixSimps
 import Rupert.Quaternion
-import Rupert.RelatingRupertDefs
+import Rupert.Equivalences.RupertEquivRupertPrime
 
 namespace Icosahedron
 
