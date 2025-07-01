@@ -6,7 +6,8 @@ import Rupert.FinCases
 import Rupert.Icosahedron
 import Rupert.MatrixSimps
 import Rupert.Quaternion
-import Rupert.RelatingRupertDefs
+import Rupert.Equivalences.RupertEquivRupertPrime
+import Rupert.Equivalences.RupertEquivRupertSet
 import Rupert.Set
 import Rupert.SnubCube
 import Rupert.Square

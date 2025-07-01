@@ -2,7 +2,7 @@ import Rupert.Basic
 import Rupert.Convex
 import Rupert.Quaternion
 import Rupert.MatrixSimps
-import Rupert.RelatingRupertDefs
+import Rupert.Equivalences.RupertEquivRupertPrime
 
 namespace Cube
 open Matrix
