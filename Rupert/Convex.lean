@@ -148,7 +148,7 @@ lemma ball_in_hull_of_corners_in_hull {X : Set (E 2)} {ε : ℝ} (hε : ε ∈ S
     fin_cases i <;> simp [h₀, h₁, h₂, h₃]
   · rw [Fin.sum_univ_four]
     simp only [Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val]
-    simp only [mul_sub, sub_mul, smul_sub, sub_smul, cx, cy, one_mul, mul_one]
+    simp only [mul_sub, sub_mul, sub_smul, cx, cy, one_mul, mul_one]
     ext i
     fin_cases i
     · simp

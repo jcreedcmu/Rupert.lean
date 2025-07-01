@@ -35,7 +35,7 @@ lemma inner_rot_so3 : inner_rot ∈ SO3 := by
   rw [mem_specialOrthogonalGroup_iff]
   constructor
   · constructor <;> (ext i j; fin_cases i, j) <;>
-     simp [Matrix.mul_apply, Fin.sum_univ_three, Matrix.vecMul]
+     simp [Matrix.mul_apply, Fin.sum_univ_three]
   · simp [det_succ_row_zero, Fin.sum_univ_three]
 
 noncomputable abbrev outer_rot : Matrix (Fin 3) (Fin 3) ℝ :=
@@ -48,7 +48,7 @@ lemma outer_rot_so3 : outer_rot ∈ SO3 := by
   rw [mem_specialOrthogonalGroup_iff]
   constructor
   · constructor <;> (ext i j; fin_cases i, j) <;>
-     simp [Matrix.mul_apply, Fin.sum_univ_three, Matrix.vecMul, rh_lemma]
+     simp [Matrix.mul_apply, Fin.sum_univ_three, rh_lemma]
   · simp [det_succ_row_zero, Fin.sum_univ_three, rh_lemma]
 
 set_option maxHeartbeats 10000000 in
@@ -90,7 +90,7 @@ by π/4 radians. No offset translation is needed.
    · linarith
  have zero_in_outer : Metric.ball 0 ε₀ ⊆ convexHull ℝ outer_shadow := by
    intro v hv
-   simp only [Metric.mem_ball, dist_zero_right, outer_rot, inner_rot] at hv
+   simp only [Metric.mem_ball, dist_zero_right] at hv
    rw [mem_convexHull_iff_exists_fintype]
    use Fin 4, inferInstance
    use ![1/4 + v 0 / (2 * √2), 1/4 - v 0 / (2*√2),
@@ -183,10 +183,7 @@ by π/4 radians. No offset translation is needed.
      fin_cases i
      · unfold outer_shadow proj_xy outer_rot rh
        simp only [Fin.isValue, cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
-         neg_mul, one_mul, zero_add, empty_mulVec, cons_val_zero, cons_val_one, Nat.succ_eq_add_one,
-         Nat.reduceAdd, neg_sub, Fin.zero_eta, Set.mem_image, Set.mem_insert_iff,
-         Set.mem_singleton_iff, exists_eq_or_imp, head_cons, mul_neg, mul_one, tail_cons,
-         add_neg_cancel, neg_add_cancel, exists_eq_left]
+         neg_mul, one_mul, zero_add, empty_mulVec, cons_val_zero, cons_val_one, neg_sub, Fin.zero_eta, Set.mem_image]
        use ![√2, 0]
        constructor
        · rw [Set.mem_setOf]
@@ -195,10 +192,7 @@ by π/4 radians. No offset translation is needed.
          fin_cases i <;> simp
      · simp only [proj_xy, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
         cons_val_fin_one, cons_val_zero, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
-        cons_val_one, neg_mul, Nat.succ_eq_add_one, Nat.reduceAdd, neg_sub, Fin.mk_one,
-        Set.mem_image, Set.mem_insert_iff, Set.mem_singleton_iff, exists_eq_or_imp, head_cons,
-        mul_neg, mul_one, tail_cons, neg_neg, add_neg_cancel, neg_add_cancel, add_halves,
-        exists_eq_left, outer_shadow]
+        cons_val_one, neg_mul, neg_sub, Fin.mk_one, Set.mem_image, outer_shadow]
        use ![-√2, 0]
        constructor
        · rw [Set.mem_setOf]
@@ -242,10 +236,7 @@ by π/4 radians. No offset translation is needed.
      fin_cases i
      · unfold outer_shadow proj_xy outer_rot rh
        simp only [Fin.isValue, cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
-         neg_mul, one_mul, zero_add, empty_mulVec, cons_val_zero, cons_val_one, Nat.succ_eq_add_one,
-         Nat.reduceAdd, neg_sub, Fin.zero_eta, Set.mem_image, Set.mem_insert_iff,
-         Set.mem_singleton_iff, exists_eq_or_imp, head_cons, mul_neg, mul_one, tail_cons,
-         add_neg_cancel, neg_add_cancel, exists_eq_left]
+         neg_mul, one_mul, zero_add, empty_mulVec, cons_val_zero, cons_val_one, neg_sub, Fin.zero_eta, Set.mem_image]
        use ![√2, 0]
        constructor
        · use 3; simp
@@ -253,10 +244,7 @@ by π/4 radians. No offset translation is needed.
          fin_cases i <;> simp
      · simp only [proj_xy, mulVec, outer_rot, rh, Fin.isValue, of_apply, cons_val',
         cons_val_fin_one, cons_val_zero, cons_dotProduct, zero_mul, dotProduct_empty, add_zero,
-        cons_val_one, neg_mul, Nat.succ_eq_add_one, Nat.reduceAdd, neg_sub, Fin.mk_one,
-        Set.mem_image, Set.mem_insert_iff, Set.mem_singleton_iff, exists_eq_or_imp, head_cons,
-        mul_neg, mul_one, tail_cons, neg_neg, add_neg_cancel, neg_add_cancel, add_halves,
-        exists_eq_left, outer_shadow]
+        cons_val_one, neg_mul, neg_sub, Fin.mk_one, Set.mem_image, outer_shadow]
        use ![-√2, 0]
        constructor
        · use 0; simp; ring_nf
@@ -274,7 +262,7 @@ by π/4 radians. No offset translation is needed.
  obtain ⟨y, proj_rot_y_eq_x⟩ := hx
  rw [← proj_rot_y_eq_x]; unfold inner_offset; simp;
  fin_cases y
- all_goals (simp[inner_rot, proj_xy, Matrix.mulVec])
+ all_goals (simp [proj_xy])
  · exact negx_in_outer
  · exact posx_in_outer
  · exact negx_in_outer

@@ -381,7 +381,7 @@ lemma rect_fact2 : ![rnn 0, rpp 1] = rnp := by
       PiLp.add_apply, PiLp.smul_apply, cons_val_zero, smul_eq_mul, mul_neg, mul_zero, add_zero, rnp]
   have coord1 : rpp 1 = rnp 1 := by
     simp only [Fin.isValue, rpp, one_div, outer_shadow_points_denorm, neg_mul, cons_val,
-      PiLp.add_apply, PiLp.smul_apply, cons_val_one, cons_val_fin_one, smul_eq_mul, mul_neg, rnp]
+      PiLp.add_apply, PiLp.smul_apply, cons_val_one, cons_val_fin_one, smul_eq_mul, rnp]
   rw [← vector_ext rnp, coord0, coord1]
 
 lemma mediant_sub_hull_outer : Set.range (rect_vertices (rnn 0) (rpp 0) (rnn 1) (rpp 1)) ⊆ convexHull ℝ outer_shadow := by
@@ -412,10 +412,9 @@ theorem rupert : IsRupert cube := by
                  apply interior_mono; exact mediant_sub_outer)
     rw [closed_mediant, open_rectangle_is_interior]
     use extract x
-    simp only [and_true, Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, and_self,
-                     proj_xy, cube, Matrix.cons_val, ← p]
+    simp only [Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, proj_xy, cube, ← p]
     simp only [Fin.isValue, extract, Fin.zero_eta, cons_val_zero, cons_val_one, cons_val_fin_one,
-      inject, and_true, inner_shadow]
+      inject, and_true]
     refine ⟨⟨ ?_, ?_⟩, ?_, ?_⟩
     · exact rnn_contains_cube2.1
     · exact rpp_contains_cube.1
@@ -426,10 +425,9 @@ theorem rupert : IsRupert cube := by
                  apply interior_mono; exact mediant_sub_outer)
     rw [closed_mediant, open_rectangle_is_interior]
     use extract x
-    simp only [and_true, Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, and_self,
-                     proj_xy, cube, Matrix.cons_val, ← p]
+    simp only [Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, proj_xy, cube, ← p]
     simp only [Fin.isValue, extract, Fin.mk_one, cons_val_one, cons_val_zero, cons_val_fin_one,
-      inject, and_true, inner_shadow]
+      inject, and_true]
     refine ⟨⟨ ?_, ?_⟩, ?_, ?_⟩
     · exact rnn_contains_cube2.1
     · exact rpp_contains_cube.1
@@ -439,10 +437,9 @@ theorem rupert : IsRupert cube := by
                  apply interior_mono; exact mediant_sub_outer)
     rw [closed_mediant, open_rectangle_is_interior]
     use extract x
-    simp only [and_true, Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, and_self,
-                     proj_xy, cube, Matrix.cons_val, ← p]
+    simp only [Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, proj_xy, cube, ← p]
     simp only [Fin.isValue, extract, Fin.reduceFinMk, cons_val, cons_val_zero, cons_val_one,
-      cons_val_fin_one, inject, and_true, inner_shadow]
+      cons_val_fin_one, inject, and_true]
     refine ⟨⟨ ?_, ?_⟩, ?_, ?_⟩
     · exact rnn_contains_cube.1
     · exact rpp_contains_cube2.1
@@ -452,10 +449,9 @@ theorem rupert : IsRupert cube := by
                  apply interior_mono; exact mediant_sub_outer)
     rw [closed_mediant, open_rectangle_is_interior]
     use extract x
-    simp only [and_true, Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, and_self,
-                     proj_xy, cube, Matrix.cons_val, ← p]
+    simp only [Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, proj_xy, cube, ← p]
     simp only [Fin.isValue, extract, Fin.reduceFinMk, cons_val, cons_val_zero, cons_val_one,
-      cons_val_fin_one, inject, and_true, inner_shadow]
+      cons_val_fin_one, inject, and_true]
     refine ⟨⟨ ?_, ?_⟩, ?_, ?_⟩
     · exact rnn_contains_cube.1
     · exact rpp_contains_cube2.1
@@ -466,10 +462,9 @@ theorem rupert : IsRupert cube := by
                  apply interior_mono; exact mediant_sub_outer)
     rw [closed_mediant, open_rectangle_is_interior]
     use extract x
-    simp only [and_true, Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, and_self,
-                     proj_xy, cube, Matrix.cons_val, ← p]
-    simp only [Fin.isValue, extract, Fin.zero_eta, cons_val_zero, cons_val_one, cons_val_fin_one,
-      inject, and_true, inner_shadow]
+    simp only [Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, proj_xy, cube, ← p]
+    simp only [Fin.isValue, extract, cons_val_zero, cons_val_one, cons_val_fin_one,
+      inject, and_true]
     refine ⟨⟨ ?_, ?_⟩, ?_, ?_⟩
     · exact rnn_contains_cube2.1
     · exact rpp_contains_cube.1
@@ -481,10 +476,9 @@ theorem rupert : IsRupert cube := by
                  apply interior_mono; exact mediant_sub_outer)
     rw [closed_mediant, open_rectangle_is_interior]
     use extract x
-    simp only [and_true, Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, and_self,
-                     proj_xy, cube, Matrix.cons_val, ← p]
-    simp only [Fin.isValue, extract, Fin.mk_one, cons_val_one, cons_val_zero, cons_val_fin_one,
-      inject, and_true, inner_shadow]
+    simp only [Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, proj_xy, cube, ← p]
+    simp only [Fin.isValue, extract, cons_val_one, cons_val_zero, cons_val_fin_one,
+      inject, and_true]
     refine ⟨⟨ ?_, ?_⟩, ?_, ?_⟩
     · exact rnn_contains_cube2.1
     · exact rpp_contains_cube.1
@@ -494,10 +488,9 @@ theorem rupert : IsRupert cube := by
                  apply interior_mono; exact mediant_sub_outer)
     rw [closed_mediant, open_rectangle_is_interior]
     use extract x
-    simp only [and_true, Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, and_self,
-                     proj_xy, cube, Matrix.cons_val, ← p]
+    simp only [Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, proj_xy, cube, ← p]
     simp only [Fin.isValue, extract, Fin.reduceFinMk, cons_val, cons_val_zero, cons_val_one,
-      cons_val_fin_one, inject, and_true, inner_shadow]
+      cons_val_fin_one, inject, and_true]
     refine ⟨⟨ ?_, ?_⟩, ?_, ?_⟩
     · exact rnn_contains_cube.1
     · exact rpp_contains_cube2.1
@@ -507,10 +500,9 @@ theorem rupert : IsRupert cube := by
                  apply interior_mono; exact mediant_sub_outer)
     rw [closed_mediant, open_rectangle_is_interior]
     use extract x
-    simp only [and_true, Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, and_self,
-                     proj_xy, cube, Matrix.cons_val, ← p]
+    simp only [Set.prod, Set.mem_Ioo, Set.mem_setOf_eq, proj_xy, cube, ← p]
     simp only [Fin.isValue, extract, Fin.reduceFinMk, cons_val, cons_val_zero, cons_val_one,
-      cons_val_fin_one, inject, and_true, inner_shadow]
+      cons_val_fin_one, inject, and_true]
     refine ⟨⟨ ?_, ?_⟩, ?_, ?_⟩
     · exact rnn_contains_cube.1
     · exact rpp_contains_cube2.1

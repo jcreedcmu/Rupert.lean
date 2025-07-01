@@ -48,9 +48,9 @@ lemma denorm_half_unitary (q : Quaternion ℝ)
   let ⟨r,x,y,z⟩ := q; ext i j; fin_cases i, j
   all_goals simp only [denorm_matrix_of_quat, Matrix.mul_apply, Fin.sum_univ_succ, Quaternion.normSq];
   all_goals simp only [Fin.zero_eta, Fin.isValue, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
-   Matrix.cons_val_fin_one, star_trivial, Fin.succ_zero_eq_one, Matrix.cons_val_one,
-   Fin.succ_one_eq_two, Matrix.cons_val, Finset.univ_eq_empty, Matrix.cons_val_succ, Finset.sum_const, Finset.card_empty,
-   zero_smul, add_zero, Quaternion.mul_re, Quaternion.star_re, Quaternion.star_imI, mul_neg, sub_neg_eq_add,
+   Matrix.cons_val_fin_one, Fin.succ_zero_eq_one, Matrix.cons_val_one,
+   Fin.succ_one_eq_two, Matrix.cons_val, Finset.univ_eq_empty, Matrix.cons_val_succ,
+   Quaternion.mul_re, Quaternion.star_re, Quaternion.star_imI, mul_neg, sub_neg_eq_add,
    Quaternion.star_imJ, Quaternion.star_imK, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Matrix.smul_apply,
    Matrix.one_apply_eq, smul_eq_mul]
   all_goals (simp; ring_nf)
@@ -60,9 +60,9 @@ lemma denorm_half_unitary2 (q : Quaternion ℝ)
   let ⟨r,x,y,z⟩ := q; ext i j; fin_cases i, j
   all_goals simp only [denorm_matrix_of_quat, Matrix.mul_apply, Fin.sum_univ_succ, Quaternion.normSq];
   all_goals simp only [Fin.zero_eta, Fin.isValue, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
-   Matrix.cons_val_fin_one, star_trivial, Fin.succ_zero_eq_one, Matrix.cons_val_one,
-   Fin.succ_one_eq_two, Matrix.cons_val, Finset.univ_eq_empty, Matrix.cons_val_succ, Finset.sum_const, Finset.card_empty,
-   zero_smul, add_zero, Quaternion.mul_re, Quaternion.star_re, Quaternion.star_imI, mul_neg, sub_neg_eq_add,
+   Matrix.cons_val_fin_one, Fin.succ_zero_eq_one, Matrix.cons_val_one,
+   Fin.succ_one_eq_two, Matrix.cons_val, Finset.univ_eq_empty, Matrix.cons_val_succ,
+   Quaternion.mul_re, Quaternion.star_re, Quaternion.star_imI, mul_neg, sub_neg_eq_add,
    Quaternion.star_imJ, Quaternion.star_imK, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, Matrix.smul_apply,
    Matrix.one_apply_eq, smul_eq_mul]
   all_goals (simp; ring_nf)
@@ -92,7 +92,7 @@ lemma denorm_matrix_of_quat_has_correct_det (q : Quaternion ℝ)
    Fin.succAbove_zero, Matrix.submatrix_apply, Fin.succ_zero_eq_one, Matrix.cons_val_one,
    Fin.val_eq_zero, Fin.succ_one_eq_two, Matrix.cons_val, Matrix.submatrix_submatrix,
    Matrix.submatrix_empty, Matrix.det_fin_zero, Finset.univ_eq_empty, Matrix.cons_val_succ,
-   Finset.sum_const, Finset.card_empty, smul_add, zero_smul, add_zero, Fin.val_one, pow_one,
+   Finset.sum_const, Finset.card_empty, zero_smul, add_zero, Fin.val_one, pow_one,
    neg_mul, Fin.succAbove, Fin.castSucc_zero, Fin.lt_one_iff, ↓reduceIte, Fin.castSucc_eq_zero_iff,
    Finset.sum_empty, Fin.val_succ, zero_add, Fin.succ_pos, Fin.castSucc_lt_succ_iff,
    le_of_subsingleton, Finset.sum_neg_distrib, neg_zero, Fin.castSucc_one, lt_self_iff_false,

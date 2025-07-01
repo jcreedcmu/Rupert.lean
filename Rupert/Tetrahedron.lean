@@ -94,7 +94,7 @@ theorem rupert : IsRupert vertices := by
   let ε₁ : ℝ := 0.0001
   have hε₁ : ε₁ ∈ Set.Ioo 0 1 := by norm_num
   refine Convex.mem_interior_hull hε₀.1 hε₁ hb ?_
-  simp only [Set.mem_range, inner_shadow] at hv
+  simp only [inner_shadow] at hv
   obtain ⟨y, hy⟩ := hv
   rw [mem_convexHull_iff_exists_fintype]
   fin_cases y <;>
@@ -160,11 +160,3 @@ theorem rupert : IsRupert vertices := by
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add,Matrix.vec2_add, Matrix.vec2_add]
       norm_num
-
-elab "so_sorry" : tactic => do
-  Lean.Elab.Tactic.closeMainGoal `so_sorry (Lean.mkConst ``trivial)
-
-set_option debug.skipKernelTC true in
-def f : False := by so_sorry
-
-theorem g : False := f

@@ -64,7 +64,7 @@ theorem rupert : IsRupert vertices := by
       · simp [Fin.sum_univ_eight]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
       · simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-                   Fin.sum_univ_eight, ε₀, outer_shadow, matrix_simps]
+                   Fin.sum_univ_eight, ε₀, matrix_simps]
         norm_num
     · use ![0,
             1051981313303264779479/2828088006641774084000,
@@ -78,7 +78,7 @@ theorem rupert : IsRupert vertices := by
       · simp [Fin.sum_univ_eight]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
       · simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-                   Fin.sum_univ_eight, ε₀, outer_shadow, matrix_simps]
+                   Fin.sum_univ_eight, ε₀, matrix_simps]
         norm_num
     · use ![3938334956654107739/8031045263445271000,
             2045224314929433491/8031045263445271000,
@@ -91,7 +91,7 @@ theorem rupert : IsRupert vertices := by
       · simp [Fin.sum_univ_eight]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
       · simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-                   Fin.sum_univ_eight, ε₀, outer_shadow, matrix_simps]
+                   Fin.sum_univ_eight, ε₀, matrix_simps]
         norm_num
     · use ![0,
             1095105012905906001/353511000830221760500,
@@ -106,17 +106,17 @@ theorem rupert : IsRupert vertices := by
       · simp [Fin.sum_univ_eight]; norm_num
       · exact fun i ↦ ⟨i, rfl⟩
       · simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-                   Fin.sum_univ_eight, ε₀, outer_shadow, matrix_simps]
+                   Fin.sum_univ_eight, ε₀, matrix_simps]
         norm_num
   intro v hv
   let ε₁ : ℝ := 1e-11
   have hε₁ : ε₁ ∈ Set.Ioo 0 1 := by norm_num
   refine Convex.mem_interior_hull hε₀.1 hε₁ hb ?_
-  simp only [Set.mem_range, inner_shadow] at hv
+  simp only [inner_shadow] at hv
   obtain ⟨y, hy⟩ := hv
   rw [mem_convexHull_iff_exists_fintype]
   fin_cases y <;>
-    simp only [vertices, Fin.reduceFinMk, Matrix.cons_val, inner_shadow] at hy <;>
+    simp only [vertices, Fin.reduceFinMk, Matrix.cons_val] at hy <;>
     use Fin 8, Fin.fintype 8
   · use ![320050956502833201167751985054675539223111361/
           158836228761182627011085302790150062539835294740000,
@@ -133,8 +133,7 @@ theorem rupert : IsRupert vertices := by
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
-        outer_shadow, matrix_simps]
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -153,8 +152,7 @@ theorem rupert : IsRupert vertices := by
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
-        outer_shadow, matrix_simps]
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -174,8 +172,7 @@ theorem rupert : IsRupert vertices := by
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
-        outer_shadow, matrix_simps]
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -195,8 +192,7 @@ theorem rupert : IsRupert vertices := by
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
-        outer_shadow, matrix_simps]
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -216,8 +212,7 @@ theorem rupert : IsRupert vertices := by
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
-        outer_shadow, matrix_simps]
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -236,8 +231,7 @@ theorem rupert : IsRupert vertices := by
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
-        outer_shadow, matrix_simps]
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -256,8 +250,7 @@ theorem rupert : IsRupert vertices := by
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
-        outer_shadow, matrix_simps]
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
@@ -277,8 +270,7 @@ theorem rupert : IsRupert vertices := by
     · exact fun i ↦ ⟨proj_xy (outer_rot *ᵥ vertices i), by simp [outer_shadow]⟩
     · rw [←hy]
       simp only [proj_xy, outer_rot, matrix_of_quat, outer_quat, vertices,
-        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, inner_shadow,
-        outer_shadow, matrix_simps]
+        Fin.sum_univ_eight, inner_offset, inner_rot, inner_quat, ε₁, matrix_simps]
       rw [Matrix.smul_vec2, Matrix.smul_vec2, Matrix.smul_vec2,
           Matrix.vec2_add, Matrix.vec2_add, Matrix.vec2_add]
       norm_num
