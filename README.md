@@ -9,6 +9,7 @@ given two congruent copies of a convex polyhedron,
 can we cut a hole in one copy, such that the other copy fits through the hole?
 
 ## Main Results
+|  |  |
 | ----- | ---- |
 |cube | [Rupert/Cube.lean](Rupert/Cube.lean) |
 |tetrahedron | [Rupert/Tetrahedron.lean](Rupert/Tetrahedron.lean)|
