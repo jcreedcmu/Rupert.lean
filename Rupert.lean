@@ -15,3 +15,32 @@ import Rupert.SnubCube
 import Rupert.Square
 import Rupert.Tetrahedron
 import Rupert.TriakisTetrahedron
+
+--- main results
+
+/--
+info: 'Cube.rupert' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Cube.rupert
+
+
+/--
+info: 'TriakisTetrahedron.rupert' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms TriakisTetrahedron.rupert
+
+
+/--
+info: 'Tetrahedron.rupert' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms Tetrahedron.rupert
+
+
+/--
+info: 'TriakisTetrahedron.rupert' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs in
+#print axioms TriakisTetrahedron.rupert
