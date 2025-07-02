@@ -2,11 +2,13 @@ import Mathlib
 import Rupert.Basic
 import Rupert.Set
 import Rupert.Affine
+open Matrix
+
 
 set_option pp.deepTerms true
 set_option pp.proofs true
 set_option pp.maxSteps 1000000
-set_option pp.showLetValues true
+set_option pp.showLetValues false
 
 noncomputable
 def so3_to_affine_isometry (rot : SO3) : AffineIsometry ℝ ℝ³ ℝ³ := by
@@ -17,6 +19,16 @@ def so3_to_affine_isometry (rot : SO3) : AffineIsometry ℝ ℝ³ ℝ³ := by
  · sorry
 
 def inject (v : ℝ²) : ℝ³ := ![v 0, v 1, 0]
+
+noncomputable
+def injectl : ℝ² →ₗ[ℝ] ℝ³ := Matrix.toLin' !![1, 0; 0, 1; 0, 0]
+
+noncomputable
+def projectl : ℝ³ →ₗ[ℝ] ℝ² := Matrix.toLin' !![1, 0, 0; 0, 1, 0]
+
+
+
+-- set_option pp.all true
 
 noncomputable
 def translation_to_affine_isometry (trans : ℝ³) : AffineIsometry ℝ ℝ³ ℝ³ := by
@@ -48,7 +60,33 @@ theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
     let inner_shadow' := (proj ∘ (inner_offset_isom.comp inner_rot_isom)) '' X
     let outer_shadow' := (proj ∘ outer_rot_isom) '' Y;
     change closure inner_shadow' ⊆ interior outer_shadow'
-    let incl : ℝ² ≃ₜ R2as := sorry -- need this commute with some stuff probably
+
+    have linear_derived_map (p2 : ℝ²) : R2as :=
+      ⟨ injectl p2, by
+        -- FIXME: Not sure why I need the explicit 'show' below
+        rw [show injectl p2 = _ *ᵥ p2 from Matrix.toLin'_apply _ _]
+        simp_all only [cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero]
+        rfl
+        ⟩
+
+    -- Inclusion map from ℝ² into the subspace R2as
+    -- Will need to show it commutes with projection or something
+    let incl : ℝ² ≃ₜ R2as := {
+      -- FIXME: If I call inject p2 here, it breaks proofs. Why?
+      toFun p2 := ⟨ ![p2 0, p2 1, 0], rfl ⟩
+      invFun pas := let p3 : ℝ³ := pas; ![p3 0, p3 1]
+      left_inv := by
+        intros x; ext i; fin_cases i <;> simp
+      right_inv := by
+        intros x; ext i; fin_cases i
+        · simp
+        · simp
+        · simp only [Fin.reduceFinMk, Matrix.cons_val]
+          rw [x.property]
+      continuous_toFun := by sorry
+      continuous_invFun := by sorry
+    }
+
     have hinner : inner_shadow' = incl '' inner_shadow :=
       sorry
     have houter : outer_shadow' = incl '' outer_shadow :=
