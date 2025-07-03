@@ -21,7 +21,9 @@ def so3_to_affine_isometry (rot : SO3) : AffineIsometry ℝ ℝ³ ℝ³ := by
 def inject (v : ℝ²) : ℝ³ := ![v 0, v 1, 0]
 
 noncomputable
-def injectl : ℝ² →ₗ[ℝ] ℝ³ := Matrix.toLin' !![1, 0; 0, 1; 0, 0]
+-- It is more helpful to define this in terms of Fin n → ℝ instead of ℝⁿ
+-- For some reason ℝ² prevents Matrix.toLin'_apply from unifying
+def injectl : (Fin 2 → ℝ) →ₗ[ℝ] (Fin 3 → ℝ) := Matrix.toLin' !![1, 0; 0, 1; 0, 0]
 
 noncomputable
 def projectl : ℝ³ →ₗ[ℝ] ℝ² := Matrix.toLin' !![1, 0, 0; 0, 1, 0]
@@ -36,6 +38,11 @@ def translation_to_affine_isometry (trans : ℝ³) : AffineIsometry ℝ ℝ³ �
  · refine {toFun v := v + trans, linear := LinearMap.id, map_vadd' := ?_}
    sorry
  · sorry
+
+-- FIXME: what's the right theorem to capture something like:
+-- If A and A' are isomorphic as vector spaces, and A' ⊆ B as affine spaces
+-- then A and A' are isomorphic as affine spaces?
+theorem subspace_helper (A B : Type)  : True := sorry
 
 theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
     IsAffineRupertPair X Y ↔ IsRupertPair X Y := by
@@ -63,11 +70,14 @@ theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
 
     have linear_derived_map (p2 : ℝ²) : R2as :=
       ⟨ injectl p2, by
-        -- FIXME: Not sure why I need the explicit 'show' below
-        rw [show injectl p2 = _ *ᵥ p2 from Matrix.toLin'_apply _ _]
+        rw [injectl, toLin'_apply]
         simp_all only [cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero]
         rfl
         ⟩
+
+    let lincl : ℝ² ≃ᵃⁱ[ℝ] R2as := AffineIsometryEquiv.mk' linear_derived_map sorry ![0,0]  sorry
+
+    let incl2 : ℝ² ≃ₜ R2as := lincl.toHomeomorph
 
     -- Inclusion map from ℝ² into the subspace R2as
     -- Will need to show it commutes with projection or something
