@@ -48,6 +48,18 @@ theorem proj_offset_commute (q : ℝ³) (offset : ℝ²) : offset + proj_xy q = 
   ext i;  fin_cases i <;> simp [proj_xy, inject]
 
 
+def R2 : Set ℝ³ := { x | x 2 = 0 }
+def R2as : AffineSubspace ℝ ℝ³ := { carrier := R2, smul_vsub_vadd_mem := sorry }
+instance R2_nonempty : Nonempty R2as := Nonempty.intro ⟨ ![0,0,0], rfl ⟩
+theorem R2_coatom : IsCoatom R2as := sorry
+
+noncomputable
+def injectl_subspace (p2 : ℝ²) : ↑ R2as := ⟨ injectl p2, his p2 ⟩ where
+    his (p2 : ℝ²) : injectl p2 ∈ R2as := by
+        rw [injectl, toLin'_apply]
+        simp_all only [cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero]
+        rfl
+
 
 theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
     IsAffineRupertPair X Y ↔ IsRupertPair X Y := by
@@ -61,69 +73,50 @@ theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
     let inner_offset_isom : ℝ³ →ᵃⁱ[ℝ] ℝ³ := translation_to_affine_isometry (inject inner_offset)
     let inner_rot_isom : ℝ³ →ᵃⁱ[ℝ] ℝ³ := so3_to_affine_isometry ⟨ inner_rot, inner_so3 ⟩
     let outer_rot_isom : ℝ³ →ᵃⁱ[ℝ] ℝ³ := so3_to_affine_isometry ⟨ outer_rot, outer_so3 ⟩
-    use inner_offset_isom.comp inner_rot_isom
-    use outer_rot_isom
-    let R2 : Set ℝ³ := { x | x 2 = 0 }
-    have R2_nonempty : Nonempty R2 := Nonempty.intro ⟨ ![0,0,0], rfl ⟩
-    let R2as : AffineSubspace ℝ ℝ³ := { carrier := R2, smul_vsub_vadd_mem := sorry }
-    have R2_coatom : IsCoatom R2as := sorry
-    use R2as, R2_nonempty, R2_coatom
+    use inner_offset_isom.comp inner_rot_isom, outer_rot_isom, R2as, R2_nonempty, R2_coatom
     let proj := EuclideanGeometry.orthogonalProjection R2as
     let inner_shadow' := (proj ∘ (inner_offset_isom.comp inner_rot_isom)) '' X
     let outer_shadow' := (proj ∘ outer_rot_isom) '' Y;
     change closure inner_shadow' ⊆ interior outer_shadow'
 
-    have linear_derived_map (p2 : ℝ²) : R2as :=
-      ⟨ injectl p2, by
-        rw [injectl, toLin'_apply]
-        simp_all only [cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero]
-        rfl
-        ⟩
-
-    let lincl : ℝ² ≃ᵃⁱ[ℝ] R2as := AffineIsometryEquiv.mk' linear_derived_map sorry ![0,0]  sorry
+    let lincl : ℝ² ≃ᵃⁱ[ℝ] R2as := AffineIsometryEquiv.mk' injectl_subspace sorry ![0,0]  sorry
 
     let incl : ℝ² ≃ₜ R2as := lincl.toHomeomorph
 
-    -- Deprecated
-    have incl0 : ℝ² ≃ₜ R2as := {
-      -- FIXME: If I call inject p2 here, it breaks proofs. Why?
-      toFun p2 := ⟨ ![p2 0, p2 1, 0], rfl ⟩
-      invFun pas := let p3 : ℝ³ := pas; ![p3 0, p3 1]
-      left_inv := by
-        intros x; ext i; fin_cases i <;> simp
-      right_inv := by
-        intros x; ext i; fin_cases i
-        · simp
-        · simp
-        · simp only [Fin.reduceFinMk, Matrix.cons_val]
-          rw [x.property]
-      continuous_toFun := by sorry
-      continuous_invFun := by sorry
-    }
+    have proj_eq_inject_comp_proj (w : ℝ³) : proj w = injectl_subspace (proj_xy w) := by
+      apply Subtype.val_inj.mp
+      change EuclideanGeometry.orthogonalProjectionFn R2as w = injectl (proj_xy w)
 
+
+      sorry
 
     have hinner : inner_shadow' = incl '' inner_shadow := by
-
       change (proj ∘ (inner_offset_isom.comp inner_rot_isom)) '' X =
            incl '' ((λ p ↦ inner_offset + proj_xy (inner_rot.mulVec p)) '' X)
       rw [← Set.image_comp]
       have h2 : ∀ x : ℝ³, proj (inner_offset_isom.comp inner_rot_isom x)
                         = incl (inner_offset + proj_xy (inner_rot *ᵥ x)) := by
           intro x
-
-          let inj_inner_offset : Fin 3 → ℝ := inject inner_offset
-          let w := inj_inner_offset + inner_rot *ᵥ x
           rw [proj_offset_commute]
-          change proj w = linear_derived_map (proj_xy w)
-
-          sorry
+          let inj_inner_offset : Fin 3 → ℝ := inject inner_offset
+          exact proj_eq_inject_comp_proj (inj_inner_offset + inner_rot *ᵥ x)
 
       have h : proj ∘ (inner_offset_isom.comp inner_rot_isom) = (incl ∘ fun p ↦ inner_offset + proj_xy (inner_rot *ᵥ p)) := by
         ext x i; apply congrFun; simp only [SetLike.coe_eq_coe]; apply h2
-
       rw[h]
-    have houter : outer_shadow' = incl '' outer_shadow :=
-      sorry
+
+    have houter : outer_shadow' = incl '' outer_shadow := by
+      change (proj ∘ outer_rot_isom) '' Y =
+           incl '' ((λ p ↦  proj_xy (outer_rot.mulVec p)) '' Y)
+      rw [← Set.image_comp]
+      have h2 : ∀ x : ℝ³, proj (outer_rot_isom x)
+                        = incl (proj_xy (outer_rot *ᵥ x)) :=
+          λ x ↦ proj_eq_inject_comp_proj (outer_rot *ᵥ x)
+
+      have h : proj ∘ outer_rot_isom = (incl ∘ fun p ↦ proj_xy (outer_rot *ᵥ p)) := by
+        ext x i; apply congrFun; simp only [SetLike.coe_eq_coe]; apply h2
+      rw[h]
+
     rw [hinner, houter]
     rw [← Homeomorph.image_closure incl inner_shadow, ← Homeomorph.image_interior incl outer_shadow]
     exact Set.image_mono hcontain
