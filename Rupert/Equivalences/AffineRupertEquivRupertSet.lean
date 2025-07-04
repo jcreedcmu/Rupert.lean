@@ -35,7 +35,7 @@ def projectl : ℝ³ →ₗ[ℝ] ℝ² := Matrix.toLin' !![1, 0, 0; 0, 1, 0]
 noncomputable
 def translation_to_affine_isometry (trans : ℝ³) : AffineIsometry ℝ ℝ³ ℝ³ := by
  refine ⟨?_, ?_⟩
- · refine {toFun v := v + trans, linear := LinearMap.id, map_vadd' := ?_}
+ · refine {toFun v := trans + v, linear := LinearMap.id, map_vadd' := ?_}
    sorry
  · sorry
 
@@ -43,6 +43,11 @@ def translation_to_affine_isometry (trans : ℝ³) : AffineIsometry ℝ ℝ³ �
 -- If A and A' are isomorphic as vector spaces, and A' ⊆ B as affine spaces
 -- then A and A' are isomorphic as affine spaces?
 theorem subspace_helper (A B : Type)  : True := sorry
+
+theorem proj_offset_commute (q : ℝ³) (offset : ℝ²) : offset + proj_xy q = proj_xy (inject offset + q) := by
+  ext i;  fin_cases i <;> simp [proj_xy, inject]
+
+
 
 theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
     IsAffineRupertPair X Y ↔ IsRupertPair X Y := by
@@ -77,11 +82,10 @@ theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
 
     let lincl : ℝ² ≃ᵃⁱ[ℝ] R2as := AffineIsometryEquiv.mk' linear_derived_map sorry ![0,0]  sorry
 
-    let incl2 : ℝ² ≃ₜ R2as := lincl.toHomeomorph
+    let incl : ℝ² ≃ₜ R2as := lincl.toHomeomorph
 
-    -- Inclusion map from ℝ² into the subspace R2as
-    -- Will need to show it commutes with projection or something
-    let incl : ℝ² ≃ₜ R2as := {
+    -- Deprecated
+    have incl0 : ℝ² ≃ₜ R2as := {
       -- FIXME: If I call inject p2 here, it breaks proofs. Why?
       toFun p2 := ⟨ ![p2 0, p2 1, 0], rfl ⟩
       invFun pas := let p3 : ℝ³ := pas; ![p3 0, p3 1]
@@ -97,8 +101,27 @@ theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
       continuous_invFun := by sorry
     }
 
-    have hinner : inner_shadow' = incl '' inner_shadow :=
-      sorry
+
+    have hinner : inner_shadow' = incl '' inner_shadow := by
+
+      change (proj ∘ (inner_offset_isom.comp inner_rot_isom)) '' X =
+           incl '' ((λ p ↦ inner_offset + proj_xy (inner_rot.mulVec p)) '' X)
+      rw [← Set.image_comp]
+      have h2 : ∀ x : ℝ³, proj (inner_offset_isom.comp inner_rot_isom x)
+                        = incl (inner_offset + proj_xy (inner_rot *ᵥ x)) := by
+          intro x
+
+          let inj_inner_offset : Fin 3 → ℝ := inject inner_offset
+          let w := inj_inner_offset + inner_rot *ᵥ x
+          rw [proj_offset_commute]
+          change proj w = linear_derived_map (proj_xy w)
+
+          sorry
+
+      have h : proj ∘ (inner_offset_isom.comp inner_rot_isom) = (incl ∘ fun p ↦ inner_offset + proj_xy (inner_rot *ᵥ p)) := by
+        ext x i; apply congrFun; simp only [SetLike.coe_eq_coe]; apply h2
+
+      rw[h]
     have houter : outer_shadow' = incl '' outer_shadow :=
       sorry
     rw [hinner, houter]
