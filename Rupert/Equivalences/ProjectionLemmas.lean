@@ -31,7 +31,7 @@ instance {k : Type*} {V : Type*} [Ring k] [AddCommGroup V] [Module k V] (p : Sub
 theorem affine_projection_eq_linear_projection_euclidean
   {I : Type} [Fintype I] (s : Submodule ℝ (EuclideanSpace ℝ I))
   [Nonempty s] (v : EuclideanSpace ℝ I) :
-  EuclideanGeometry.orthogonalProjection s.toAffineSubspace v = s.orthogonalProjection.toAffineMap v := by
+  EuclideanGeometry.orthogonalProjection s.toAffineSubspace v = s.orthogonalProjection v := by
     let s1 : EuclideanSpace ℝ I →ᵃ[ℝ] s.toAffineSubspace := EuclideanGeometry.orthogonalProjection s.toAffineSubspace
     let s2 : EuclideanSpace ℝ I →ᵃ[ℝ] s := s.orthogonalProjection.toAffineMap
 
@@ -87,7 +87,11 @@ theorem oproj_eq_eproj {I : Type} [Fintype I] [DecidableEq I] (i : I) (v : Eucli
      | isTrue h => simp only [← h, ↓reduceIte, add_zero]
      | isFalse h => simp only [if_neg h, add_zero]
 
-
 theorem oproj_eq_eproj_r2 (x : ℝ³) : (proj_subspace 2).orthogonalProjection x = ![x 0, x 1, 0] := by
  rw [oproj_eq_eproj 2]
  ext i; fin_cases i <;> dsimp [eproj]
+
+theorem affine_oproj_eq_eproj_r2 (x : ℝ³) :
+  EuclideanGeometry.orthogonalProjection (P := ℝ³) ((proj_subspace 2).toAffineSubspace) x = ![x 0, x 1, 0] := by
+ rw [affine_projection_eq_linear_projection_euclidean]
+ apply oproj_eq_eproj_r2
