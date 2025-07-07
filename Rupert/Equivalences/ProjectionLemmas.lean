@@ -48,7 +48,7 @@ theorem proj_subspace_def {I : Type} [Fintype I] [DecidableEq I] {i : I} (u : Eu
 
 theorem oproj_eq_eproj {I : Type} [Fintype I] [DecidableEq I] (i : I) (v : EuclideanSpace ℝ I) :
   (proj_subspace i).orthogonalProjection v = eproj i v := by
-    let v1 (j : I) := if i = j then 0 else v j
+    with_reducible let v1 (j : I) := if i = j then 0 else v j
     let v2 (j : I) := if i = j then v j else 0
 
     -- The vector v is equal to the sum of v1, a component in the
@@ -86,11 +86,16 @@ theorem oproj_eq_eproj {I : Type} [Fintype I] [DecidableEq I] (i : I) (v : Eucli
      | isTrue h => simp only [← h, ↓reduceIte, add_zero]
      | isFalse h => simp only [if_neg h, add_zero]
 
-theorem oproj_eq_eproj_r2 (x : ℝ³) : (proj_subspace 2).orthogonalProjection x = ![x 0, x 1, 0] := by
+theorem oproj_eq_eproj_r2 (x : ℝ³) : (proj_subspace 2).orthogonalProjection x = eproj 2 x := by
  rw [oproj_eq_eproj 2]
- ext i; fin_cases i <;> dsimp [eproj]
 
-theorem affine_oproj_eq_eproj_r2 (x : ℝ³) :
-  EuclideanGeometry.orthogonalProjection (P := ℝ³) ((proj_subspace 2).toAffineSubspace) x = ![x 0, x 1, 0] := by
+@[reducible] noncomputable
+def R2as : AffineSubspace ℝ ℝ³ := (proj_subspace 2).toAffineSubspace
+
+@[reducible] noncomputable
+def affine_oproj : ℝ³ →ᵃ[ℝ] R2as := EuclideanGeometry.orthogonalProjection R2as
+
+theorem affine_oproj_eq_eproj_r2 (x : ℝ³) : affine_oproj x = eproj 2 x := by
+ dsimp only [ContinuousAffineMap.coe_toAffineMap]
  rw [affine_projection_eq_linear_projection_euclidean]
  apply oproj_eq_eproj_r2
