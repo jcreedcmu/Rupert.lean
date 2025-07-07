@@ -60,12 +60,11 @@ def injectl_subspace (p2 : ℝ²) : ↑ R2as := ⟨ injectl p2, his p2 ⟩ where
         simp_all only [cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero]
         rfl
 
+theorem affine_rupert_pair_imp_rupert_set_pair (X Y : Set ℝ³) :
+    IsAffineRupertPair X Y → IsRupertPair X Y := by sorry
 
-theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
-    IsAffineRupertPair X Y ↔ IsRupertPair X Y := by
-  have mp : IsAffineRupertPair X Y → IsRupertPair X Y := by
-    sorry
-  have mpr : IsRupertPair X Y → IsAffineRupertPair X Y := by
+theorem rupert_set_pair_imp_affine_rupert_set_pair (X Y : Set ℝ³) :
+    IsRupertPair X Y → IsAffineRupertPair X Y := by
     intro ⟨inner_rot, inner_so3, inner_offset, outer_rot, outer_so3, hcontain⟩
     let inner_shadow := {x | ∃ p ∈ X, inner_offset + proj_xy (inner_rot.mulVec p) = x};
     let outer_shadow := {x | ∃ p ∈ Y, proj_xy (outer_rot.mulVec p) = x};
@@ -86,7 +85,6 @@ theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
     have proj_eq_inject_comp_proj (w : ℝ³) : proj w = injectl_subspace (proj_xy w) := by
       apply Subtype.val_inj.mp
       change EuclideanGeometry.orthogonalProjectionFn R2as w = injectl (proj_xy w)
-
 
       sorry
 
@@ -120,7 +118,11 @@ theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
     rw [hinner, houter]
     rw [← Homeomorph.image_closure incl inner_shadow, ← Homeomorph.image_interior incl outer_shadow]
     exact Set.image_mono hcontain
-  exact { mp, mpr }
+
+theorem affine_rupert_pair_iff_rupert_set_pair (X Y : Set ℝ³) :
+    IsAffineRupertPair X Y ↔ IsRupertPair X Y := by
+  exact { mp := affine_rupert_pair_imp_rupert_set_pair X Y,
+          mpr:= rupert_set_pair_imp_affine_rupert_set_pair X Y }
 
 theorem affine_rupert_iff_rupert_set (X : Set (EuclideanSpace ℝ (Fin 3))) :
     IsAffineRupertSet X ↔ IsRupertSet X := affine_rupert_pair_iff_rupert_set_pair X X
