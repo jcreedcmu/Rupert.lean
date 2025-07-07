@@ -28,21 +28,20 @@ instance {k : Type*} {V : Type*} [Ring k] [AddCommGroup V] [Module k V] (p : Sub
   : Nonempty p.toAffineSubspace :=
   ⟨0, by simp⟩
 
+-- Thanks to Jireh Loreaux!
+-- https://leanprover.zulipchat.com/#narrow/channel/113489-new-members/topic/Orthogonal.20projection.20commutes.20with.20affine.20space.20inclusion/with/527494321
 theorem affine_projection_eq_linear_projection_euclidean
   {I : Type} [Fintype I] (s : Submodule ℝ (EuclideanSpace ℝ I))
   [Nonempty s] (v : EuclideanSpace ℝ I) :
   EuclideanGeometry.orthogonalProjection s.toAffineSubspace v = s.orthogonalProjection v := by
-    let s1 : EuclideanSpace ℝ I →ᵃ[ℝ] s.toAffineSubspace := EuclideanGeometry.orthogonalProjection s.toAffineSubspace
-    let s2 : EuclideanSpace ℝ I →ᵃ[ℝ] s := s.orthogonalProjection.toAffineMap
-
-    let z : (EuclideanGeometry.orthogonalProjection s.toAffineSubspace).linear = s.toAffineSubspace.direction.orthogonalProjection := by
-     apply EuclideanGeometry.orthogonalProjection_linear
-
-    -- have h : s1 = s2 := by
-    --   apply AffineMap.ext_linear
-    --   sorry
-    change s1 v = s2 v
-    sorry
+    symm
+    ext1
+    apply Set.eq_of_mem_singleton
+    rw [← EuclideanGeometry.inter_eq_singleton_orthogonalProjection]
+    apply Set.mem_inter (by simp)
+    simp only [Submodule.toAffineSubspace_direction, SetLike.mem_coe, AffineSubspace.mem_mk', vsub_eq_sub]
+    rw [← neg_mem_iff, neg_sub]
+    simp
 
 theorem proj_subspace_def {I : Type} [Fintype I] [DecidableEq I] {i : I} (u : EuclideanSpace ℝ I)
     (h : u ∈ proj_subspace i) : u i = 0 := h
