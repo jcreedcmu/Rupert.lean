@@ -5,19 +5,24 @@ import Rupert.Affine
 import Rupert.Equivalences.ProjectionLemmas
 open Matrix
 
-
-set_option pp.deepTerms true
-set_option pp.proofs true
-set_option pp.maxSteps 1000000
-set_option pp.showLetValues false
+-- set_option pp.deepTerms true
+-- set_option pp.proofs true
+-- set_option pp.maxSteps 1000000
+-- set_option pp.showLetValues false
 
 noncomputable
-def so3_to_affine_isometry (rot : SO3) : AffineIsometry ℝ ℝ³ ℝ³ := by
- let ⟨ mat, rot_so3 ⟩ := rot
- refine ⟨?_, ?_⟩
- · refine {toFun := mat.mulVec, linear := mat.mulVecLin, map_vadd' := ?_}
-   sorry
- · sorry
+def Matrix.UnitaryGroup.toLinearIsometryEquiv
+    {n : Type*} [DecidableEq n] [Fintype n]
+    (k : Type*) [RCLike k]
+    (M : unitaryGroup n k) : EuclideanSpace k n ≃ₗᵢ[k] EuclideanSpace k n :=
+  let matrix_to_endomorphism := unitary.map (F := Matrix n n k ≃⋆ₐ[k] (EuclideanSpace k n →L[k] EuclideanSpace k n))
+    Matrix.toEuclideanCLM
+  unitary.linearIsometryEquiv (matrix_to_endomorphism M)
+
+noncomputable
+def so3_to_affine_isometry (rot : SO3) : ℝ³ →ᵃⁱ[ℝ] ℝ³ :=
+  let u := Submonoid.inclusion Matrix.specialUnitaryGroup_le_unitaryGroup rot
+  (Matrix.UnitaryGroup.toLinearIsometryEquiv ℝ u).toAffineIsometryEquiv.toAffineIsometry
 
 def inject (v : ℝ²) : ℝ³ := ![v 0, v 1, 0]
 
