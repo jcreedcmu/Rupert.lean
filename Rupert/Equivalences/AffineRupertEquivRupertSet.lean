@@ -31,9 +31,6 @@ noncomputable
 -- For some reason ℝ² prevents Matrix.toLin'_apply from unifying
 def injectl : (Fin 2 → ℝ) →ₗ[ℝ] (Fin 3 → ℝ) := Matrix.toLin' !![1, 0; 0, 1; 0, 0]
 
-noncomputable
-def projectl : ℝ³ →ₗ[ℝ] ℝ² := Matrix.toLin' !![1, 0, 0; 0, 1, 0]
-
 theorem proj_offset_commute (q : ℝ³) (offset : ℝ²) : offset + proj_xy q = proj_xy (inject offset + q) := by
   ext i;  fin_cases i <;> simp [proj_xy, inject]
 
