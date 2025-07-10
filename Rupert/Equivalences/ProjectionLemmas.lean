@@ -109,6 +109,8 @@ def lmapDomainEuc (I J : Type*) [Fintype I] [Fintype J] (f : I → J) : Euclidea
       (Finsupp.lmapDomain ℝ ℝ f) ∘ₗ
       (Finsupp.linearEquivFunOnFinite ℝ ℝ I).symm) : (I → ℝ) →ₗ[ℝ] (J → ℝ))
 
+def funLeftEuc {I J : Type*} (f : I → J) : (EuclideanSpace ℝ J) →ₗ[ℝ] (EuclideanSpace ℝ I) :=
+    LinearMap.funLeft ℝ ℝ f
 
 def proj_kernel_basis {I : Type} [Fintype I] [DecidableEq I] (i : I) :
     Basis {j // j ≠ i} ℝ (proj_subspace i) :=

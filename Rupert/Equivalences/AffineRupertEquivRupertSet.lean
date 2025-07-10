@@ -33,7 +33,20 @@ theorem proj_offset_commute (q : ℝ³) (offset : ℝ²) : offset + proj_xy q = 
 theorem R2_coatom : IsCoatom R2as := sorry
 
 theorem affine_rupert_pair_imp_rupert_set_pair (X Y : Set ℝ³) :
-    IsAffineRupertPair X Y → IsRupertPair X Y := by sorry
+    IsAffineRupertPair X Y → IsRupertPair X Y := by
+     intro ⟨ inner, outer, Q, Q_nonempty, Q_isCoatom, hsubeq ⟩
+     let proj := EuclideanGeometry.orthogonalProjection Q;
+     change closure (proj ∘ inner '' X) ⊆ interior (proj ∘ outer '' Y) at hsubeq
+     let inner_rot : SO3 := sorry
+     let inner_offset : ℝ² := sorry
+     let outer_rot : SO3 := sorry
+     use inner_rot, inner_rot.2, inner_offset, outer_rot, outer_rot.2
+     let inner_shadow' := {x | ∃ p ∈ X, inner_offset + proj_xy (↑inner_rot *ᵥ p) = x};
+     let outer_shadow' := {x | ∃ p ∈ Y, proj_xy (↑outer_rot *ᵥ p) = x};
+     change closure inner_shadow' ⊆ interior outer_shadow'
+
+     sorry
+#exit
 
 theorem rupert_set_pair_imp_affine_rupert_set_pair (X Y : Set ℝ³) :
     IsRupertPair X Y → IsAffineRupertPair X Y := by
