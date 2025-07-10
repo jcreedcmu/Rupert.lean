@@ -1,7 +1,7 @@
 import Mathlib
 import Rupert.Basic
 import Rupert.Set
-import Rupert.Affine
+import Rupert.AffineRupert
 import Rupert.Equivalences.ProjectionLemmas
 open Matrix
 
@@ -34,7 +34,7 @@ theorem R2_coatom : IsCoatom R2as := sorry
 
 theorem affine_rupert_pair_imp_rupert_set_pair (X Y : Set ℝ³) :
     IsAffineRupertPair X Y → IsRupertPair X Y := by
-     intro ⟨ inner, outer, Q, Q_nonempty, Q_isCoatom, hsubeq ⟩
+     intro ⟨ Q, Q_nonempty, Q_isCoatom, inner, outer, hsubeq ⟩
      let proj := EuclideanGeometry.orthogonalProjection Q;
      change closure (proj ∘ inner '' X) ⊆ interior (proj ∘ outer '' Y) at hsubeq
      let inner_rot : SO3 := sorry
@@ -46,7 +46,6 @@ theorem affine_rupert_pair_imp_rupert_set_pair (X Y : Set ℝ³) :
      change closure inner_shadow' ⊆ interior outer_shadow'
 
      sorry
-#exit
 
 theorem rupert_set_pair_imp_affine_rupert_set_pair (X Y : Set ℝ³) :
     IsRupertPair X Y → IsAffineRupertPair X Y := by
@@ -57,7 +56,7 @@ theorem rupert_set_pair_imp_affine_rupert_set_pair (X Y : Set ℝ³) :
     let inner_offset_isom : ℝ³ →ᵃⁱ[ℝ] ℝ³ := (AffineIsometryEquiv.constVAdd ℝ ℝ³ (inject inner_offset)).toAffineIsometry
     let inner_rot_isom : ℝ³ →ᵃⁱ[ℝ] ℝ³ := so3_to_affine_isometry ⟨ inner_rot, inner_so3 ⟩
     let outer_rot_isom : ℝ³ →ᵃⁱ[ℝ] ℝ³ := so3_to_affine_isometry ⟨ outer_rot, outer_so3 ⟩
-    use inner_offset_isom.comp inner_rot_isom, outer_rot_isom, R2as, inferInstance, R2_coatom
+    use R2as, inferInstance, R2_coatom, inner_offset_isom.comp inner_rot_isom, outer_rot_isom
 
     let inner_shadow' := (affine_oproj ∘ (inner_offset_isom.comp inner_rot_isom)) '' X
     let outer_shadow' := (affine_oproj ∘ outer_rot_isom) '' Y;

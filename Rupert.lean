@@ -1,10 +1,11 @@
-import Rupert.Affine
+import Rupert.AffineRupert
 import Rupert.Attr
 import Rupert.Basic
 import Rupert.Convex
 import Rupert.Cube
 import Rupert.FinCases
 import Rupert.Icosahedron
+import Rupert.LinearRupert
 import Rupert.MatrixSimps
 import Rupert.Quaternion
 import Rupert.Equivalences.RupertEquivRupertPrime
