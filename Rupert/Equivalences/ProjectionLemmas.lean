@@ -103,8 +103,18 @@ theorem affine_oproj_eq_eproj_r2 (x : ℝ³) : affine_oproj x = eproj 2 x := by
  rw [affine_projection_eq_linear_projection_euclidean]
  apply oproj_eq_eproj_r2
 
+noncomputable
+def lmapDomainEuc (I J : Type*) [Fintype I] [Fintype J] (f : I → J) : EuclideanSpace ℝ I →ₗ[ℝ] EuclideanSpace ℝ J :=
+    (((Finsupp.linearEquivFunOnFinite ℝ ℝ J) ∘ₗ
+      (Finsupp.lmapDomain ℝ ℝ f) ∘ₗ
+      (Finsupp.linearEquivFunOnFinite ℝ ℝ I).symm) : (I → ℝ) →ₗ[ℝ] (J → ℝ))
+
+
 def proj_kernel_basis {I : Type} [Fintype I] [DecidableEq I] (i : I) :
-    Basis {j : I // j ≠ i} ℝ (proj_subspace i) :=
+    Basis {j // j ≠ i} ℝ (proj_subspace i) :=
+  let J := {j // j ≠ i}
+  let vec (j : J) : proj_subspace i := sorry
+  let lindep : LinearIndependent ℝ vec := sorry
   sorry
 
 noncomputable
