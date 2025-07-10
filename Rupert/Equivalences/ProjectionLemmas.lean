@@ -93,6 +93,9 @@ theorem oproj_eq_eproj_r2 (x : ℝ³) : (proj_subspace 2).orthogonalProjection x
 def R2as : AffineSubspace ℝ ℝ³ := (proj_subspace 2).toAffineSubspace
 
 @[reducible] noncomputable
+def R2ss : Submodule ℝ ℝ³ := proj_subspace 2
+
+@[reducible] noncomputable
 def affine_oproj : ℝ³ →ᵃ[ℝ] R2as := EuclideanGeometry.orthogonalProjection R2as
 
 theorem affine_oproj_eq_eproj_r2 (x : ℝ³) : affine_oproj x = eproj 2 x := by
@@ -110,5 +113,28 @@ def linear_subspace_has_dim_one_less {I : Type} [Fintype I] [DecidableEq I] (i :
   let J := {j : I // j ≠ i}
   have lineq : proj_subspace i ≃ₗ[ℝ] EuclideanSpace ℝ J :=
     (proj_kernel_basis i).repr.trans (Finsupp.linearEquivFunOnFinite ℝ ℝ J)
-  have pres_norm : ∀ (x : ↥(proj_subspace i)), ‖lineq x‖ = ‖x‖ := sorry
+  have pres_norm : ∀ (x : proj_subspace i), ‖lineq x‖ = ‖x‖ := sorry
   exact LinearIsometryEquiv.mk lineq pres_norm
+
+noncomputable
+def R2_eq_proj_subspace : R2ss ≃ₗᵢ[ℝ] ℝ² := by
+  have eq : { j : Fin 3 // j ≠ 2 } ≃ Fin 2 := {
+    toFun x := match x with
+      | ⟨0, _⟩ => 0
+      | ⟨1, _⟩ => 1
+      | ⟨2, hy⟩ => absurd rfl hy
+    invFun x :=
+     match x with
+     | ⟨0, _⟩ => ⟨0, by tauto⟩
+     | ⟨1, _⟩ => ⟨1, by tauto⟩
+    left_inv x := by
+     let ⟨y, hy⟩ := x
+     fin_cases y; all_goals try simp
+     tauto
+    right_inv x := by fin_cases x <;> simp
+  }
+  exact (linear_subspace_has_dim_one_less 2).trans (LinearIsometryEquiv.piLpCongrLeft 2 ℝ ℝ eq)
+
+
+-- noncomputable
+-- def R2as_eq_proj_subspace : R2as ≃ᵃⁱ[ℝ] ℝ² := R2_eq_proj_subspace.toAffineIsometryEquiv
