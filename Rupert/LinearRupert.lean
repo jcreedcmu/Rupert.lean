@@ -14,19 +14,19 @@ import Mathlib
     a set fitting inside itself. -/
 def IsLinearRupertPairForSubspace {P : Type*} [NormedAddCommGroup P]
     [InnerProductSpace ℝ P] [FiniteDimensional ℝ P]
-    (inner outer : Set P) (Q : Submodule ℝ P) [Nonempty Q] : Prop :=
-    ∃ (inner_isometry outer_isometry : P →ₗᵢ[ℝ] P),
-    let inner_shadow : Set Q := (Q.orthogonalProjection ∘ inner_isometry) '' inner
-    let outer_shadow : Set Q := (Q.orthogonalProjection ∘ outer_isometry) '' outer
-    closure inner_shadow ⊆ interior outer_shadow
+    (X Y : Set P) (Q : Submodule ℝ P) [Nonempty Q] : Prop :=
+    ∃ (Xi Yi : P →ₗᵢ[ℝ] P),
+    let Xs := (Q.orthogonalProjection ∘ Xi) '' X
+    let Ys := (Q.orthogonalProjection ∘ Yi) '' Y
+    closure Xs ⊆ interior Ys
 
 /-- A pair of subsets X, Y are Rupert if there exists a coatomic subspace Q ⊆ P,
     satisfying the above definition. -/
 def IsLinearRupertPair {P : Type*} [NormedAddCommGroup P]
     [InnerProductSpace ℝ P] [FiniteDimensional ℝ P]
-    (inner outer : Set P) : Prop :=
+    (X Y : Set P) : Prop :=
     ∃ (Q : Submodule ℝ P) (_ : Nonempty Q) (_ : IsCoatom Q),
-    IsLinearRupertPairForSubspace inner outer Q
+    IsLinearRupertPairForSubspace X Y Q
 
 /-- A single subset X is Rupert if the pair X, X is Rupert -/
 def IsLinearRupertSet {P : Type*} [NormedAddCommGroup P]
