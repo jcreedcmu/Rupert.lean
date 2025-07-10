@@ -16,6 +16,8 @@ def IsAffineRupertPair {P : Type*} {V : Type*} [MetricSpace P] [NormedAddCommGro
     (inner outer : Set P) : Prop :=
     ∃ (inner_isometry outer_isometry : AffineIsometry ℝ P P)
       (Q : AffineSubspace ℝ P) (_ : Nonempty Q) (_ : IsCoatom Q),
+
+
     let proj := EuclideanGeometry.orthogonalProjection Q
     let inner_shadow := (proj ∘ inner_isometry) '' inner
     let outer_shadow := (proj ∘ outer_isometry) '' outer
