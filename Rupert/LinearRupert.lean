@@ -15,7 +15,7 @@ import Mathlib
 def IsLinearRupertPairForSubspace {P : Type*} [NormedAddCommGroup P]
     [InnerProductSpace ℝ P] [FiniteDimensional ℝ P]
     (X Y : Set P) (Q : Submodule ℝ P) [Nonempty Q] : Prop :=
-    ∃ (Xi Yi : P →ₗᵢ[ℝ] P),
+    ∃ (Xi Yi : P →ᵃⁱ[ℝ] P),
     let Xs := (Q.orthogonalProjection ∘ Xi) '' X
     let Ys := (Q.orthogonalProjection ∘ Yi) '' Y
     closure Xs ⊆ interior Ys
