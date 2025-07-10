@@ -19,22 +19,43 @@ theorem affine_projection_eq_linear_projection {P : Type*} [NormedAddCommGroup P
     rw [← neg_mem_iff, neg_sub]
     simp
 
+-- FIXME: these could probably be golfed a bit
 theorem linear_for_subspace_imp_affine_for_subspace {P : Type*} [NormedAddCommGroup P]
     [InnerProductSpace ℝ P] [FiniteDimensional ℝ P] (X Y : Set P)
     (Q : Submodule ℝ P) [Nonempty Q] :
     IsLinearRupertPairForSubspace X Y Q → IsAffineRupertPairForSubspace X Y (Q.toAffineSubspace) := by
-    intro ⟨ Xi, Yi, hsub ⟩
-    use Xi.toAffineIsometry, Yi.toAffineIsometry
-    let aproj := EuclideanGeometry.orthogonalProjection Q.toAffineSubspace
+  intro ⟨ Xi, Yi, hsub ⟩
+  use Xi, Yi
+  let aproj := EuclideanGeometry.orthogonalProjection Q.toAffineSubspace
 
-    have Xe : Q.orthogonalProjection ∘ Xi = aproj ∘ Xi := by
-     ext1 p; change Q.orthogonalProjection (Xi p) = aproj (Xi p)
-     rw [affine_projection_eq_linear_projection Q (Xi p)]
+  have Xe : Q.orthogonalProjection ∘ Xi = aproj ∘ Xi := by
+   ext1 p; change Q.orthogonalProjection (Xi p) = aproj (Xi p)
+   rw [affine_projection_eq_linear_projection Q (Xi p)]
 
-    have Ye : Q.orthogonalProjection ∘ Yi = aproj ∘ Yi := by
-     ext1 p; change Q.orthogonalProjection (Yi p) = aproj (Yi p)
-     rw [affine_projection_eq_linear_projection Q (Yi p)]
+  have Ye : Q.orthogonalProjection ∘ Yi = aproj ∘ Yi := by
+   ext1 p; change Q.orthogonalProjection (Yi p) = aproj (Yi p)
+   rw [affine_projection_eq_linear_projection Q (Yi p)]
 
-    change closure ((aproj ∘ Xi) '' X) ⊆ interior ((aproj ∘ Yi) '' Y)
-    rw [← Xe, ← Ye]
-    exact hsub
+  change closure ((aproj ∘ Xi) '' X) ⊆ interior ((aproj ∘ Yi) '' Y)
+  rw [← Xe, ← Ye]
+  exact hsub
+
+theorem affine_for_subspace_imp_linear_for_subspace {P : Type*} [NormedAddCommGroup P]
+    [InnerProductSpace ℝ P] [FiniteDimensional ℝ P] (X Y : Set P)
+    (Q : Submodule ℝ P) [Nonempty Q] :
+    IsAffineRupertPairForSubspace X Y (Q.toAffineSubspace) → IsLinearRupertPairForSubspace X Y Q := by
+  intro ⟨ Xi, Yi, hsub ⟩
+  use Xi, Yi
+  let aproj := EuclideanGeometry.orthogonalProjection Q.toAffineSubspace
+
+  have Xe : Q.orthogonalProjection ∘ Xi = aproj ∘ Xi := by
+   ext1 p; change Q.orthogonalProjection (Xi p) = aproj (Xi p)
+   rw [affine_projection_eq_linear_projection Q (Xi p)]
+
+  have Ye : Q.orthogonalProjection ∘ Yi = aproj ∘ Yi := by
+   ext1 p; change Q.orthogonalProjection (Yi p) = aproj (Yi p)
+   rw [affine_projection_eq_linear_projection Q (Yi p)]
+
+  change closure ((Q.orthogonalProjection ∘ Xi) '' X) ⊆ interior ((Q.orthogonalProjection ∘ Yi) '' Y)
+  rw [ Xe,  Ye]
+  exact hsub
