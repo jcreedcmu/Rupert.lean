@@ -24,24 +24,13 @@ def so3_to_affine_isometry (rot : SO3) : ℝ³ →ᵃⁱ[ℝ] ℝ³ :=
   let u := Submonoid.inclusion Matrix.specialUnitaryGroup_le_unitaryGroup rot
   (Matrix.UnitaryGroup.toLinearIsometryEquiv ℝ u).toAffineIsometryEquiv.toAffineIsometry
 
+-- FIXME: maybe this should be dead code, but isn't yet. It's only used for offset.
 def inject (v : ℝ²) : ℝ³ := ![v 0, v 1, 0]
-
-noncomputable
--- It is more helpful to define this in terms of Fin n → ℝ instead of ℝⁿ
--- For some reason ℝ² prevents Matrix.toLin'_apply from unifying
-def injectl : (Fin 2 → ℝ) →ₗ[ℝ] (Fin 3 → ℝ) := Matrix.toLin' !![1, 0; 0, 1; 0, 0]
 
 theorem proj_offset_commute (q : ℝ³) (offset : ℝ²) : offset + proj_xy q = proj_xy (inject offset + q) := by
   ext i;  fin_cases i <;> simp [proj_xy, inject]
 
 theorem R2_coatom : IsCoatom R2as := sorry
-
-noncomputable
-def injectl_subspace (p2 : ℝ²) : ↑ R2as := ⟨ injectl p2, his p2 ⟩ where
-    his (p2 : ℝ²) : injectl p2 ∈ R2as := by
-        rw [injectl, toLin'_apply]
-        simp_all only [cons_mulVec, cons_dotProduct, zero_mul, dotProduct_empty, add_zero]
-        rfl
 
 theorem affine_rupert_pair_imp_rupert_set_pair (X Y : Set ℝ³) :
     IsAffineRupertPair X Y → IsRupertPair X Y := by sorry
@@ -61,15 +50,18 @@ theorem rupert_set_pair_imp_affine_rupert_set_pair (X Y : Set ℝ³) :
     let outer_shadow' := (affine_oproj ∘ outer_rot_isom) '' Y;
     change closure inner_shadow' ⊆ interior outer_shadow'
 
-    let lincl : ℝ² ≃ᵃⁱ[ℝ] R2as := AffineIsometryEquiv.mk' injectl_subspace sorry ![0,0]  sorry
+    let llincl : ℝ² ≃ₗᵢ[ℝ] R2ss := R2_eq_proj_subspace.symm
 
-    let incl : ℝ² ≃ₜ R2as := lincl.toHomeomorph
+    let incl : ℝ² ≃ₜ R2as := llincl.toHomeomorph
 
-    have proj_eq_inject_comp_proj (w : ℝ³) : affine_oproj w = injectl_subspace (proj_xy w) := by
+    -- FIXME: this should be provable once we decide what llincl is
+    have proj_eq_inject_comp_proj (w : ℝ³) : affine_oproj w = llincl (proj_xy w) := by
       apply Subtype.val_inj.mp
-      change affine_oproj w = injectl (proj_xy w)
       rw [affine_oproj_eq_eproj_r2]
-      ext i; fin_cases i <;> simp [eproj, injectl, proj_xy]
+      ext i; fin_cases i; all_goals simp [eproj, proj_xy]
+      · change w 0 = (llincl ![w 0, w 1] : ℝ³) 0; sorry
+      · change w 1 = (llincl ![w 0, w 1] : ℝ³) 1; sorry
+      · change 0 = (llincl ![w 0, w 1] : ℝ³) 2; sorry
 
     have hinner : inner_shadow' = incl '' inner_shadow := by
       change (affine_oproj ∘ (inner_offset_isom.comp inner_rot_isom)) '' X =
