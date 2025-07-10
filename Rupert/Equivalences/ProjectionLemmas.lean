@@ -134,7 +134,3 @@ def R2_eq_proj_subspace : R2ss ≃ₗᵢ[ℝ] ℝ² := by
     right_inv x := by fin_cases x <;> simp
   }
   exact (linear_subspace_has_dim_one_less 2).trans (LinearIsometryEquiv.piLpCongrLeft 2 ℝ ℝ eq)
-
-
--- noncomputable
--- def R2as_eq_proj_subspace : R2as ≃ᵃⁱ[ℝ] ℝ² := R2_eq_proj_subspace.toAffineIsometryEquiv
