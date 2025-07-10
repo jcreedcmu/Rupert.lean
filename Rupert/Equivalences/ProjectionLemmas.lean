@@ -100,32 +100,15 @@ theorem affine_oproj_eq_eproj_r2 (x : ℝ³) : affine_oproj x = eproj 2 x := by
  rw [affine_projection_eq_linear_projection_euclidean]
  apply oproj_eq_eproj_r2
 
+def proj_kernel_basis {I : Type} [Fintype I] [DecidableEq I] (i : I) :
+    Basis {j : I // j ≠ i} ℝ (proj_subspace i) :=
+  sorry
+
 noncomputable
 def linear_subspace_has_dim_one_less {I : Type} [Fintype I] [DecidableEq I] (i : I) :
-  EuclideanSpace ℝ { j // j ≠ i } ≃ₗᵢ[ℝ] ↥(proj_subspace i) := by
-  let basis := Pi.basisFun ℝ {j : I // j ≠ i}
-
+  ↥(proj_subspace i) ≃ₗᵢ[ℝ] EuclideanSpace ℝ { j // j ≠ i } := by
   let J := {j : I // j ≠ i}
-
-  let setmap (j : J) : proj_subspace i := ⟨
-    fun i => if i = j then 1 else 0, by
-     change (if i = j then 1 else 0) = 0;
-     simp_all only [ite_eq_right_iff, one_ne_zero]
-     exact fun a => j.property (id (Eq.symm a))
-     ⟩
-
-  let linear_fore := Basis.constr basis ℝ setmap
-  let back (v : proj_subspace i) : EuclideanSpace ℝ J := fun j => v.1 j
-
-  have lineq : EuclideanSpace ℝ {j : I // j ≠ i} ≃ₗ[ℝ] proj_subspace i := by
-    refine LinearEquiv.mk linear_fore back ?_ ?_
-    · intro a
-      dsimp only [back, linear_fore]; ext j;
-      simp only [ne_eq, AddHom.toFun_eq_coe, LinearMap.coe_toAddHom]
-      rw [Basis.constr_def]
-      simp
-      sorry
-    · intro a
-      sorry
-  have pres_norm : ∀ (x : EuclideanSpace ℝ { j // j ≠ i }), ‖lineq x‖ = ‖x‖ := sorry
+  have lineq : proj_subspace i ≃ₗ[ℝ] EuclideanSpace ℝ J :=
+    (proj_kernel_basis i).repr.trans (Finsupp.linearEquivFunOnFinite ℝ ℝ J)
+  have pres_norm : ∀ (x : ↥(proj_subspace i)), ‖lineq x‖ = ‖x‖ := sorry
   exact LinearIsometryEquiv.mk lineq pres_norm
