@@ -57,5 +57,12 @@ theorem affine_for_subspace_imp_linear_for_subspace {P : Type*} [NormedAddCommGr
    rw [affine_projection_eq_linear_projection Q (Yi p)]
 
   change closure ((Q.orthogonalProjection ∘ Xi) '' X) ⊆ interior ((Q.orthogonalProjection ∘ Yi) '' Y)
-  rw [ Xe,  Ye]
+  rw [Xe, Ye]
   exact hsub
+
+theorem linear_for_subspace_iff_affine_for_subspace {P : Type*} [NormedAddCommGroup P]
+    [InnerProductSpace ℝ P] [FiniteDimensional ℝ P] (X Y : Set P)
+    (Q : Submodule ℝ P) [Nonempty Q] :
+    IsLinearRupertPairForSubspace X Y Q ↔ IsAffineRupertPairForSubspace X Y (Q.toAffineSubspace) :=
+   ⟨ linear_for_subspace_imp_affine_for_subspace _ _ _,
+     affine_for_subspace_imp_linear_for_subspace _ _ _⟩

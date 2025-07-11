@@ -3,6 +3,7 @@ import Rupert.Attr
 import Rupert.Basic
 import Rupert.Convex
 import Rupert.Cube
+import Rupert.EuclideanRupert
 import Rupert.FinCases
 import Rupert.Icosahedron
 import Rupert.LinearRupert
