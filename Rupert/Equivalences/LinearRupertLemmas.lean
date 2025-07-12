@@ -10,6 +10,20 @@ variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [FiniteDim
 -- #check Submodule.Quotient.nontrivial_of_lt_top
 
 
+theorem foo (Q : Submodule ℝ P) (Qcoatom : IsCoatom Q) : False := by
+ let nQ : ℕ := Module.finrank ℝ Q
+ -- a basis for the subspace Q
+ have bQ : Basis (Fin nQ) ℝ Q := Module.finBasis ℝ Q
+ -- it can be construed as a function to Q
+ let bQf : Fin nQ → Q := bQ
+ -- ...which is an independent set
+ have bQf_ind : LinearIndependent ℝ bQf := Basis.linearIndependent bQ
+ -- it's also a function to the ambient space P
+ let bQf2 : Fin nQ → P := Q.subtype ∘ bQf
+ -- I'd like to conclude that bQf2 is LinearIndependent
+ let bQf2 : LinearIndependent ℝ bQf2 := by exact?
+
+ sorry
 theorem coatomic_subspace_dim (Q : Submodule ℝ P) (Qcoatom : IsCoatom Q) :
     Module.finrank ℝ P = Module.finrank ℝ Q + 1 := by
   simp_all [IsCoatom]
@@ -25,19 +39,39 @@ theorem coatomic_subspace_dim (Q : Submodule ℝ P) (Qcoatom : IsCoatom Q) :
   let nQ : ℕ := Module.finrank ℝ Q
 
   have bP : Basis (Fin n) ℝ P := Module.finBasis ℝ P
-  have bQ : Basis (Fin nQ) ℝ Q := Module.finBasis ℝ Q
 
-  let extended : Fin (nQ + 1) → P := Fin.cases x (fun i => bQ i)
+  have bQ : Basis (Fin nQ) ℝ Q := Module.finBasis ℝ Q
+  let bQf : Fin nQ → P := Q.subtype ∘ ↑bQ
+
+
+  have zz1 : LinearIndependent ℝ bQ := (Basis.linearIndependent bQ)
+  have hx2 : x ∉ Submodule.span ℝ (Set.range bQf) := sorry
+
+  have zz : LinearIndepOn ℝ bQ Set.univ := (Basis.linearIndependent bQ).linearIndepOn
+
+  have mm := zz1.option hx2
+
+
+
+  -- let extended : Fin (nQ + 1) → P := Fin.cases x (fun i => bQ i)
+  -- have extended_ind : LinearIndependent ℝ extended := sorry
+  -- sorry
+#exit
+
 
   let Q' := Submodule.span ℝ (Set.range extended)
 
-  have Q_le_Q' : Q < Q' := sorry
+  have Q_le_Q' : Q < Q' := by
+    change Q.carrier ⊂ Q'.carrier
+
+    sorry
+
 
   have : Module.finrank ℝ Q' = Module.finrank ℝ P := by
    rw [show Q' = (⊤ : Submodule ℝ P) from Qmax Q' Q_le_Q']
    exact finrank_top ℝ P
 
-
+  let m : Module.finrank ℝ Q' = Cardinal.mk (Set.range extended) := (Submodule.finrank_eq_rank ℝ P Q').trans (rank_span extended_ind)
   sorry
 
 
