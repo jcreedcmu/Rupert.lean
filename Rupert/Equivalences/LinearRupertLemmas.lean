@@ -27,10 +27,17 @@ theorem coatomic_subspace_dim (Q : Submodule ℝ P) (Qcoatom : IsCoatom Q) :
   have bP : Basis (Fin n) ℝ P := Module.finBasis ℝ P
   have bQ : Basis (Fin nQ) ℝ Q := Module.finBasis ℝ Q
 
-  let extended : Option (Fin nQ) → P
-   | some v => bQ v
-   | none   => x
+  let extended : Fin (nQ + 1) → P := Fin.cases x (fun i => bQ i)
+
   let Q' := Submodule.span ℝ (Set.range extended)
+
+  have Q_le_Q' : Q < Q' := sorry
+
+  have : Module.finrank ℝ Q' = Module.finrank ℝ P := by
+   rw [show Q' = (⊤ : Submodule ℝ P) from Qmax Q' Q_le_Q']
+   exact finrank_top ℝ P
+
+
   sorry
 
 
