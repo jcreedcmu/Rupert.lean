@@ -21,9 +21,13 @@ theorem foo (Q : Submodule ℝ P) (Qcoatom : IsCoatom Q) : False := by
  -- it's also a function to the ambient space P
  let bQf2 : Fin nQ → P := Q.subtype ∘ bQf
  -- I'd like to conclude that bQf2 is LinearIndependent
- let bQf2 : LinearIndependent ℝ bQf2 := by exact?
+ let bQf2 : LinearIndependent ℝ bQf2 := by
+    exact LinearIndependent.map' bQf_ind Q.subtype (Submodule.ker_subtype Q)
+
 
  sorry
+
+
 theorem coatomic_subspace_dim (Q : Submodule ℝ P) (Qcoatom : IsCoatom Q) :
     Module.finrank ℝ P = Module.finrank ℝ Q + 1 := by
   simp_all [IsCoatom]
@@ -39,19 +43,22 @@ theorem coatomic_subspace_dim (Q : Submodule ℝ P) (Qcoatom : IsCoatom Q) :
   let nQ : ℕ := Module.finrank ℝ Q
 
   have bP : Basis (Fin n) ℝ P := Module.finBasis ℝ P
-
   have bQ : Basis (Fin nQ) ℝ Q := Module.finBasis ℝ Q
-  let bQf : Fin nQ → P := Q.subtype ∘ ↑bQ
 
+  let bQf : Fin nQ → P := Q.subtype ∘ bQ
+  let bQf' : Option (Fin nQ) → P := fun i => i.casesOn' x bQf
 
-  have zz1 : LinearIndependent ℝ bQ := (Basis.linearIndependent bQ)
-  have hx2 : x ∉ Submodule.span ℝ (Set.range bQf) := sorry
+  have bQ_ind : LinearIndependent ℝ bQ := Basis.linearIndependent bQ
+  let bQf_ind : LinearIndependent ℝ bQf :=
+    LinearIndependent.map' bQ_ind Q.subtype (Submodule.ker_subtype Q)
+  have x_not_in_bQf : x ∉ Submodule.span ℝ (Set.range bQf) := sorry
 
-  have zz : LinearIndepOn ℝ bQ Set.univ := (Basis.linearIndependent bQ).linearIndepOn
+  have h : Submodule.span ℝ (Set.range (Q.subtype ∘ bQ)) = Q.carrier := by
+    ext
+    sorry
+  have bQf'_ind := bQf_ind.option x_not_in_bQf
 
-  have mm := zz1.option hx2
-
-
+  sorry
 
   -- let extended : Fin (nQ + 1) → P := Fin.cases x (fun i => bQ i)
   -- have extended_ind : LinearIndependent ℝ extended := sorry
