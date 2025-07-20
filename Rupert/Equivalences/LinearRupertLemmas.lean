@@ -2,30 +2,24 @@ import Mathlib
 import Rupert.Basic
 import Rupert.LinearRupert
 
-variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P] [FiniteDimensional ℝ P] (X Y : Set P)
+variable {P : Type*} [NormedAddCommGroup P] [InnerProductSpace ℝ P]
 
--- #check exists_orthonormalBasis
--- #check LinearEquiv.ofRankEq
--- #check Orthonormal.exists_orthonormalBasis_extension_of_card_eq
--- #check Submodule.Quotient.nontrivial_of_lt_top
-
-
-theorem foo (Q : Submodule ℝ P) (Qcoatom : IsCoatom Q) : False := by
- let nQ : ℕ := Module.finrank ℝ Q
- -- a basis for the subspace Q
- have bQ : Basis (Fin nQ) ℝ Q := Module.finBasis ℝ Q
- -- it can be construed as a function to Q
- let bQf : Fin nQ → Q := bQ
- -- ...which is an independent set
- have bQf_ind : LinearIndependent ℝ bQf := Basis.linearIndependent bQ
- -- it's also a function to the ambient space P
- let bQf2 : Fin nQ → P := Q.subtype ∘ bQf
- -- I'd like to conclude that bQf2 is LinearIndependent
- let bQf2 : LinearIndependent ℝ bQf2 := by
-    exact LinearIndependent.map' bQf_ind Q.subtype (Submodule.ker_subtype Q)
+-- FIXME: is there a better way?
+lemma not_top_implies_not_univ {Q : Submodule ℝ P} (Qnontriv : ¬Q = ⊤) :
+    Q.carrier ≠ Set.univ :=
+  fun a =>
+     False.elim (Qnontriv (Submodule.ext fun x ↦ Eq.to_iff (congrFun a x)))
 
 
- sorry
+variable [FiniteDimensional ℝ P] (X Y : Set P)
+
+
+-- FIXME: is there a better way?
+lemma in_basis_span_imp_in_submodule (Q : Submodule ℝ P) (x : P) :
+    x ∈ Submodule.span ℝ (Set.range (Q.subtype ∘ Module.finBasis ℝ Q)) → x ∈ Q.carrier := by
+ rw [Set.range_comp, Submodule.span_image]
+ simp only [Basis.span_eq, Submodule.map_top, Submodule.range_subtype, Submodule.carrier_eq_coe,
+   SetLike.mem_coe, imp_self]
 
 
 theorem coatomic_subspace_dim (Q : Submodule ℝ P) (Qcoatom : IsCoatom Q) :
@@ -33,32 +27,50 @@ theorem coatomic_subspace_dim (Q : Submodule ℝ P) (Qcoatom : IsCoatom Q) :
   simp_all [IsCoatom]
   obtain ⟨Qnontriv, Qmax⟩ := Qcoatom
 
-  -- FIXME: is there a better way?
-  have hne : Q.carrier ≠ Set.univ := fun a =>
-     False.elim (Qnontriv (Submodule.ext fun x ↦ Eq.to_iff (congrFun a x)))
+  have hne : Q.carrier ≠ Set.univ := not_top_implies_not_univ Qnontriv
 
   -- x an element in P \ Q
   let ⟨ x, hx ⟩ := (Set.ne_univ_iff_exists_notMem Q.carrier).mp hne
   let n : ℕ := Module.finrank ℝ P
   let nQ : ℕ := Module.finrank ℝ Q
 
-  have bP : Basis (Fin n) ℝ P := Module.finBasis ℝ P
-  have bQ : Basis (Fin nQ) ℝ Q := Module.finBasis ℝ Q
+  let bP : Basis (Fin n) ℝ P := Module.finBasis ℝ P
+  let bQ : Basis (Fin nQ) ℝ Q := Module.finBasis ℝ Q
 
   let bQf : Fin nQ → P := Q.subtype ∘ bQ
   let bQf' : Option (Fin nQ) → P := fun i => i.casesOn' x bQf
 
   have bQ_ind : LinearIndependent ℝ bQ := Basis.linearIndependent bQ
-  let bQf_ind : LinearIndependent ℝ bQf :=
+  have bQf_ind : LinearIndependent ℝ bQf :=
     LinearIndependent.map' bQ_ind Q.subtype (Submodule.ker_subtype Q)
-  have x_not_in_bQf : x ∉ Submodule.span ℝ (Set.range bQf) := sorry
+  have x_not_in_bQf : x ∉ Submodule.span ℝ (Set.range bQf) := by
+    intro hhx
+    refine False.elim (hx ?_)
+    apply in_basis_span_imp_in_submodule
+    exact hhx
 
-  have h : Submodule.span ℝ (Set.range (Q.subtype ∘ bQ)) = Q.carrier := by
-    ext
-    sorry
+  have bQf'_spans : ⊤ ≤ Submodule.span ℝ (Set.range bQf') := by
+    refine eq_top_iff.mp ?_
+    refine Qmax (Submodule.span ℝ (Set.range bQf')) ?_
+
+    constructor
+    · intro q qh
+      have : q ∈ Set.range bQf' := sorry
+      simp only [Submodule.span, Submodule.sInf_coe, Set.mem_iInter]
+      exact fun _ j ↦ j this
+
+    · sorry
+
+
   have bQf'_ind := bQf_ind.option x_not_in_bQf
 
-  sorry
+  have bQf'_basis : Basis (Option (Fin nQ)) ℝ P := Basis.mk bQf'_ind bQf'_spans
+
+  have P_rank : Module.finrank ℝ P = Nat.card (Option (Fin nQ)) :=
+    Module.finrank_eq_nat_card_basis bQf'_basis
+
+  rw [P_rank, Finite.card_option, Nat.card_fin]
+
 
   -- let extended : Fin (nQ + 1) → P := Fin.cases x (fun i => bQ i)
   -- have extended_ind : LinearIndependent ℝ extended := sorry
