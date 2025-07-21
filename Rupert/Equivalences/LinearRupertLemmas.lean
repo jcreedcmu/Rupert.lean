@@ -83,8 +83,42 @@ theorem coatomic_subspaces_equivalent (Q1 Q2 : Submodule ℝ P) (_ : IsCoatom Q1
 section nonempty_q
 variable (Q : Submodule ℝ P) [Nonempty Q]
 
-theorem linear_rupert_respects_subspace_iso (T : P ≃ₗᵢ[ℝ] P) :
-    IsLinearRupertPairForSubspace X Y Q → IsLinearRupertPairForSubspace X Y (Submodule.map T Q) := by
+-- have Xs := ⇑(Submodule.map T Q).orthogonalProjection ∘ ⇑Xi' '' X;
+lemma equiv_map_ortho {P1 P2 : Type*} [NormedAddCommGroup P1] [InnerProductSpace ℝ P1] [FiniteDimensional ℝ P1]
+   [NormedAddCommGroup P2] [InnerProductSpace ℝ P2] [FiniteDimensional ℝ P2]
+    (T : P1 →ₗᵢ[ℝ] P2) (Q : Submodule ℝ P1) (v : P1) :
+    (Submodule.map T Q).orthogonalProjection (T v) = T (Q.orthogonalProjection v) :=
+   Eq.symm (LinearIsometry.map_orthogonalProjection' T Q v)
+
+
+lemma equiv_map_ortho2 {P1 P2 : Type*} [NormedAddCommGroup P1] [InnerProductSpace ℝ P1] [FiniteDimensional ℝ P1]
+   [NormedAddCommGroup P2] [InnerProductSpace ℝ P2] [FiniteDimensional ℝ P2]
+    (T : P1 ≃ₗᵢ[ℝ] P2) (Q : Submodule ℝ P1) (v : P1) :
+     False := by
+  let z1 : P1 →L[ℝ] Submodule.map T Q := ((Submodule.map T Q).orthogonalProjection).comp T.toContinuousLinearMap
+  let z2 : P1 →L[ℝ] Q := Q.orthogonalProjection
+  let m : P1 →L[ℝ] P2 := T.toContinuousLinearMap
+  let z3 : Q →ₗᵢ[ℝ]  Submodule.map T Q := by exact?
+  sorry
+
+theorem linear_rupert_respects_subspace_iso (T : P ≃ₗᵢ[ℝ] P)
+    (r : IsLinearRupertPairForSubspace X Y Q) : IsLinearRupertPairForSubspace X Y (Submodule.map T Q) := by
+  let ⟨ Xi , Yi, clo_sub_int ⟩ := r
+  let Xi' : P →ᵃⁱ[ℝ] P := T.toAffineIsometryEquiv.toAffineIsometry.comp Xi
+  let Yi' : P →ᵃⁱ[ℝ] P := T.toAffineIsometryEquiv.toAffineIsometry.comp Yi
+  use Xi', Yi'
+  let Xs : Set Q := Q.orthogonalProjection ∘ Xi '' X
+  let Ys : Set Q := Q.orthogonalProjection ∘ Yi '' Y
+  let XsP_closure : closure (Q.subtype '' Xs) = Q.subtype '' (closure Xs) := by sorry
+  let YsP_interior : interior (Q.subtype '' Ys) = Q.subtype '' (interior Ys) := by sorry
+  change closure Xs ⊆ interior Ys at clo_sub_int
+  have h : closure (Q.subtype '' Xs) ⊆ interior (Q.subtype '' Ys) := by
+    rw [XsP_closure, YsP_interior]
+    exact Set.image_mono clo_sub_int
+  let Xs' := (Submodule.map T Q).orthogonalProjection ∘ Xi' '' X
+  let Ys' := (Submodule.map T Q).orthogonalProjection ∘ Yi' '' Y
+  change closure Xs' ⊆ interior Ys'
+
   sorry
 
 theorem linear_rupert_pair_imp_subspace (Qcoatom : IsCoatom Q) :
