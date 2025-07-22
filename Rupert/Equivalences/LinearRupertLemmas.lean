@@ -91,16 +91,61 @@ lemma equiv_map_ortho {P1 P2 : Type*} [NormedAddCommGroup P1] [InnerProductSpace
    Eq.symm (LinearIsometry.map_orthogonalProjection' T Q v)
 
 
+-- LinearEquiv.submoduleMap.{u_1, u_3, u_5, u_7} {R : Type u_1} {R₂ : Type u_3} {M : Type u_5} {M₂ : Type u_7} [Semiring R]
+--   [Semiring R₂] [AddCommMonoid M] [AddCommMonoid M₂] {module_M : Module R M} {module_M₂ : Module R₂ M₂} {σ₁₂ : R →+* R₂}
+--   {σ₂₁ : R₂ →+* R} {re₁₂ : RingHomInvPair σ₁₂ σ₂₁} {re₂₁ : RingHomInvPair σ₂₁ σ₁₂} (e : M ≃ₛₗ[σ₁₂] M₂)
+--   (p : Submodule R M) : ↥p ≃ₛₗ[σ₁₂] ↥(Submodule.map (↑e) p)
+-- #check LinearEquiv.submoduleMap
+
+section mylemmas
+
+def LinearIsometry.submoduleMap {R : Type*} {M : Type*} {M₂ : Type*} [Ring R]
+    [SeminormedAddCommGroup M] [SeminormedAddCommGroup M₂]
+    [Module R M] [Module R M₂]
+    (p : Submodule R M) (e : M →ₗᵢ[R] M₂) : p →ₗᵢ[R] (Submodule.map e p) :=
+  { e.toLinearMap.submoduleMap p with norm_map' := fun x => e.norm_map' x }
+
+variable {R : Type*} {R₂ : Type*} {M : Type*} {M₂ : Type*} [Ring R] [Ring R₂]
+    [SeminormedAddCommGroup M] [SeminormedAddCommGroup M₂]
+    [Module R M] [Module R₂ M₂]
+    {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R}
+    {re₁₂ : RingHomInvPair σ₁₂ σ₂₁} {re₂₁ : RingHomInvPair σ₂₁ σ₁₂}
+    (e : M ≃ₛₗᵢ[σ₁₂] M₂)
+
+
+def LinearIsometryEquiv.submoduleMap
+    (p : Submodule R M) : p ≃ₛₗᵢ[σ₁₂] (Submodule.map e p) :=
+  { e.toLinearEquiv.submoduleMap p with norm_map' := fun x => e.norm_map' x }
+
+@[simp]
+theorem LinearIsometryEquiv.submoduleMap_apply (p : Submodule R M) (x : p) : ↑(e.submoduleMap p x) = e x :=
+  rfl
+
+end mylemmas
+
 lemma equiv_map_ortho2 {P1 P2 : Type*} [NormedAddCommGroup P1] [InnerProductSpace ℝ P1] [FiniteDimensional ℝ P1]
    [NormedAddCommGroup P2] [InnerProductSpace ℝ P2] [FiniteDimensional ℝ P2]
-    (T : P1 ≃ₗᵢ[ℝ] P2) (Q : Submodule ℝ P1) (v : P1) :
+    (T : P1 ≃ₗᵢ[ℝ] P2) (Q : Submodule ℝ P1) :
      False := by
-  let z1 : P1 →L[ℝ] Submodule.map T Q := ((Submodule.map T Q).orthogonalProjection).comp T.toContinuousLinearMap
-  let z2 : P1 →L[ℝ] Q := Q.orthogonalProjection
-  let m : P1 →L[ℝ] P2 := T.toContinuousLinearMap
-  let z3 : Q →ₗᵢ[ℝ]  Submodule.map T Q := by exact?
+  let f2 : P2 →L[ℝ] Submodule.map T Q:= (Submodule.map T Q).orthogonalProjection
+  let f1 : P1 →L[ℝ] P2:= T.toContinuousLinearMap
+  let f12 : P1 →L[ℝ] Submodule.map T Q := f2.comp f1
+  let g1 : P1 →L[ℝ] Q := Q.orthogonalProjection
+  let g2 : Q →L[ℝ] Submodule.map T Q := T.submoduleMap Q
+  let g12 : P1 →L[ℝ] Submodule.map T Q := g2.comp g1
+  have foo : f12 = g12 := by
+   ext x; simp only [SetLike.coe_eq_coe]; ext
+   exact Eq.symm (LinearIsometry.map_orthogonalProjection' T.toLinearIsometry Q x)
+
   sorry
 
+
+#exit
+-- If we have a linear isometry equivalence T between two spaces, then any submodule Q
+-- is linear isometry equivalent to map T Q.
+
+-- If we have a linear isometry equivalence T between two spaces, then Rupertness with respect to
+-- a subspace Q is equivalent to Rupertness with respect to map T Q.
 theorem linear_rupert_respects_subspace_iso (T : P ≃ₗᵢ[ℝ] P)
     (r : IsLinearRupertPairForSubspace X Y Q) : IsLinearRupertPairForSubspace X Y (Submodule.map T Q) := by
   let ⟨ Xi , Yi, clo_sub_int ⟩ := r
